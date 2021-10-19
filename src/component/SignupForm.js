@@ -1,12 +1,14 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import {connect} from 'react-redux'
 
 import { signupHandler } from '../store/signup';
+import {signInHandlerWithGoogle} from '../store/google'
 
 const SignupForm = (props) => {
-console.log("🚀 ~ file: SignupForm.js ~ line 7 ~ SignupForm ~ props", props.user)
 
-    
+    const [user, setUser] = useState()
+    const [userTokens, setUserTokens] = useState()
+
 
     const [values,setValues] =useState({
         first_name:'',
@@ -36,26 +38,37 @@ console.log("🚀 ~ file: SignupForm.js ~ line 7 ~ SignupForm ~ props", props.us
         
     }
 
+    useEffect(() => {
+        if(window.location.search){
+            props.signInHandlerWithGoogle(window.location.search)
+        } 
+       console.log('props.googleUser', props.googleUser)
+    },[])
+    useEffect(() => {
+        console.log('props.googleUser', props.googleUser)
+        setUser(props.googleUser.user)
+        setUserTokens(props.googleUser.userTokens)
+    },[props.googleUser])
 
     return (
         <div className='container'>
             <div className='app-wrapper'>
                 <div>
                     <h2>Create Account</h2>
-                    <form className='form-wrapper' onClick={handleSubmit}>
+                    <form className='form-wrapper' onSubmit={handleSubmit}>
                         <div className='first-name'>
                             <label className='label'>first name</label>
-                            <input className='input' name='first_name' type='text'value={values.first_name} onChange={handleChange}></input>
+                            <input className='input' name='first_name' type='text'value={user? user.first_name: values.first_name} onChange={handleChange}></input>
 
                         </div>
                         <div className='last-name'>
                             <label className='label'>last name</label>
-                            <input className='input' name='last_name' type='text' value={values.last_name} onChange={handleChange}></input>
+                            <input className='input' name='last_name' type='text' value={user? user.last_name:values.last_name} onChange={handleChange}></input>
 
                         </div>
                         <div className='email'>
                             <label className='label'>E-mail</label>
-                            <input className='input' name='email' value={values.email} onChange={handleChange}></input>
+                            <input className='input' name='email' value={user? user.email:values.email} onChange={handleChange}></input>
 
                         </div>
                         <div className='phone-number'>
@@ -107,9 +120,9 @@ console.log("🚀 ~ file: SignupForm.js ~ line 7 ~ SignupForm ~ props", props.us
 
 const mapStateToProps = (state) => ({
     user: state.signupData ? state.signupData : null,
-
+    googleUser : state.signInWithGoogleData ? state.signInWithGoogleData : null
   });
   
-  const mapDispatchToProps = { signupHandler };
+  const mapDispatchToProps = { signupHandler , signInHandlerWithGoogle};
   
   export default connect(mapStateToProps, mapDispatchToProps)(SignupForm);

@@ -8,17 +8,15 @@ let signIn = createSlice({
     reducers:{
         getUser(state,action){
         
-            
-            return state 
+            return action.payload 
         }
     }
 
 })
 
 export const signInHandler = (payload) => (dispatch,state) => {
-console.log("🚀 ~ file: signin.js ~ line 19 ~ signInHandler ~ payload", payload)
     
-    let API = 'http://localhost:5000/api/v1/signin';
+    let API = 'http://localhost:5000/auth/signin';
     
     
     return axios({

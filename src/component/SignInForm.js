@@ -2,20 +2,19 @@ import React,{useState,useEffect} from 'react'
 import {connect} from 'react-redux'
 import {signInHandler} from '../store/signin';
 import {signInHandlerWithGoogle} from '../store/google'
+import { useParams } from 'react-router-dom';
+import {GoogleLogin} from 'react-google-login'
 
 
 const SignInForm = props => {
-console.log("🚀 ~ file: SignInForm.js ~ line 7 ~ props", props)
-
+  
     let [value,setValue]= useState({
         
         email:'',
         password:'',
     })
     const handleChange = e=>{
-        console.log("🚀 ~ file: SignInForm.js ~ line 10 ~ value", value)
-        console.log(e.target.name,'name');
-        console.log(e.target.value,'value');
+       
         setValue({
             ...value,
             [e.target.name]:e.target.value
@@ -24,7 +23,7 @@ console.log("🚀 ~ file: SignInForm.js ~ line 7 ~ props", props)
     }
     const handleSubmit = async e=>{
         e.preventDefault();
-        console.log(value);
+       
         try {
             
             props.signInHandler(value);
@@ -34,18 +33,28 @@ console.log("🚀 ~ file: SignInForm.js ~ line 7 ~ props", props)
         }
     }
    
+   
     const handleGoogle = async()=>{
-        console.log('the handleGoogle is working')
         window.location ='http://localhost:5000/auth/google'
-        
-
-           await  props.signInHandlerWithGoogle()
-        
-        console.log(props.googleUser,'props.googleUser')
     }
+    useEffect(() => {
+        if(window.location.search){
+            props.signInHandlerWithGoogle(window.location.search)
+        } 
+       
+    },[])
+    
+    useEffect(()=>{
+
+        console.log(props.googleUser,'props.googleUser')
+        
+    },[props.googleUser])
     const handleFacebook = ()=>{
         console.log('the handleFacebook is working')
     }
+    const responseGoogle = (response) => {
+        console.log(response);
+      }
     return (
         <div>
             <div>Sign In</div>
@@ -59,7 +68,12 @@ console.log("🚀 ~ file: SignInForm.js ~ line 7 ~ props", props)
 
                 <button className='submit' >Sign In </button>
 
-               
+               {/* <GoogleLogin
+               clientId='747281148015-p2998j799job733pm8a01ad0p6p09j0p.apps.googleusercontent.com'
+               onSuccess={responseGoogle}
+               onFailure={responseGoogle}
+               cookiePolicy={'single_host_origin'}
+               /> */}
 
                     
                 </form>

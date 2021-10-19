@@ -1,15 +1,14 @@
 import axios from 'axios';
 
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 
 let signup = createSlice({
     name: 'signup',
     initialState: {},
     reducers:{
         addUser(state,action){
-        console.log("🚀 ~ file: signup.js ~ line 10 ~ addUser ~ state", state)
-            
-            return state 
+     
+            return action.payload 
         }
     }
 
@@ -17,7 +16,7 @@ let signup = createSlice({
 
 export const signupHandler = (payload) => (dispatch,state) => {
     
-    let API = 'http://localhost:5000/api/v1/signup';
+    let API = 'http://localhost:5000/auth/signup';
     console.log("🚀 ~ file: signup.js ~ line 19 ~ signupHandler ~ payload", payload)
     
     return axios({
@@ -26,9 +25,10 @@ export const signupHandler = (payload) => (dispatch,state) => {
         data: payload
     })
     .then(res => {
-  console.log("🚀 ~ file: signup.js ~ line 28 ~ signupHandler ~ res", res)
+  console.log("🚀 ~ file: signup.js ~ line 28 ~ signupHandler ~ res", res.data)
     dispatch(addUser(res.data));
    })
+   .catch(err => {throw new Error(err.message)});
 }
 
 export default signup.reducer 
