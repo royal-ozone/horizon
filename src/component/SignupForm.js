@@ -1,24 +1,21 @@
 import React,{useState, useEffect} from 'react'
 import {connect} from 'react-redux'
-
+import SignInForm from './SignInForm';
 import { signupHandler } from '../store/signup';
 import {signInHandlerWithGoogle} from '../store/google'
 
 const SignupForm = (props) => {
 
-    const [user, setUser] = useState()
-    const [userTokens, setUserTokens] = useState()
-
-
     const [values,setValues] =useState({
-        first_name:'',
-        last_name:'',
-        email:'',
+        first_name:props.googleUser.first_name||'' ,
+        last_name:props.googleUser.last_name||'',
+        email:props.googleUser.email||'',
         mobile:'',
         country:'',
         city:'',
         country_code:'' ,
         password:'',
+        google_id:props.googleUser.google_id ||'' ,
 
     })
 
@@ -32,10 +29,13 @@ const SignupForm = (props) => {
 
         })
     }
-    const handleSubmit = (e) => {
+    const handleSubmit =async (e) => {
         e.preventDefault();
-        props.signupHandler(values);
-        
+       await props.signupHandler(values)
+       ahmad(); 
+    }
+    const ahmad = async () => {
+        <SignInForm />
     }
 
     useEffect(() => {
@@ -45,9 +45,16 @@ const SignupForm = (props) => {
        console.log('props.googleUser', props.googleUser)
     },[])
     useEffect(() => {
-        console.log('props.googleUser', props.googleUser)
-        setUser(props.googleUser.user)
-        setUserTokens(props.googleUser.userTokens)
+        console.log('props.googleUser8888888888888888888888888888888888888888888888888', props.googleUser)
+        
+        setValues({
+            ...values,
+            first_name: props.googleUser.first_name,
+            last_name: props.googleUser.last_name,
+            email: props.googleUser.email,
+
+        })
+        // setUserTokens(props.googleUser.userTokens)
     },[props.googleUser])
 
     return (
@@ -58,17 +65,17 @@ const SignupForm = (props) => {
                     <form className='form-wrapper' onSubmit={handleSubmit}>
                         <div className='first-name'>
                             <label className='label'>first name</label>
-                            <input className='input' name='first_name' type='text'value={user? user.first_name: values.first_name} onChange={handleChange}></input>
+                            <input className='input' name='first_name' type='text'value={values.first_name} onChange={handleChange}></input>
 
                         </div>
                         <div className='last-name'>
                             <label className='label'>last name</label>
-                            <input className='input' name='last_name' type='text' value={user? user.last_name:values.last_name} onChange={handleChange}></input>
+                            <input className='input' name='last_name' type='text' value={values.last_name} onChange={handleChange}></input>
 
                         </div>
                         <div className='email'>
                             <label className='label'>E-mail</label>
-                            <input className='input' name='email' value={user? user.email:values.email} onChange={handleChange}></input>
+                            <input className='input' name='email' value={values.email} onChange={handleChange}></input>
 
                         </div>
                         <div className='phone-number'>
@@ -100,6 +107,11 @@ const SignupForm = (props) => {
                         <div className='password'>
                             <label className='label'>Password</label>
                             <input className='input' name='password' type='password' value={values.password} onChange={handleChange}></input>
+
+                        </div>
+                        <div className='googleId'>
+                            <label hidden className='label'>googleId</label>
+                            <input hidden className='input' name='google_id' type='text' value={values.google_id} onChange={handleChange}></input>
 
                         </div>
 

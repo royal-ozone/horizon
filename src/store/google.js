@@ -24,13 +24,16 @@ export const signInHandlerWithGoogle = (payload) => (dispatch,state) => {
     return axios({
         method: 'get',
         url: API,
-    }
+    } 
    
     )
     .then(res => {
     dispatch(addUserWithGoogle(res.data));
    })
-   .catch(e=>{throw new Error(e.message);});
+   .catch(e=>{
+       console.error(e.message);
+    //    throw new Error(e.message);
+});
 }
 
 export default signInWithGoogle.reducer 

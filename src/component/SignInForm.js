@@ -7,6 +7,7 @@ import {GoogleLogin} from 'react-google-login'
 
 
 const SignInForm = props => {
+console.log("🚀 ~ file: SignInForm.js ~ line 10 ~ props", props)
   
     let [value,setValue]= useState({
         
@@ -38,6 +39,8 @@ const SignInForm = props => {
         window.location ='http://localhost:5000/auth/google'
     }
     useEffect(() => {
+        
+        console.log("🚀 ~ file: SignInForm.js ~ line 44 ~ useEffect ~ window.location.search", window.location.search)
         if(window.location.search){
             props.signInHandlerWithGoogle(window.location.search)
         } 
