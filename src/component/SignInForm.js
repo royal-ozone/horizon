@@ -2,8 +2,8 @@ import React,{useState,useEffect} from 'react'
 import {connect} from 'react-redux'
 import {signInHandler} from '../store/signin';
 import {signInHandlerWithGoogle} from '../store/google'
-import { useParams } from 'react-router-dom';
-import {GoogleLogin} from 'react-google-login'
+import {googleProvider,facebookProvider} from '../store/authProvider'
+import {signInHandlerWithFacebook} from '../store/facebook'
 
 
 const SignInForm = props => {
@@ -35,25 +35,38 @@ console.log("🚀 ~ file: SignInForm.js ~ line 10 ~ props", props)
     }
    
    
-    const handleGoogle = async()=>{
+    const handleGoogle = ()=>{
+       localStorage.setItem('provider', 'google');
         window.location ='http://localhost:5000/auth/google'
     }
-    useEffect(() => {
+    // useEffect(() => {
         
-        console.log("🚀 ~ file: SignInForm.js ~ line 44 ~ useEffect ~ window.location.search", window.location.search)
-        if(window.location.search){
-            props.signInHandlerWithGoogle(window.location.search)
-        } 
        
-    },[])
+    //     if(window.location.search){
+    //         if(props.provider=== 'google'){
+
+    //             props.signInHandlerWithGoogle(window.location.search)
+    //         } else if  (props.provider=== 'facebook'){
+    //             props.signInHandlerWithfaceook(window.location.search)
+    //         }
+    //     } 
+       
+    // },[])
+    useEffect(() => {
+        console.log("🚀 ~ file: SignInForm.js ~ line 54 ~ props.provider", props.provider)
+
+    },[props.provider])
     
     useEffect(()=>{
 
         console.log(props.googleUser,'props.googleUser')
         
     },[props.googleUser])
+    
     const handleFacebook = ()=>{
-        console.log('the handleFacebook is working')
+        localStorage.setItem('provider', 'facebook');
+        props.facebookProvider()
+        window.location ='http://localhost:5000/auth/facebook'
     }
     const responseGoogle = (response) => {
         console.log(response);
@@ -98,10 +111,12 @@ console.log("🚀 ~ file: SignInForm.js ~ line 10 ~ props", props)
 
 const mapStateToProps = (state) => ({
     user: state.signInData ? state.signInData : null,
-    googleUser : state.signInWithGoogleData ? state.signInWithGoogleData : null
+    googleUser : state.signInWithGoogleData ? state.signInWithGoogleData : null,
+    provider: state.provider,
+    facebookUser: state.signInWithFacebookData ? state.signInWithFacebookData : null,
 
   });
   
-  const mapDispatchToProps = { signInHandler ,signInHandlerWithGoogle};
+  const mapDispatchToProps = { signInHandler ,signInHandlerWithGoogle, googleProvider,facebookProvider,signInHandlerWithFacebook};
   
   export default connect(mapStateToProps, mapDispatchToProps)(SignInForm);
