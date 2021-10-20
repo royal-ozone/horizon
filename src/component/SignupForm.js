@@ -32,20 +32,20 @@ const SignupForm = (props) => {
     const handleSubmit =async (e) => {
         e.preventDefault();
        await props.signupHandler(values)
-       ahmad(); 
+      window.location=`http://localhost:3000/signin`
     }
-    const ahmad = async () => {
-        <SignInForm />
-    }
+    // const ahmad = async () => {
+    //     <SignInForm />
+    // }
 
     useEffect(() => {
         if(window.location.search){
             props.signInHandlerWithGoogle(window.location.search)
         } 
-       console.log('props.googleUser', props.googleUser)
+      
     },[])
     useEffect(() => {
-        console.log('props.googleUser8888888888888888888888888888888888888888888888888', props.googleUser)
+       
         
         setValues({
             ...values,
