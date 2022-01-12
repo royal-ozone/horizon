@@ -70,13 +70,13 @@ const [user,setUser] = useState({})
        
         
         console.log("🚀 ~ file: SignupForm.js ~ line 72 ~ SignupForm ~ [props.googleUser", props.googleUser)
-        setUser(props.googleUser.user)
+        setUser(props.googleUser)
       
     },[props.googleUser])
     useEffect(() => {
        
         
-        setUser(props.facebookUser.user)
+        setUser(props.facebookUser)
         console.log("🚀 ~ file: SignupForm.js ~ line 80 ~ useEffect ~ props.facebookUser.user", props.facebookUser.user)
       
     },[props.facebookUser])
