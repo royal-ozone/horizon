@@ -1,3 +1,353 @@
+body{
+  
+  margin:auto;
+}
+
+/* @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,300&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,300&family=Roboto+Condensed:ital,wght@1,300&display=swap');
+.container2 {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #ecedf2;
+  padding: 1rem 10%;
+}
+
+@media (min-width:1400px){
+  .container2 {
+    padding: 1rem 10%;
+  }
+  .mainCardSection{
+    display: flex;
+  justify-content: space-around;
+  }
+  .mainCard{
+    height: 31rem;
+    width: 45%;
+}
+.mainDeals{
+  padding: 1rem 10%;
+}
+.deals{
+  display: flex;
+  justify-content:space-between;
+}
+.mainimg{
+  margin-top: 5rem;
+  margin-bottom: 2rem;
+  height: 100%;
+  max-width: 100%;
+}
+.FDP{
+  width: 20%;
+  margin: 1rem  .5rem;
+
+}
+.last{
+  padding: .5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+.prices{
+ padding: .1rem .3rem;
+ }
+ .prices h4{
+  padding-top: 1rem;
+  font-size: medium;
+}
+.prices h3{
+  font-size: large;
+  font-weight: bold;
+}
+.subscribe2{
+  padding: 3rem 10%;
+}
+.subscribe2 section{
+  padding: 2rem 10%;
+  display: flex;
+ justify-content: center;
+ border-radius: 5px;
+  background-color:rgba(240, 233, 233, 0.548);
+}
+} 
+@media (min-width:992px) and (max-width:1399px){
+  .container2 {
+    padding: 1rem 5%;
+  }
+  .mainCard{
+    height: 31rem;
+    width: 40%;
+}
+.mainCardSection{
+  display: flex;
+  flex-wrap: wrap;
+justify-content: space-around;
+}
+.mainDeals{
+  padding: 1rem 5%;
+}
+.deals{
+  display: flex;
+  justify-content:space-between;
+  flex-direction: wrap;
+}
+.mainimg{
+  margin-top: 5rem;
+  margin-bottom: 2rem;
+  height: 100%;
+  max-width: 100%;
+}
+.FDP{
+  width: 25%;
+  margin: 1rem  .5rem;
+
+}
+.last{
+  padding: .5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  /* justify-content: space-between; */
+}
+.prices{
+  padding: .1rem .3rem;
+  }
+.prices h4{
+    padding-top: 1rem;
+    font-size: medium;
+}
+.prices h3{
+  font-size: large;
+  font-weight: bold;
+}
+.subscribe2{
+  padding: 3rem 0%;
+}
+.subscribe2 section{
+  padding: 2rem 0%;
+  display: flex;
+ justify-content: center;
+ border-radius: 5px;
+  background-color:rgba(240, 233, 233, 0.548);
+}
+.subscribe2 h3{
+  margin: auto .2rem;
+}
+.SMA{
+  margin: 0 5px;
+}
+}
+
+@media (min-width:768px) and (max-width: 991px) {
+  .container2 {
+    padding: 1rem 0;
+  }
+  .mainCard{
+    height: 27rem;
+    width: 65%;
+}
+.mainCard:nth-child(2){
+  margin-top: 1rem;
+}
+.mainCardSection{
+display: flex;
+align-items: center;
+justify-content: space-around;
+flex-direction: column;
+}
+.mainDeals{
+  padding: 1rem 0%;
+}
+.FDP{
+  width: 45%;
+  margin: 1rem  .5rem;
+
+}
+.deals{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:space-between;
+}
+.mainimg{
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  height: 100%;
+  max-width: 100%;
+}
+.last{
+  padding: .5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+.prices{
+  padding: .1rem .1rem;
+  }
+  .prices h4{
+    padding-top: 1rem;
+    font-size: medium;
+}
+.prices h3{
+  font-size: large;
+  font-weight: bold;
+}
+.subscribe2{
+  padding: 3rem 0%;
+}
+.subscribe2 section{
+  padding: 2rem 0%;
+  display: flex;
+ justify-content: center;
+ border-radius: 5px;
+  background-color:rgba(240, 233, 233, 0.548);
+}
+.subscribe2 h3{
+  margin: auto .3rem;
+  font-size: larger;
+}
+.SMA{
+  margin: 0 0px;
+}
+
+}
+
+@media (min-width:553px) and (max-width:767px){
+  .MainNavbar{
+    display: none;
+  }
+  .mainimg{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    height: 100%;
+    max-width: 100%;
+  }
+  .container2 {
+    padding: 2rem 0;
+  }
+  .discover{
+    display: none;
+  }
+  .mainCard{
+    height: 28rem;
+    width: 45%;
+}
+  .mainCardSection{
+    display: flex;
+    flex-wrap: wrap;
+  justify-content: space-around;
+  }
+  .mainDeals{
+    padding: 1rem 0%;
+  }
+  .FDP{
+    width: 45%;
+    margin: .5rem  .1rem;
+}
+  .deals{
+    display: flex;
+    justify-content:space-around;
+    flex-wrap: wrap;
+  }
+  .last{
+    padding: .5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  .prices{
+    padding: .05rem .1rem;
+    }
+.prices h4{
+      padding-top: .8rem;
+      font-size: small;
+}
+.prices h3{
+  font-size: smaller;
+  font-weight: bold;
+}
+.subscribe2{
+  padding: 3rem 0%;
+}
+.subscribe2 section{
+  padding: 2rem 0%;
+  display: flex;
+  flex-wrap: wrap;
+ justify-content: center;
+ border-radius: 5px;
+  background-color:rgba(240, 233, 233, 0.548);
+}
+.mainDiv{
+ 
+  justify-content: space-around;
+}
+/* .subscribe2 h3{
+  margin: auto .3rem;
+  font-size: larger;
+} */
+}
+
+@media (max-width: 552px){
+  .MainNavbar{
+    display: none;
+  }
+  .mainimg{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    height: 100%;
+    max-width: 100%;
+  }
+  .container2 {
+    padding: 2rem 0;
+  }
+  .discover{
+    display: none;
+  }
+  .mainCard{
+    height: 28rem;
+    width: 90%;
+  }
+  .mainCardSection{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  .mainDeals{
+    padding: 1rem 0%;
+  }
+  .FDP{
+    width: 90%;
+    margin: .5rem  .1rem;
+  }
+  .deals{
+    display: flex;
+    justify-content:space-around;
+    flex-wrap: wrap;
+  }
+  .links{
+    display: flex;
+  }
+  .last{
+    padding: .05rem .15rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .prices h4 {
+    padding-top: .8rem;
+    font-size: small;
+}
+.prices h3{
+  font-size: smaller;
+  font-weight: bold;
+}
+.subscribe2{
+  display: none;
+}
+.mainDiv{
+ 
+  justify-content: space-around;
+}
+.mainDiv a h2{ 
+  font-size: medium;
+}
+}
 .App {
   text-align: center;
 }
@@ -35,4 +385,202 @@
   to {
     transform: rotate(360deg);
   }
+}
+ 
+
+ .pin{
+   height: 20px;
+   margin: 10px 0;
+ }
+
+ .fav {
+   height: 25px;
+ }
+
+ .profile{
+  height: 40px;
+  margin-top: 3px;
+ }
+
+ .subscribe{
+   height: 25px;
+   margin-right: 5px;
+ }
+ #collasible-nav-dropdown2{
+   margin: 0px;
+   padding: 8px 4px;
+ }
+
+ .logo{
+  font-family: 'Open Sans', sans-serif;
+  /* font-family: 'Roboto Condensed', sans-serif; */
+   font-weight: 1000;
+   font-size: 1.75rem;
+ }
+
+ .nav-link{
+   margin: 0 10px;
+ }
+
+ 
+
+ .SM{
+   width: 40px;
+ }
+
+ .SMA:hover img{
+  opacity: 0.3;
+ }
+ .STA{
+   margin: 2rem 0;
+ }
+
+ .SMI{
+   margin-top: 1rem;
+   margin-bottom: 2rem;
+ }
+ .app{
+   width: 40px;
+ }
+ .footlinks{
+   margin-top: 1rem;
+   display:flex;
+   flex-direction:column;
+ }
+
+ .footlinks a{
+  text-decoration: none;
+  line-height: 2rem;
+  color: rgb(105, 103, 103);
+ }
+
+ .news{
+   margin-top: 1.5rem;
+ }
+
+ .subscribebtn{
+   height: 100%;
+   border: 0;
+   background-color: blueviolet;
+   color: white;
+   padding: 0.4rem;
+   border-radius: 5px;
+  
+ }
+
+ .email{
+   border: 2px solid black;
+   border-radius: 5px;
+   padding: 0.3rem;
+   margin-right: 1px;
+ }
+
+ .footer{
+   margin: auto;
+   
+ }
+
+ .footer a{
+   text-decoration: none;
+   margin: 10px;
+  
+ }
+ 
+.discover{
+  width: 20%;
+  background-color: white;
+  padding: 1rem;
+  /* position: relative;
+  top: -5px; */
+  border-radius: 10px;
+}
+.discover a{
+  text-decoration: none;
+  display: flex;
+  justify-content: space-between;
+}
+.discover a h5{
+  text-align: left;
+  line-height: 2rem;
+  font-size: medium;
+  color:rgb(105, 103, 103)
+}
+
+.discoverh{
+  text-align: left;
+}
+.count{
+  font-size: smaller;
+  color:rgb(105, 103, 103)
+}
+.MainNavbar{
+ width: 100%;
+ margin-bottom: 1rem;
+ 
+}
+
+
+
+.mainDiv{
+  display: flex;
+}
+
+.FH{
+  margin-right: 2rem;
+}
+
+.mainDiv button{
+  background-color: blueviolet;
+  color:white;
+  border: 0;
+  border-radius: 5px;
+  padding: 0 1rem;
+}
+
+.mainDiv a{
+  text-decoration: none;
+  color:rgb(77, 72, 72)
+}
+
+.mainDiv a:hover{
+  color:rgb(94, 94, 250);
+}
+
+.mainDeals{
+  margin: 1.5rem 0;
+}
+
+.links{
+  display: inline;
+}
+
+.mainDeals:nth-child(even){
+  background-color: rgba(240, 233, 233, 0.548);
+}
+
+.subscribe2 h3{
+
+  color: blueviolet;
+}
+
+.carousel{
+  /* margin-top: 4rem; */
+  width: 80%;
+ margin: 4rem auto;
+}
+.carousel img{
+  height: 80vh;   
+  width: 80%;
+}
+.carousel h1{
+  position: absolute;
+  margin: auto 0;
+  left: 10%;
+  top: 15%;
+  color: white;
+  /* display: inline-block; */
+  width:30%;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
 }
