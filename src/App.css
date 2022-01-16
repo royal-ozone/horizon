@@ -577,10 +577,11 @@ flex-direction: column;
   margin: auto 0;
   left: 10%;
   top: 15%;
-  color: white;
+  color: #fff;
   /* display: inline-block; */
   width:30%;
   justify-content: center;
   align-items: center;
   font-size: 4rem;
+  -webkit-text-stroke: 2px black; /* width and color */
 }

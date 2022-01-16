@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import Form from './component/Form';
+import React, {Suspense} from 'react'
 import {BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; 
@@ -13,6 +14,7 @@ import './App.css';
 
 function App() {
   return (
+    <Suspense fallback='loading'>
    <div>  
      <Router> 
        <Header/>
@@ -21,21 +23,22 @@ function App() {
             <Main />
 
           </Route>
-          <Route exact path="/home">
-            <Home />
-
-          </Route>
           <Route exact path='/signup' >
             <SignupForm/>
           </Route>
           <Route exact path='/signin'>
             <SignInForm/>
           </Route>
+          <Route exact path="/home">
+            <Home />
+
+          </Route>
           
        </Switch>
        <Footer/>
        </ Router>
     </div>
+    </Suspense>
   );
 }
 

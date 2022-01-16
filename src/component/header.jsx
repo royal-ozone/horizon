@@ -1,7 +1,9 @@
 import React, {useEffect,useState} from "react";
 import {Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
+import { useTranslation  } from 'react-i18next';
 
 const Header = () => {
+  const { t, i18n } = useTranslation();
   const [style, setStyle] = useState({})
 useEffect(() => {
   let x = window.innerWidth
@@ -9,30 +11,15 @@ useEffect(() => {
    setStyle({display: 'none'})
  }
 },[])
+const changeLanguage = lang => {
+  i18n.changeLanguage(lang);
+}
   return (
     <div>
       <Navbar bg="primary" variant="dark">
         <Container>
           <Navbar.Brand href="#home"><span className='logo'>Horizon</span></Navbar.Brand>
           <Nav>
-              <img
-                className="pin"
-                src="https://j.top4top.io/p_21814opub1.png"
-                alt="pin"
-              />
-              <NavDropdown title="Auckland" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Another action
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">
-                  Something
-                </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">
-                  Separated link
-                </NavDropdown.Item>
-              </NavDropdown>
               <div className="links" style={style}>
               <Nav>
 
@@ -56,12 +43,15 @@ useEffect(() => {
                   Separated link
                 </NavDropdown.Item>
               </NavDropdown>
-              <Nav.Link href="#features">
-                <img className="subscribe" src="https://j.top4top.io/p_21826qy0f2.png" alt='subscribe'/>
-                Subscribe
-              </Nav.Link>
+             
               </Nav>
               </div>
+              <NavDropdown title={t('lan')} id="collasible-nav-dropdown">
+                <NavDropdown.Item href="#action/3.1" onClick={() => changeLanguage('ar')}>العربية</NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.2" onClick={() => changeLanguage('en')}>
+                  English
+                </NavDropdown.Item>
+              </NavDropdown>
           </Nav>
         </Container>
       </Navbar>
