@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Nav, NavDropdown, Navbar } from "react-bootstrap";
-import mainProduct from "../products/mainProduct";
+import mainProduct from "../static-data/mainProduct";
 import MainNavbar from "../component/navbar";
 import ProfileCard from "../component/productCard";
 import ProductView from "../component/featuredDeals"
-import featuredDeals from "../products/FeaturedAucklandDeals";
-import escapes from "../products/escapes"
-import Automotive from "../products/Automotive"
+import featuredDeals from "../static-data/FeaturedAucklandDeals";
+import escapes from "../static-data/escapes"
+import Automotive from "../static-data/Automotive"
 import CarouselItem  from '../component/carousel';
 
 const Main = () => {

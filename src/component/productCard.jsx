@@ -1,30 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./productCard.css";
+import {connect} from 'react-redux'
+import {addItem,decrementQuantity,incrementQuantity,deleteItem} from '../store/cart'
+import {addProduct,deleteProduct} from '../store/wishlist'
 // import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'
+
+
 const ProfileCard = (props) => {
-console.log("🚀 ~ file: productCard.jsx ~ line 5 ~ ProfileCard ~ props", props)
-  
+  const { addItem,decrementQuantity,incrementQuantity,deleteItem, cart,addProduct,deleteProduct, wishlist} = props
 
   const [addbag, setaddbag] = useState(1);
   const [heart, setheart] = useState(1);
 
-  const AddBag = () => {
-    if (addbag < 10) {
-      setaddbag(addbag + 1);
-    }
+  const AddBag = (product) => {
+   let item = cart.filter(item => item.id === product.id)
+   if(item[0]){
+     incrementQuantity(product)
+   } else{
+     addItem(product)
+   }
   };
   const DecBag = () => {
     if (addbag >= 1) {
       setaddbag(addbag - 1);
     }
   };
-  const Heart = () => {
+  const Heart = (product) => {
     if (heart) {
       setheart(0);
+      addProduct(product)
     } else {
       setheart(1);
+      deleteProduct(product);
     }
   };
+  const wishlistIds = wishlist.map(product=>product.id)
+
+  useEffect(()=>{
+    if(wishlistIds.includes(props.product.id)){
+      setheart(0);
+    } else{
+      setheart(1)
+    }
+    
+  },[])
+
 
   return (
     <>
@@ -41,8 +61,9 @@ console.log("🚀 ~ file: productCard.jsx ~ line 5 ~ ProfileCard ~ props", props
                         </div> */}
           <small>
             <i
-              onClick={Heart}
+              onClick={()=>Heart(props.product)}
               className={`fa ${heart ? "fa-heart-o" : "fa-heart"}`}
+              // className={`fa ${!wishlistIds.includes(props.product.id)} ? "fa-heart-o" : "fa-heart"`}
             ></i>
           </small>
         </div>
@@ -100,12 +121,20 @@ console.log("🚀 ~ file: productCard.jsx ~ line 5 ~ ProfileCard ~ props", props
                             <i onClick={AddBag} className="fa fa-plus"></i> */}
           </div>
         </div>
-        {/* <div className="money_bag">
-                            <button onClick={AddBag}><i className="fa fa-shopping-bag"></i>Add to bag</button>
-                        </div> */}
+        <div className="money_bag">
+                            <button onClick={()=>AddBag(props.product)}><i className="fa fa-shopping-bag"></i>Add to cart</button>
+                        </div>
       </div>
     </>
   );
 };
 
-export default ProfileCard;
+const mapStateToProps = (state) => ({
+  cart: state.cart,
+  wishlist: state.wishlist
+
+});
+
+const mapDispatchToProps = { addItem,decrementQuantity,incrementQuantity,deleteItem,addProduct,deleteProduct};
+
+export default connect(mapStateToProps,mapDispatchToProps)(ProfileCard);

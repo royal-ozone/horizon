@@ -9,6 +9,8 @@ import {
 
 const Footer = () => {
   return (
+    <div className="footer">
+
     <Navbar bg="light">
       <Container>
         <Row>
@@ -102,6 +104,7 @@ const Footer = () => {
         </Row>
       </Container>
     </Navbar>
+    </div>
   );
 };
 

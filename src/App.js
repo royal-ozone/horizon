@@ -10,15 +10,17 @@ import Home from './component/Home';
 import Header from './component/header';
 import Main from './pages/main'
 import Footer from './component/footer'
+import Cart from './component/cart'
 import './App.css';
 
 function App() {
   return (
     <Suspense fallback='loading'>
-   <div>  
+   <div className="body">  
      <Router> 
        <Header/>
        <Switch>
+
        <Route exact path="/">
             <Main />
 
@@ -28,6 +30,9 @@ function App() {
           </Route>
           <Route exact path='/signin'>
             <SignInForm/>
+          </Route>
+          <Route exact path='/cart'>
+            <Cart/>
           </Route>
           <Route exact path="/home">
             <Home />

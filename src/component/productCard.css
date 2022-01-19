@@ -303,7 +303,10 @@ background-color: rgba(221, 220, 220, 0.568);
 border-radius: 25px;
 }
 
-
+i{
+    position: relative;
+    z-index: 10;
+}
 
 
 .last span{
@@ -321,13 +324,12 @@ border-radius: 25px;
 
 .hover{
     position: absolute;
-    z-index: -1px;
-    top: 1.9rem;
+    top: 0rem;
     width: 100%;
     /* display: none; */
     background-color: #107cbbb0;
-    height:50%;
-    padding: 2rem;
+    height:63%;
+    padding: 10%;
     color: #fff;
     font-size: large;
     font-weight: bold;

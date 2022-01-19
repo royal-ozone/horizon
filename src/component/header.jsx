@@ -1,8 +1,10 @@
 import React, {useEffect,useState} from "react";
 import {Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import { useTranslation  } from 'react-i18next';
-
-const Header = () => {
+import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
+const Header = (props) => {
+  const {cart} = props;
   const { t, i18n } = useTranslation();
   const [style, setStyle] = useState({})
 useEffect(() => {
@@ -18,13 +20,22 @@ const changeLanguage = lang => {
     <div>
       <Navbar bg="primary" variant="dark">
         <Container>
-          <Navbar.Brand href="#home"><span className='logo'>Horizon</span></Navbar.Brand>
+          <Navbar.Brand href="">
+            <Link to="/">
+            <span className='logo'>Horizon</span>
+            </Link>
+            </Navbar.Brand>
           <Nav>
               <div className="links" style={style}>
               <Nav>
 
             <Nav.Link href="#features"><img className="fav" src="https://i.top4top.io/p_21828tlph1.png" alt="fav"/></Nav.Link>
-            <Nav.Link href="#pricing"><img className="fav" src="https://k.top4top.io/p_2182zfpu31.png" alt='cart'/></Nav.Link>
+
+            <Nav.Link href="">
+            <Link to='/cart'>
+              <span className="cartNumber"><strong>{cart.reduce((x,y)=> {return x+y.qty},0)}</strong><img className="fav" src="https://d.top4top.io/p_22088h0ek1.png" alt='cart'/></span>
+            </Link>
+              </Nav.Link>
           <img
                 className="profile"
                 src="https://b.top4top.io/p_2182nn0jy1.png"
@@ -59,4 +70,9 @@ const changeLanguage = lang => {
   );
 };
 
-export default Header;
+const mapStateToProps = (state) => ({
+  cart: state.cart
+
+});
+
+export default connect(mapStateToProps)(Header);
