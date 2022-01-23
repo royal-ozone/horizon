@@ -7,7 +7,7 @@ const featuredDeals = [
         title: 'Day Pass Combo incl. Rental Equipment',
         activity: 'Snowplanet',
         place: 'Silverdale',
-        bought: 1313,
+        rate: 4,
         oldPrice: '$124',
         price: "$45",
         description: 'Day Pass Combo to Snowplanet incl. Rental Equipment'
@@ -18,7 +18,7 @@ const featuredDeals = [
         title: 'Day Tandem Skydive Package Combo incl. Rental Equipment',
         activity: 'Taupo Tandem Skydiving',
         place: 'Taupo',
-        bought: 114,
+        rate: 4.5,
         oldPrice: null,
         price: "$199",
         description: '9000ft Tandem Skydive Package Overlooking Lake Taupo - Options for 12000ft, 15000ft or 18500ft & to incl. Voucher Towards a Camera Package or Exit Image - Valid from 1st January 2022'
@@ -29,7 +29,7 @@ const featuredDeals = [
         title: 'Six-Course Signature Menu Dining Experience',
         activity: 'Sails Restaurant, Westhaven Marina',
         place: 'Auckland',
-        bought: 435,
+        rate: 4.7,
         oldPrice: null,
         price: "$89",
         description: 'Six-Course Signature Menu Dining Experience - Options for up to Ten People - Valid from 5th January 2022'
@@ -40,7 +40,7 @@ const featuredDeals = [
         title: ' Water Sports Experience',
         activity: 'Vector Wero Whitewater Park',
         place: 'Wiri',
-        bought: 244,
+        rate: 5,
         oldPrice: '$74',
         price: "$39",
         description: 'Rafting & Lake Adventure Combo incl. Ice Cream for One Person - Options for up to Seven People'

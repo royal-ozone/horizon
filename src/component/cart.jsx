@@ -14,6 +14,7 @@ const qtyChangeHandler = (item) => {
   return (
     <div className="cart">
         {cart.length > 0? 
+        <section>
       <table>
         <thead>
         <tr>
@@ -50,8 +51,8 @@ const qtyChangeHandler = (item) => {
         </tfoot>
         
       </table>
-            
-            
+            <strong className="subTotal">Subtotal: {cart.reduce((x,y)=>{return x+= Number(y.price.slice(1)) * y.qty},0)}</strong>
+            </section>
             : <h3 className="cartHeader">Your cart is empty</h3>}
     </div>
   );

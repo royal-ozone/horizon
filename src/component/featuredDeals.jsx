@@ -14,7 +14,7 @@ const ProductView = (props) => {
             </div>
             <div className="deals">
                { props.product.map(product => 
-                    <ProfileCard product={product} xclass={props.xclass}/>
+                    <ProfileCard product={product} xclass={props.xclass} itemType='product'/>
                 )}
             </div>
         </div>
