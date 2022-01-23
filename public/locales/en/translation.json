@@ -1,1 +1,20 @@
-{"lan": "Language"}
+{
+    "lan": "Language",
+    "text1":"Registration Form",
+    "name1":"First Name",
+    "name2":"Last Name",
+    "em":"Email Address",
+    "phone":"Mobile Number",
+    "gen":"Gender",
+    "mal":"Male",
+    "fem":"Female",
+    "count":"Country",
+    "city":"City",
+    "pass":"Password",
+    "con-pass":"Confirm Password",
+    "register":"Register",
+    "sub":"Sign In",
+    "sign":"Sign Up",
+    "text2":"Enter Email Or Phone Number",
+    "text3":"We'll never share your email with anyone else."
+}

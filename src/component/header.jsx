@@ -18,7 +18,7 @@ const changeLanguage = lang => {
     <div>
       <Navbar bg="primary" variant="dark">
         <Container>
-          <Navbar.Brand href="#home"><span className='logo'>Horizon</span></Navbar.Brand>
+          <Navbar.Brand href="/"><span className='logo'>Horizon</span></Navbar.Brand>
           <Nav>
               <div className="links" style={style}>
               <Nav>
@@ -35,12 +35,12 @@ const changeLanguage = lang => {
                 <NavDropdown.Item href="#action/3.2">
                   Another action
                 </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">
-                  Something
+                <NavDropdown.Item href="/signUp">
+                  Sign Up 
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">
-                  Separated link
+                <NavDropdown.Item href="/signIn">
+                  Sign In
                 </NavDropdown.Item>
               </NavDropdown>
              
@@ -51,6 +51,7 @@ const changeLanguage = lang => {
                 <NavDropdown.Item href="#action/3.2" onClick={() => changeLanguage('en')}>
                   English
                 </NavDropdown.Item>
+                
               </NavDropdown>
           </Nav>
         </Container>
