@@ -78,13 +78,13 @@
     margin-top: 2px
 }
 
-.image {
+.image2 {
     display: flex;
     justify-content: center;
     align-items: center
 }
 
-.image img {
+.image2 img {
     width: 100%;
     margin-bottom: 30px;
     border-radius: 10px 10px 0 0;

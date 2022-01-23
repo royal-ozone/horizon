@@ -70,7 +70,7 @@ const ProfileCard = (props) => {
             ></i>
           </small>
         </div>
-        <div className="image">
+        <div className="image2">
           <img className="img" src={props.product.image} alt="Image" />
           {/* <p className="hover">{props.product.description}</p> */}
         </div>
