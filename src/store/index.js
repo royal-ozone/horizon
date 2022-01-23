@@ -7,8 +7,10 @@ import signIn from './signin';
 import signInWithGoogle from './google';
 import authProvider from'./authProvider';
 import signInWithFacebook from './facebook';
+import cart from './cart';
+import wishlist from './wishlist';
 
-let reducers = combineReducers({signupData:signup,signInData:signIn,signInWithGoogleData:signInWithGoogle, provider:authProvider,signInWithFacebookData: signInWithFacebook }) ;
+let reducers = combineReducers({signupData:signup,signInData:signIn,signInWithGoogleData:signInWithGoogle, provider:authProvider,signInWithFacebookData: signInWithFacebook, cart:cart, wishlist:wishlist }) ;
 
 
 let store = configureStore({reducer:reducers}, applyMiddleware(thunk));

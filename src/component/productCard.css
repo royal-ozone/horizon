@@ -3,10 +3,13 @@
 
 
 .card {
+    display: flex;
+    direction: column;
+    justify-content:space-between;
     position: relative;
-    z-index: -10000px;
     background-color: #fff;
     border-radius: 10px;
+    min-height: 100%;
     /* border-radius: 25px; */
     font-family: 'Poppins', sans-serif;
     /* margin-bottom: 5.5rem; */
@@ -265,7 +268,10 @@
 .money_bag {
     display: flex;
     justify-content: center;
-    align-items: center
+    align-items: center;
+    position: relative;
+    bottom: 0.5rem;
+
 }
 
 .money_bag h3 {
@@ -303,7 +309,10 @@ background-color: rgba(221, 220, 220, 0.568);
 border-radius: 25px;
 }
 
-
+i{
+    position: relative;
+    z-index: 10;
+}
 
 
 .last span{
@@ -321,13 +330,12 @@ border-radius: 25px;
 
 .hover{
     position: absolute;
-    z-index: -1px;
-    top: 1.9rem;
+    top: 0rem;
     width: 100%;
     /* display: none; */
     background-color: #107cbbb0;
-    height:50%;
-    padding: 2rem;
+    height:63%;
+    padding: 10%;
     color: #fff;
     font-size: large;
     font-weight: bold;
