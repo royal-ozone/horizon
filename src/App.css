@@ -634,7 +634,7 @@ table img{
   width:150;
 }
 table th, table td{
-  border:1px solid black;
+  /* border:1px solid black; */
   font-family: 'Roboto', sans-serif;
   color:rgb(77, 72, 72);
 }
@@ -642,9 +642,9 @@ table td{
   text-align:center;
   background-color:rgb(194, 187, 187);
 }
-th{
+/* th{
   background-color: rgb(25, 241, 25)
-}
+} */
 
 .btns{
   /* border: 1px solid black; */
@@ -724,6 +724,14 @@ th{
   margin:auto;
   padding: 1rem;
 }
+.productstHead{
+  border-bottom:rgb(94, 94, 250) 1px solid;
+  text-align: center;
+  width: 20rem;
+  max-width: 50%;
+  margin:auto;
+  padding: 1rem;
+}
 .visit{
   border: 0;
   border-radius: 10px;
@@ -749,6 +757,135 @@ th{
   padding: 0 10%; 
   margin-bottom: 6rem;
   display: flex;
- justify-content: left;
+  justify-content: space-around;
  
+}
+
+.productContent{
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-around; */
+  line-height: 3rem;
+  width: 50%;
+  padding: 2.5%;
+}
+
+.productAction{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.WLB{
+  padding: .6rem;
+  border-radius: 1.2rem;
+  border: 0;
+  font-size: .6rem;
+  color: #fff;
+  background-color: olivedrab;
+}
+
+.icCart button:nth-child(1){
+padding: .5rem;
+border-radius: 1rem 0 0 1rem;
+
+border-right: 0;
+background-color: skyblue
+}
+.icCart button:nth-child(3){
+  padding: .5rem;
+  border-radius:  0 1rem 1rem 0;
+ 
+  border-left: 0;
+  background-color: skyblue
+  }
+.icCart{
+  display: flex;
+  flex-direction: row;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+.icCart span{
+ height: 100%;
+  width: 100%;
+  padding:.5rem;
+  background-color: skyblue;
+  
+ 
+}
+
+.icCart span, .icCart button{
+  color: #fff;
+}
+.checkoutForm{
+  display: flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction: column;
+}
+/* .checkoutForm button{
+    color: blue;
+
+} */
+.checkout{
+  background-color: rgb(99, 99, 243);
+  color: #fff;
+  margin: 0 auto;
+  padding:1rem;
+  border-radius: 5rem;
+  border: 0;
+}
+.wishlistBtn button img {
+  position: relative;
+  left: -1rem;
+
+}
+
+.seller{
+  padding: 1rem 10%;
+}
+
+.seller section{
+  display: flex;
+  flex-direction: row;
+ background-color: #fff;
+ border: 1rem solid rgb(212, 200, 200);
+}
+
+.rounded{
+  /* position: relative;
+  left: 0; */
+  width: 20%
+}
+.sellerAvatar{
+  border-radius: 30rem;
+}
+.sellerDetails{
+  padding: 1rem;
+  line-height: 3rem;
+}
+
+.seller hr{
+  width: 100%;
+  margin: auto;
+  height: 2px;
+  margin-bottom: 1rem;
+}
+
+.sellerProducts{
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+/* .sellerProducts div{
+  width: 80%;
+} */
+
+.tab-pane{
+  background-color: #fff !important;
 }

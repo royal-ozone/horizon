@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState, useEffect }from "react";
 import { connect } from "react-redux";
 import {deleteProduct} from '../store/wishlist'
 import {addItem} from '../store/cart'
+import {If, Then, Else} from 'react-if'
 const Wishlist = props =>{
-    const {wishlist,deleteProduct, addItem} = props
+    const {wishlist,deleteProduct, addItem, cart} = props
+   
+    const x = cart.map(w => w.id)
+
+    // useEffect(() =>{
+       
+    //     setW(x)
+    //   },[wishlist])
     return(
         <div className="wishlist">
             <h2 className="wishlistHead">Wishlist</h2>
@@ -13,7 +21,16 @@ const Wishlist = props =>{
                 <h3>{item.title}</h3>
                 <div className="btnContainer">
                     <div className="money_bag">
-                    <button onClick={() =>addItem(item)}><i className="fa fa-shopping-bag"/>Move to Card</button>
+                        <If condition={!x.includes(Number(item.id))}>
+                 
+                            <Then>
+                                <button onClick={() =>addItem({...item, qty: 1})}><i className="fa fa-shopping-bag"/>Move to Card</button>
+                            </Then>
+                            <Else>
+                                <button disabled onClick={() =>addItem({...item, qty: 1})}><i className="fa fa-shopping-bag"/>In your Card</button>
+                            </Else>
+                        </If>
+                    {/* <button onClick={() =>addItem({...item, qty: 1})}><i className="fa fa-shopping-bag"/>Move to Card</button> */}
                     </div>
                     <div className="removeBtn ">
                     <button className="removeWishlist" onClick={() =>deleteProduct(item)}>Remove</button>
@@ -28,7 +45,8 @@ const Wishlist = props =>{
     )
 }
 const mapStateToProps = (state) =>({
-    wishlist: state.wishlist
+    wishlist: state.wishlist,
+    cart: state.cart
 })
 
 const mapDispatchToProps = {deleteProduct,addItem}

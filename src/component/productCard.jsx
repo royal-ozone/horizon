@@ -7,6 +7,8 @@ import { If, Then, Else } from 'react-if'
 // import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'
 import StarRatings from 'react-star-ratings';
 import { Link } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
+
 
 
 const ProfileCard = (props) => {
@@ -20,8 +22,9 @@ const ProfileCard = (props) => {
     if (item[0]) {
       incrementQuantity(product)
     } else {
-      addItem(product)
+      addItem({...product, qty: 1})
     }
+    toast("added to your cart")
   };
   const DecBag = () => {
     if (addbag >= 1) {
@@ -150,6 +153,7 @@ const ProfileCard = (props) => {
           <Then>
             <div className="money_bag">
               <button onClick={() => AddBag(props.product)}><i className="fa fa-shopping-bag"></i>Add to cart</button>
+              <ToastContainer position="bottom-right"/>
             </div>
 
           </Then>
