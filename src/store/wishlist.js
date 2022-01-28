@@ -1,6 +1,8 @@
 import { createSlice,current } from "@reduxjs/toolkit";
 import cookie from 'react-cookies'
 let cookieWishlist = cookie.load('wishlist') || []
+
+
 const wishlist = createSlice({
     name: 'wishlist',
     initialState: [...cookieWishlist],

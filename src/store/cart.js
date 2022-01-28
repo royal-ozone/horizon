@@ -7,8 +7,8 @@ const cart = createSlice({
     initialState: cookieCard? cookieCard: [],
     reducers:{
         addItem(state,action) {
-            cookie.save('cart', [...state,{...action.payload, qty:1} ] )
-            return [...state,{...action.payload, qty:1} ];
+            cookie.save('cart', [...state,{...action.payload} ] )
+            return [...state,{...action.payload} ];
         },
         decrementQuantity(state,action){
             let arr = current(state)

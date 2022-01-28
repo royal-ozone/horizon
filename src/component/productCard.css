@@ -280,7 +280,7 @@
 
 .money_bag button {
     height: 40px;
-    width: 100px;
+    /* width: 100px; */
     background-color: #51beff;
     border: none;
     border-radius: 25px;

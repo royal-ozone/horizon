@@ -6,12 +6,12 @@ import store from './store/';
 import {Provider} from 'react-redux';
 import './i18next';
 import reportWebVitals from './reportWebVitals';
-
+import Loader from './component/loader'
 ReactDOM.render(
   
     <React.StrictMode>
       <Provider store={store}>
-      <Suspense fallback='loading'>
+      <Suspense fallback={Loader}>
       <App />
       </Suspense>
       </Provider>
