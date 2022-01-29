@@ -1,10 +1,11 @@
 import React,{useState,useEffect} from 'react'
 import {connect} from 'react-redux'
-import {signInHandler} from '../store/signin';
+import {signInHandler} from '../store/sign';
 import {signInHandlerWithGoogle} from '../store/google'
 import {googleProvider,facebookProvider} from '../store/authProvider'
 import {signInHandlerWithFacebook} from '../store/facebook'
 import {useTranslation} from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 import {
   
   Form,
@@ -14,30 +15,43 @@ import './signInForm.css';
 import background from "../assets/8.jpg";
 
 const SignInForm = props => {
+  const history = useHistory();
 console.log("🚀 ~ file: SignInForm.js ~ line 10 ~ props", props)
   const {t,i18n}=useTranslation();
   const changeLanguage = att=>{
     i18n.changeLanguage(att)
   }
-    let [value,setValue]= useState({
+  
+    // let [value,setValue]= useState({
         
-        email:'',
-        password:'',
-    })
-    const handleChange = e=>{
+    //     email:'',
+    //     password:'',
+    // })
+    // const handleChange = e=>{
        
-        setValue({
-            ...value,
-            [e.target.name]:e.target.value
-        })
+    //     setValue({
+    //         ...value,
+    //         [e.target.name]:e.target.value
+    //     })
        
-    }
-    const handleSubmit = async e=>{
-        e.preventDefault();
+    // }
+    const handleSubmit = async e =>{
+         e.preventDefault();
        
         try {
+          let opj ={
+            email: e.target.email.value,
+            password: e.target.password.value
+          }
+            props.signInHandler(opj);
+           if(props.userSignIn){
+             history.push('/')
+           }
+            console.log("🚀 ~ file: SignInForm.jsx ~ line 46 ~ props", props)
             
-            props.signInHandler(value);
+            
+            console.log("🚀 ~ file: SignInForm.jsx ~ line 47 ~ props.userSignIn.access_token", props)
+
             
         } catch (error) {
             console.log(error.message);
@@ -49,19 +63,7 @@ console.log("🚀 ~ file: SignInForm.js ~ line 10 ~ props", props)
        localStorage.setItem('provider', 'google');
         window.location ='http://localhost:5000/auth/google'
     }
-    // useEffect(() => {
-        
-       
-    //     if(window.location.search){
-    //         if(props.provider=== 'google'){
-
-    //             props.signInHandlerWithGoogle(window.location.search)
-    //         } else if  (props.provider=== 'facebook'){
-    //             props.signInHandlerWithfaceook(window.location.search)
-    //         }
-    //     } 
-       
-    // },[])
+   
     useEffect(() => {
         console.log("🚀 ~ file: SignInForm.js ~ line 54 ~ props.provider", props.provider)
 
@@ -87,19 +89,19 @@ console.log("🚀 ~ file: SignInForm.js ~ line 10 ~ props", props)
         <div className="image-holder">
         <img className="image" src={background} alt={background}/>
         </div>
-      <form className="form">
+      <form className="form" onSubmit={handleSubmit}>
       <Form.Group className="mb-3" >
         
-        <Form.Control type="email" placeholder={t("text2")}  />
+        <Form.Control type="email" name="email" placeholder={t("text2")}  />
 
         <Form.Text className="text-muted">
           {t("text3")}
         </Form.Text>
       </Form.Group>
     
-      <Form.Group className="mb-3" >
+      <Form.Group className="mb-3"  >
       
-        <Form.Control type="password" placeholder={t("pass")} />
+        <Form.Control type="password" name="password" placeholder={t("pass")} />
       </Form.Group>
     
       <Button variant="primary" type="submit" className="btn">
@@ -121,11 +123,14 @@ console.log("🚀 ~ file: SignInForm.js ~ line 10 ~ props", props)
 
 // export default SignInForm
 
-const mapStateToProps = (state) => ({
-    user: state.signInData ? state.signInData : null,
+const mapStateToProps = (state) => (
+
+  {
+    userSignIn: state.sign ? state.sign : null,
     googleUser : state.signInWithGoogleData ? state.signInWithGoogleData : null,
     provider: state.provider,
     facebookUser: state.signInWithFacebookData ? state.signInWithFacebookData : null,
+    
 
   });
   

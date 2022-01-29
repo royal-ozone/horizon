@@ -45,9 +45,10 @@ function App() {
           <Route exact path='/signup' >
             <SignupForm/>
           </Route>
-          <Route exact path='/signin'>
+          <Route exact path='/signIn'>
             <SignInForm/>
           </Route>
+          
           <Route exact path='/cart'>
             <Cart/>
           </Route>

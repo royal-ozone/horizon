@@ -8,21 +8,37 @@ export default class ApiService {
      let res = await axios({
             method: 'get',
             url: `${api}/${endpoint}`,
-            params:params
+            params:params,
+            
           })
         
           return res.data
     }
-    async post(endpoint,params,data){
+    async post(endpoint,params,data,token){
      let res = await axios({
             method: 'post',
             url: `${api}/${endpoint}`,
             data: data,
-            params:params
+            params:params,
+            headers: {
+              Authorization: 'Bearer ' + token 
+            }
             
           });
           return res.data
     }
+    async basicPost(endpoint,params,data){
+      let res = await axios({
+             method: 'post',
+             url: `${api}/${endpoint}`,
+             data: data,
+             params:params,
+             headers:{Authorization:` Basic ${btoa(`${data.email}:${data.password}`)}`}
+            
+             
+           });
+           return res.data
+     }
     async update(endpoint,data,params=null){
         let res = await axios({
             method: 'put',
