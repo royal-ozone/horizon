@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
+import cookie from 'react-cookies';
+import {logOutHandler} from '../store/sign';
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
+let signInToken =cookie.load('tokenSignIn')
+console.log("🚀 ~ file: header.jsx ~ line 9 ~ signInToken", signInToken)
 const Header = (props) => {
+  const history = useHistory();
+console.log("🚀 ~ file: header.jsx ~ line 12 ~ Header ~ props", props)
   const { cart } = props;
   const { t, i18n } = useTranslation();
-  const [style, setStyle] = useState({})
+  const [style, setStyle] = useState({});
+  
   useEffect(() => {
     let x = window.innerWidth
     if (x < 553) {
@@ -23,6 +31,13 @@ const Header = (props) => {
       document.documentElement.setAttribute("lang", 'ar');
       document.documentElement.setAttribute("dir", 'rtl');
     }
+  }
+  const logOutHandle = () => {
+      props.logOutHandler();
+      history.push('/signIn')
+      
+    //  window.location ='http://localhost:3000/'
+    console.log("🚀 ~ file: header.jsx ~ line 35 ~ logOutHandle ~ props", props)
   }
   return (
     <div>
@@ -61,13 +76,27 @@ const Header = (props) => {
                 <NavDropdown.Item href="#action/3.2">
                   Another action
                 </NavDropdown.Item>
+                {props.userSignIn.access_token?
+                  <NavDropdown.Item   onClick={logOutHandle}>
+                  Log Out 
+                </NavDropdown.Item>
+              :
+              <div>
+
                 <NavDropdown.Item href="/signUp">
                   Sign Up 
                 </NavDropdown.Item>
-                <NavDropdown.Divider />
                 <NavDropdown.Item href="/signIn">
                   Sign In
                 </NavDropdown.Item>
+              </div>
+             
+                
+
+              }
+                <NavDropdown.Divider />
+                
+                
               </NavDropdown>
              
               </Nav>
@@ -87,8 +116,9 @@ const Header = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  cart: state.cart
-
+  cart: state.cart,
+  dataLogOut: state.log,
+  userSignIn: state.sign ? state.sign : null
 });
-
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = { logOutHandler};
+export default connect(mapStateToProps,mapDispatchToProps)(Header);

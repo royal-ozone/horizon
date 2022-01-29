@@ -1,7 +1,8 @@
 import React,{useState, useEffect} from 'react'
 import {connect} from 'react-redux'
 import SignInForm from './SignInForm';
-import { signupHandler } from '../store/signup';
+import { signupHandler } from '../store/sign';
+import {verificationHandler} from '../store/sign'
 import {signInHandlerWithGoogle} from '../store/google';
 import {signInHandlerWithFacebook} from '../store/facebook';
 
@@ -18,6 +19,7 @@ import {useTranslation} from 'react-i18next'
 
 
 const SignupForm = (props) => {
+console.log("🚀 ~ file: SignupForm.js ~ line 21 ~ SignupForm ~ props", props)
 console.log('googleUser', props.googleUser);
 console.log('provider', props.provider)
 
@@ -26,7 +28,8 @@ const {t}=useTranslation();
 const [user,setUser] = useState({})
 const [phone, setPhone] = useState()
 const [city,setCity]=useState();
-    const [values,setValues] =useState({
+
+const [values,setValues] = useState({
         first_name:props.googleUser.first_name||'' ,
         last_name:props.googleUser.last_name||'',
         email:props.googleUser.email||'',
@@ -53,27 +56,25 @@ const [city,setCity]=useState();
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        let phoneArray = e.target.mobile.value.split(' ');
+        
        let obj = {
+        email:e.target.email.value,
+        password:e.target.password.value,
         first_name:e.target.first_name.value,
         last_name:e.target.last_name.value,
-        email:e.target.email.value,
-        mobile:e.target.mobile.value,
+        mobile:'0'+phoneArray.slice(1).join(''),
         country:e.target.country.value,
         city:e.target.city.value,
-        country_code:e.target.country_code.value ,
-        password:e.target.password.value,
+        country_code:phoneArray[0] ,
         gender:e.target.gender.value,
         google_id:e.target.google_id.value || null ,
         facebook_id:e.target.facebook_id.value || null
        }
-       console.log("🚀 ~ file: SignupForm.js ~ line 46 ~ handleSubmit ~ obj", obj)
-        props.signupHandler(obj)
-    //   window.location=`http://localhost:3000/signin`
+       props.signupHandler(obj);
+       props.verificationHandler();
     }
-    // const ahmad = async () => {
-    //     <SignInForm />
-    // }
+    
 
     useEffect(() => {
     let provider = localStorage.getItem('provider')
@@ -170,7 +171,7 @@ const [city,setCity]=useState();
             </div>
 
             <div className="form-wrapper">
-              <input type="password" placeholder={t("con-pass")} name='password' className="form-control-input"></input>
+              <input type="password" placeholder={t("con-pass")} name='con_password' className="form-control-input"></input>
             </div>
 
              <button className="ahmad" >{t("register")} </button>
@@ -210,12 +211,12 @@ const [city,setCity]=useState();
 // export default SignupForm
 
 const mapStateToProps = (state) => ({
-    user: state.signupData ? state.signupData : null,
+    userSignUp: state.signUp ? state.signUp : null,
     googleUser : state.signInWithGoogleData ? state.signInWithGoogleData : null,
     provider: state.provider,
     facebookUser: state.signInWithFacebookData ? state.signInWithFacebookData : null,
   });
   
-  const mapDispatchToProps = { signupHandler , signInHandlerWithGoogle, signInHandlerWithFacebook};
+  const mapDispatchToProps = { signupHandler ,verificationHandler, signInHandlerWithGoogle, signInHandlerWithFacebook};
   
   export default connect(mapStateToProps, mapDispatchToProps)(SignupForm);
