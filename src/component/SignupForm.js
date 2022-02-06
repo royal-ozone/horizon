@@ -57,7 +57,7 @@ const [values,setValues] = useState({
     const handleSubmit = (e) => {
         e.preventDefault();
         let phoneArray = e.target.mobile.value.split(' ');
-        
+        let country_code =phoneArray[0].slice(1);
        let obj = {
         email:e.target.email.value,
         password:e.target.password.value,
@@ -66,13 +66,13 @@ const [values,setValues] = useState({
         mobile:'0'+phoneArray.slice(1).join(''),
         country:e.target.country.value,
         city:e.target.city.value,
-        country_code:phoneArray[0] ,
+        country_code:country_code,
         gender:e.target.gender.value,
         google_id:e.target.google_id.value || null ,
         facebook_id:e.target.facebook_id.value || null
        }
        props.signupHandler(obj);
-       props.verificationHandler();
+       
     }
     
 

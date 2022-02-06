@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import SignupForm from './component/SignupForm';
 import SignInForm from './component/SignInForm';
+import Verification from './component/verification';
 import Home from './component/Home';
 import Header from './component/header';
 import Main from './pages/main'
@@ -55,6 +56,11 @@ function App() {
          
           <Route exact path='/signIn'>
             <SignInForm/>
+
+          </Route>
+
+          <Route exact path='/verification'>
+            <Verification/>
 
           </Route>
           

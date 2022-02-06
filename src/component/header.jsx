@@ -86,6 +86,9 @@ console.log("🚀 ~ file: header.jsx ~ line 12 ~ Header ~ props", props)
                 <NavDropdown.Item href="/signUp">
                   Sign Up 
                 </NavDropdown.Item>
+                <NavDropdown.Item href="/verification">
+                 verification
+                </NavDropdown.Item>
                 <NavDropdown.Item href="/signIn">
                   Sign In
                 </NavDropdown.Item>
