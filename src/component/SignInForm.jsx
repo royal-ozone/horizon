@@ -17,10 +17,8 @@ import background from "../assets/8.jpg";
 const SignInForm = props => {
   const history = useHistory();
 console.log("🚀 ~ file: SignInForm.js ~ line 10 ~ props", props)
-  const {t,i18n}=useTranslation();
-  const changeLanguage = att=>{
-    i18n.changeLanguage(att)
-  }
+  const {t}=useTranslation();
+  
   
     // let [value,setValue]= useState({
         

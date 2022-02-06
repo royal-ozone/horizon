@@ -20,7 +20,10 @@ let sign = createSlice({
         },
         verification(state,action){
             return action.payload
-        }
+        },
+        verify(state,action){
+            return action.payload
+        },
         
     }
 
@@ -73,14 +76,29 @@ export const verificationHandler = (payload) => (dispatch,state) => {
     (async()=>{
         console.log('Verification Seccessfully')
 
-        let bearer = cookie.load('tokenSignIn');
-        let data = await Verification.post('auth/user/verification',null,payload,bearer);
-        console.log("🚀 ~ file: signin.js ~ line 23 ~ data", data)
+        let bearer = cookie.load('tokenSignUp');
+        console.log("🚀 ~ file: sign.js ~ line 80 ~ bearer", bearer)
+        let data = await Verification.post('auth/user/verification',null,null,bearer);
+        console.log("🚀 ~ file: sign.js ~ line 82 ~ data", data)
         dispatch(verification(data))
     })()
 
 }
 
+export const verifyHandler = (payload) => (dispatch,state) => {
+    let Verification =new ApiService();
+    
+    
+    (async()=>{
+        console.log('Verify Seccessfully')
+        let bearer = cookie.load('tokenSignUp');
+        let data = await Verification.post('auth/user/verify',null,payload,bearer);
+        console.log("🚀 ~ file: sign.js ~ line 78 ~ data", data)
+        dispatch(verify(data))
+    })()
+
+}
+
 export default sign.reducer 
-export const {getUser,addUser,logOut,verification} = sign.actions
+export const {getUser,addUser,logOut,verification,verify} = sign.actions
 
