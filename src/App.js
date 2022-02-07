@@ -14,6 +14,12 @@ import Footer from './component/footer'
 import Cart from './component/cart'
 import Wishlist from './component/wishlist'
 import Product from './component/product'
+import Settings from './component/Settings'
+import Account from './component/account/account';
+import Address from './component/address/address';
+import Email from './component/email/changeEmail';
+import Password from './component/password/changPassword';
+import Notification from './component/notification/notification';
 import { useTranslation } from 'react-i18next';
 import {Rings } from 'react-loader-spinner'
 import Loader from './component/loader'
@@ -58,7 +64,30 @@ function App() {
             <SignInForm/>
 
           </Route>
+          <Route exact path='/settings'>
+            <Settings/>
 
+          </Route>
+          {/* <Route exact path='/account'>
+            <Account/>
+
+          </Route>
+          <Route exact path='/email'>
+            <Email/>
+
+          </Route>
+          <Route exact path='/password'>
+            <Password/>
+
+          </Route>
+          <Route exact path='/notification'>
+            <Notification/>
+
+          </Route>
+          <Route exact path='/address'>
+            <Address/>
+
+          </Route> */}
           <Route exact path='/verification'>
             <Verification/>
 

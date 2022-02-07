@@ -73,9 +73,7 @@ console.log("🚀 ~ file: header.jsx ~ line 12 ~ Header ~ props", props)
               />
               <NavDropdown  title="" id="collasible-nav-dropdown2"  >
                 <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Another action
-                </NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.2"> Another action </NavDropdown.Item>
                 {props.userSignIn.access_token?
                   <NavDropdown.Item   onClick={logOutHandle}>
                   Log Out 
@@ -94,9 +92,10 @@ console.log("🚀 ~ file: header.jsx ~ line 12 ~ Header ~ props", props)
                 </NavDropdown.Item>
               </div>
              
-                
-
-              }
+             
+             
+            }
+            <NavDropdown.Item href="/settings">settings</NavDropdown.Item>
                 <NavDropdown.Divider />
                 
                 
