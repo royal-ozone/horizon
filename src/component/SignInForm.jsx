@@ -1,137 +1,180 @@
-import React,{useState,useEffect} from 'react'
-import {connect} from 'react-redux'
-import {signInHandler} from '../store/sign';
-import {signInHandlerWithGoogle} from '../store/google'
-import {googleProvider,facebookProvider} from '../store/authProvider'
-import {signInHandlerWithFacebook} from '../store/facebook'
-import {useTranslation} from 'react-i18next';
-import { useHistory } from 'react-router-dom';
-import {
-  
-  Form,
-  Button,
-} from "react-bootstrap";
-import './signInForm.css';
+import React, { useState, useEffect } from "react";
+import { connect ,useDispatch} from "react-redux";
+import { deleteMessage, signInHandler } from "../store/auth";
+import { signInHandlerWithGoogle } from "../store/google";
+import { googleProvider, facebookProvider } from "../store/authProvider";
+import { signInHandlerWithFacebook } from "../store/facebook";
+import { useTranslation } from "react-i18next";
+import { useHistory ,Link} from "react-router-dom";
+import { Form, Button, Spinner } from "react-bootstrap";
+import "./signInForm.css";
 import background from "../assets/8.jpg";
-
-const SignInForm = props => {
+import cookie from 'react-cookies'
+const SignInForm = (props) => {
+  const dispatch = useDispatch();
   const history = useHistory();
-console.log("🚀 ~ file: SignInForm.js ~ line 10 ~ props", props)
-  const {t}=useTranslation();
+  const { t } = useTranslation();
+  const {userSignIn,signInHandler} = props;
+  console.log("🚀 ~ file: SignInForm.jsx ~ line 19 ~ SignInForm ~ userSignIn", userSignIn)
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showDeactivate,setShowDeactivate] = useState(false);
+  const [show,setShow] = useState(false);
+
+  const submitHandler = (e) => {
+    setErrorMessage('');
+    setLoading(true);
+    e.preventDefault();
+
+    signInHandler({
+      email: e.target.email.value,
+      password: e.target.password.value,
+    });
+  };
+  let currentPath =cookie.load('currentPath');
+
+  // useEffect(()=>{
+  //   if(userSignIn.user){
+  //     dispatch(deleteMessage());
+  //   }
+  //   // setLoading(false);
+  // },[dispatch, userSignIn.user])
   
-  
-    // let [value,setValue]= useState({
-        
-    //     email:'',
-    //     password:'',
-    // })
-    // const handleChange = e=>{
-       
-    //     setValue({
-    //         ...value,
-    //         [e.target.name]:e.target.value
-    //     })
-       
-    // }
-    const handleSubmit = async e =>{
-         e.preventDefault();
-       
-        try {
-          let opj ={
-            email: e.target.email.value,
-            password: e.target.password.value
-          }
-            props.signInHandler(opj);
-           if(props.userSignIn){
-             history.push('/')
-           }
-            console.log("🚀 ~ file: SignInForm.jsx ~ line 46 ~ props", props)
-            
-            
-            console.log("🚀 ~ file: SignInForm.jsx ~ line 47 ~ props.userSignIn.access_token", props)
-
-            
-        } catch (error) {
-            console.log(error.message);
-        }
+  useEffect(()=>{
+    if(userSignIn.login){
+      history.push(currentPath || '/');
     }
-   
-   
-    const handleGoogle = ()=>{
-       localStorage.setItem('provider', 'google');
-        window.location ='http://localhost:5000/auth/google'
-    }
-   
-    useEffect(() => {
-        console.log("🚀 ~ file: SignInForm.js ~ line 54 ~ props.provider", props.provider)
+    setLoading(false);
+  },[currentPath, history, userSignIn.login])
 
-    },[props.provider])
-    
-    useEffect(()=>{
+  // useEffect(()=>{
+  //   if(userSignIn.message){
+  //     if(userSignIn.message.includes('password')){
+  //       setErrorMessage(userSignIn.message)
+  //       // dispatch(deleteMessage());
+  //     }
+  //   }
+  //   setLoading(false);
+  // },[dispatch, userSignIn])
 
-        console.log(props.googleUser,'props.googleUser')
-        
-    },[props.googleUser])
-    
-    const handleFacebook = ()=>{
-        localStorage.setItem('provider', 'facebook');
-        props.facebookProvider()
-        window.location ='http://localhost:5000/auth/facebook'
-    }
-    const responseGoogle = (response) => {
-        console.log(response);
+  useEffect(()=>{
+    if(userSignIn.message){
+      if(userSignIn.message){
+        console.log("🚀 ~ file: SignInForm.jsx ~ line 62 ~ useEffect ~ userSignIn.message", userSignIn.message)
+        console.log("🚀 ~ file:asssssssssssssssssssss")
+        setShow(true);
+        // dispatch(deleteMessage());
       }
-    return (
-      <div className="wrapper">
-        <div className="inner2">
+    }
+    setLoading(false);
+  },[dispatch, userSignIn])
+
+  useEffect(()=>{
+    if(userSignIn.message){
+      if(userSignIn.message.includes('activate',30)){
+        console.log("🚀 ~ file: SignInForm.jsx ~ line 62 ~ useEffect ~ userSignIn.message", userSignIn.message)
+        console.log("🚀 ~ file:asssssssssssssssssssss")
+        setShowDeactivate(true);
+        // dispatch(deleteMessage());
+      }
+    }
+    setLoading(false);
+  },[dispatch, userSignIn])
+
+  // const handleGoogle = ()=>{
+  //    localStorage.setItem('provider', 'google');
+  //     window.location ='http://localhost:5000/auth/google'
+  // }
+
+  // useEffect(() => {
+  //     console.log("🚀 ~ file: SignInForm.js ~ line 54 ~ props.provider", props.provider)
+
+  // },[props.provider])
+
+  // useEffect(()=>{
+
+  //     console.log(props.googleUser,'props.googleUser')
+
+  // },[props.googleUser])
+
+  // const handleFacebook = ()=>{
+  //     localStorage.setItem('provider', 'facebook');
+  //     props.facebookProvider()
+  //     window.location ='http://localhost:5000/auth/facebook'
+  // }
+  // const responseGoogle = (response) => {
+  //     console.log(response);
+  //   }
+  return (
+    <div className="wrapper">
+      <div className="inner2">
         <div className="image-holder">
-        <img className="image" src={background} alt={background}/>
+          <img className="image" src={background} alt={background} />
         </div>
-      <form className="form" onSubmit={handleSubmit}>
-      <Form.Group className="mb-3" >
-        
-        <Form.Control type="email" name="email" placeholder={t("text2")}  />
+        <Form className="form" onSubmit={submitHandler}>
+          <Form.Group className="mb-3">
+            <Form.Control type="email" name="email" placeholder={t("text2")} />
 
-        <Form.Text className="text-muted">
-          {t("text3")}
-        </Form.Text>
-      </Form.Group>
-    
-      <Form.Group className="mb-3"  >
-      
-        <Form.Control type="password" name="password" placeholder={t("pass")} />
-      </Form.Group>
-    
-      <Button variant="primary" type="submit" className="btn">
-        
-        {t('sub')}
-      </Button>
-      <div>
-        <a href="/signUp" className="btn btn-sign">{t('sign')} </a>
+            <Form.Text className="text-muted">{t("text3")}</Form.Text>
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Control
+              type="password"
+              name="password"
+              placeholder={t("pass")}
+            />
+          </Form.Group>
+          {errorMessage && (
+            <div className="error" style={{ color: "red" }}>
+              {" "}
+              {errorMessage}{" "}
+            </div>
+          )}
+           {show ? <div style={{color:"red"}}> 
+            {" "}
+            {userSignIn.message}
+          </div>:
+          null}
+           {showDeactivate ? <div style={{color:"blue"}}> 
+            {" "}
+            {"your account is deactivate , you can sign in again to activate your account and We are glad to have you back in your second family ❤️"}
+          </div>:
+          null}
+          <div>
+            <Link to="/signUp" className="btn btn-sign">
+              {t("sign")}{" "}
+            </Link>
+          </div>
+          <Button variant="primary" type="submit" className="btn">
+            {t("sub")}
+          </Button>
+         
+          {loading ? <Spinner animation="border" /> : null}
+         
+        </Form>
       </div>
-    </form>
-        </div>
-
-      </div>
-       
-    )
-}
-
-
+    </div>
+  );
+};
 
 // export default SignInForm
 
-const mapStateToProps = (state) => (
+const mapStateToProps = (state) => ({
+  userSignIn: state.sign ? state.sign : null,
+  googleUser: state.signInWithGoogleData ? state.signInWithGoogleData : null,
+  provider: state.provider,
+  facebookUser: state.signInWithFacebookData
+    ? state.signInWithFacebookData
+    : null,
+});
 
-  {
-    userSignIn: state.sign ? state.sign : null,
-    googleUser : state.signInWithGoogleData ? state.signInWithGoogleData : null,
-    provider: state.provider,
-    facebookUser: state.signInWithFacebookData ? state.signInWithFacebookData : null,
-    
+const mapDispatchToProps = {
+  signInHandler,
+  signInHandlerWithGoogle,
+  googleProvider,
+  facebookProvider,
+  signInHandlerWithFacebook,
+};
 
-  });
-  
-  const mapDispatchToProps = { signInHandler ,signInHandlerWithGoogle, googleProvider,facebookProvider,signInHandlerWithFacebook};
-  
-  export default connect(mapStateToProps, mapDispatchToProps)(SignInForm);
+export default connect(mapStateToProps, mapDispatchToProps)(SignInForm);

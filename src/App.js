@@ -10,6 +10,8 @@ import Verification from './component/verification';
 import Home from './component/Home';
 import Header from './component/header';
 import Main from './pages/main'
+import Page404 from './pages/Page404';
+import PageInvalidToken from './pages/pageInvalidtoken';
 import Footer from './component/footer'
 import Cart from './component/cart'
 import Wishlist from './component/wishlist'
@@ -56,6 +58,12 @@ function App() {
             <Main />
 
           </Route>
+          <Route exact path="/page404">
+            <Page404 />
+          </Route>
+          <Route exact path="/pageInvalidToken">
+            <PageInvalidToken />
+          </Route>
           <Route exact path='/signup' >
             <SignupForm />
           </Route>
@@ -68,26 +76,28 @@ function App() {
             <Settings/>
 
           </Route>
-          {/* <Route exact path='/account'>
-            <Account/>
+          <Route  path='/settings/account'>
+           <Settings/>
+            
 
           </Route>
-          <Route exact path='/email'>
-            <Email/>
+          <Route exact path='/settings/email'>
+          <Settings/>
 
           </Route>
-          <Route exact path='/password'>
-            <Password/>
+          <Route exact path='/settings/password'>
+          <Settings/>
 
           </Route>
-          <Route exact path='/notification'>
-            <Notification/>
+          <Route exact path='/settings/notification'>
+          <Settings/>
 
           </Route>
-          <Route exact path='/address'>
-            <Address/>
+          <Route exact path='/settings/address'>
+            
+          <Settings/>
 
-          </Route> */}
+          </Route>
           <Route exact path='/verification'>
             <Verification/>
 

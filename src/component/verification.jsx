@@ -1,10 +1,10 @@
 import React, { useState, useEffect }from 'react';
 import {connect} from 'react-redux'
-import {verificationHandler,verifyHandler} from '../store/sign'
+import {verificationHandler,verifyHandler} from '../store/auth';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {Form,Button} from 'react-bootstrap';
-import './verification.css';
+// import './verification.css';
 
 const Verification = props =>{
     const history =useHistory();

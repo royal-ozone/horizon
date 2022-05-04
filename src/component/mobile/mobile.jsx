@@ -4,23 +4,33 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { Button, Row, Form, Col, Spinner } from "react-bootstrap";
 import { usePopup } from "react-custom-popup";
-import { updateEmailHandler } from "../../store/auth";
+import { updateMobileHandler } from "../../store/auth";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./email.css";
-const Email = (props) => {
-  const { updateEmailHandler, profileData } = props;
+// import "./email.css";
+const Mobile = (props) => {
+  const { updateMobileHandler, profileData } = props;
   const [loading, setLoading] = useState(true);
+  const [showMissing,setShowMissing] = useState(false);
+
   const { showOptionDialog, showToast } = usePopup();
-  const { email } = profileData.user;
+  const { mobile } = profileData.user;
   useEffect(() => {
     setLoading(false);
   }, [profileData]);
 
+  useEffect(() => {
+        if(profileData.message){
+          if(profileData.message){
+            setShowMissing(true);
+          }
+        }
+      }, [profileData]);
+
   const updateHandler = (e) => {
     e.preventDefault();
     let data = {
-      email: e.target.email.value,
+      mobile: e.target.mobile.value,
     };
     showPopup(data);
   };
@@ -28,8 +38,8 @@ const Email = (props) => {
     showOptionDialog({
       containerStyle: { width: 350 },
       text:
-        "Are you sure you want to update your Email? You won't be able to revert that action.",
-      title: "Update Email?",
+        "Are you sure you want to update your Mobile? You won't be able to revert that action.",
+      title: "Update Mobile?",
       options: [
         {
           name: "Cancel",
@@ -43,7 +53,7 @@ const Email = (props) => {
       ],
       onConfirm: () => {
         setLoading(true);
-        updateEmailHandler(data);
+        updateMobileHandler(data);
       },
     });
   };
@@ -53,17 +63,22 @@ const Email = (props) => {
       <Form onSubmit={updateHandler}>
         <Row>
           <Col>
-            <Form.Group className="mb-3" controlId="formBasicEmail1">
-              <Form.Label>Email Address </Form.Label>
+            <Form.Group className="mb-3" controlId="formBasicMobile1">  
+              <Form.Label> Phone Number </Form.Label>
               <Form.Control
-                placeholder="first name"
-                name="email"
-                defaultValue={profileData ? email : "Email Address"}
+                placeholder="mobile"
+                name="mobile"
+                defaultValue={profileData ? mobile : "Phone Number"}
               />
             </Form.Group>
           </Col>
         </Row>
         <Row>
+        {showMissing ? <div style={{color:"red"}}> 
+            {" "}
+            {profileData ? profileData.message:null}
+          </div>:
+          null}
           <Button variant="primary" type="submit" controlId="button-email">
             Update
           </Button>
@@ -77,5 +92,5 @@ const Email = (props) => {
 const mapStateToProps = (state) => ({
   profileData: state.sign ? state.sign : null,
 });
-const mapDispatchToProps = { updateEmailHandler };
-export default connect(mapStateToProps, mapDispatchToProps)(Email);
+const mapDispatchToProps = { updateMobileHandler };
+export default connect(mapStateToProps, mapDispatchToProps)(Mobile);
