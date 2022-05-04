@@ -2,12 +2,16 @@ import React,{useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
+import {myProfileHandler} from '../store/auth';
 
 import Account from './account/account';
 import Address from './address/address';
 import Email from './email/changeEmail';
 import Password from './password/changPassword';
 import Notification from './notification/notification';
+import Mobile from './mobile/mobile';
+
+import cookie from 'react-cookies'
 
 import {
   BrowserRouter as Router,
@@ -16,6 +20,9 @@ import {
   Link
 } from "react-router-dom";
 
+import {
+    Spinner
+} from "react-bootstrap";
 
 import {
     ProSidebar,
@@ -26,63 +33,105 @@ import {
     SidebarContent
 } from "react-pro-sidebar";
 import {
-    FiHome,
-    FiLogOut,
     FiArrowLeftCircle,
     FiArrowRightCircle
-} from "react-icons/fi";  
+} from "react-icons/fi"; 
 import { MdAccountCircle,MdCircleNotifications,MdFavoriteBorder,MdAddLocationAlt,MdEmail,MdPassword ,MdOutlineMenu,MdFavorite} from "react-icons/md";
 import "react-pro-sidebar/dist/css/styles.css";
 import './settings.css';
 
+
+
 const routes = [
     {
-        path: "/account",
+        path: "/settings/account",
         exact: true,
         sidebar:()=><div>account!</div>,
         main: ()=><Account/>
     },
     {
-        path: "/address",
+        path: "/settings/address",
         exact: true,
         sidebar:()=><div>home!</div>,
         main: ()=> <Address/>
     },
     {
-        path: "/notification",
+        path: "/settings/notification",
         exact: true,
         sidebar:()=> <div>notification!</div>,
         main: ()=> <Notification/>
     },
     {
-        path: "/email",
+        path: "/settings/email",
         exact: true,
         sidebar:()=> <div>email!</div>,
         main: ()=> <Email/>
     },
     {
-        path: "/password",
+        path: "/settings/password",
         exact: true,
         sidebar:()=><div>password!</div>,
         main: ()=> <Password/>
     },
+    {
+        path: "/settings/mobile",
+        exact: true,
+        sidebar:()=><div>mobile!</div>,
+        main: ()=> <Mobile/>
+    },
 
 ]
 const Settings = props => {
+    const history = useHistory();
+
+    let token = cookie.load('access_token');
 
     const [menuCollapse, setMenuCollapse] = useState(false);
-
-    //create a custom function that will change menucollapse state from false to true and true to false
+    const {myProfileHandler,profileData} = props;
+    console.log("🚀 ~ file: Settings.jsx ~ line 91 ~ profileData", profileData)
+    const [loading, setLoading] = useState(true);
+    
     const menuIconClick = () => {
-      //condition checking to change state from true to false and vice versa
-      menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
+        menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
     };
+    
+    useEffect(() => {
+        
+        if(token){
+          console.log("🚀 ~ file: Settings.jsx ~ line 101 ~ useEffect ~ token", token)
+          myProfileHandler(); 
+          setLoading(false);
+        }
+        else{
+            history.push('/pageInvalidToken')
+        }
+    },[])
+    useEffect(() => {
+        if(profileData.message){
+            if(profileData.message.includes('500')||profileData.message.includes('403')){
+                history.push('/pageInvalidToken')
+            }
+        }
+    },[history, profileData.message])
+    useEffect(() => {
+        setLoading(true)
+        if(profileData.res){
+            if(profileData.message.includes("Invalid")){
+                history.push('/pageInvalidToken')
+                }
+        }
+       
+        setLoading(false);
+    },[history, profileData, profileData.message])
+
+ useEffect(()=>{
+if(!token) {
+
+    history.push('/signIn');
+}
+ },[history,token])
 
     
-
-    const profileHandle =()=>{
-        console.log('profileHandle is word')
-    }
     return (
         <Router>
         <div className="container3">
@@ -105,15 +154,16 @@ const Settings = props => {
                  <Menu iconShape="round">
 
                    {/* <MenuItem icon={<MdFavorite />}>Favourite</MenuItem> */}
-                   <MenuItem icon={<MdAccountCircle />}><Link to="/account" className="link">Account</Link> </MenuItem>
-                   <MenuItem icon={<MdAddLocationAlt />}><Link to='/address'>Address</Link> </MenuItem>
+                   <MenuItem icon={<MdAccountCircle />} ><Link to="/settings/account" className="link">Account</Link> </MenuItem>
+                   <MenuItem icon={<MdAddLocationAlt />}><Link to='/settings/address'>Address</Link> </MenuItem>
                   
-                   <MenuItem icon={<MdCircleNotifications />}><Link to='/notification' className="link">Notification </Link> </MenuItem>
+                   <MenuItem icon={<MdCircleNotifications />}><Link to='/settings/notification' className="link">Notification </Link> </MenuItem>
                 
-                   <MenuItem icon={<MdEmail/>}> <Link to ='/email' className="link" >Change Email </Link> </MenuItem>
+                   <MenuItem icon={<MdEmail/>}> <Link to ='/settings/email' className="link" >Change Email </Link> </MenuItem>
                   
                   
-                   <MenuItem icon={<MdPassword />}> <Link to='/password' className="link">Change Password</Link> </MenuItem>
+                   <MenuItem icon={<MdPassword />}> <Link to='/settings/password' className="link">Change Password</Link> </MenuItem>
+                   <MenuItem icon={<MdPassword />}> <Link to='/settings/mobile' className="link">Change mobile</Link> </MenuItem>
                   
 
                   
@@ -146,6 +196,8 @@ const Settings = props => {
             
         </div>
         <div className="two">
+        {loading ? <Spinner animation="border" /> : null}
+
               <Switch>
                 {routes.map((route, index) => (
                   // Render more <Route>s with the same paths as
@@ -173,10 +225,10 @@ const Settings = props => {
 
 
 const mapStateToProps = (state) => ({
-    profileData: state.profile?state.profile : null,
+    profileData: state.sign?state.sign : null,
 });
 
-// const mapDispatchToProps = ()
+ const mapDispatchToProps = {myProfileHandler}
 
-export default connect(mapStateToProps)(Settings);
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);
 

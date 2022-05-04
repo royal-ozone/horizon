@@ -1,26 +1,40 @@
 import React, { useEffect, useState } from "react";
 import cookie from 'react-cookies';
-import {logOutHandler} from '../store/sign';
+import {logOutHandler} from '../store/auth';
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router-dom';
-let signInToken =cookie.load('tokenSignIn')
-console.log("🚀 ~ file: header.jsx ~ line 9 ~ signInToken", signInToken)
+
 const Header = (props) => {
-  const history = useHistory();
-console.log("🚀 ~ file: header.jsx ~ line 12 ~ Header ~ props", props)
-  const { cart } = props;
+  
+   const history = useHistory();
+  const { cart ,userSignIn } = props;
+  const [login, setLogin] = useState(false);
+   
   const { t, i18n } = useTranslation();
   const [style, setStyle] = useState({});
-  
+ 
   useEffect(() => {
     let x = window.innerWidth
     if (x < 553) {
       setStyle({ display: 'none' })
     }
+    
   }, [])
+ 
+  useEffect(() => {
+    if(cookie.load('access_token')){
+      setLogin(true);
+      console.log("🚀 ~ file: header.jsx ~ line 39 ~ Header ~ login", login)
+    }
+    else{
+      setLogin(false);
+    }
+  },[userSignIn,login])
+
+  
   const changeLanguage = lang => {
     if(lang === 'en') {
       i18n.changeLanguage(lang);
@@ -33,11 +47,9 @@ console.log("🚀 ~ file: header.jsx ~ line 12 ~ Header ~ props", props)
     }
   }
   const logOutHandle = () => {
-      props.logOutHandler();
-      history.push('/signIn')
-      
-    //  window.location ='http://localhost:3000/'
-    console.log("🚀 ~ file: header.jsx ~ line 35 ~ logOutHandle ~ props", props)
+    props.logOutHandler();
+    setLogin(false)
+    history.push('/signIn')
   }
   return (
     <div>
@@ -74,10 +86,18 @@ console.log("🚀 ~ file: header.jsx ~ line 12 ~ Header ~ props", props)
               <NavDropdown  title="" id="collasible-nav-dropdown2"  >
                 <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2"> Another action </NavDropdown.Item>
-                {props.userSignIn.access_token?
+                {login?
+                <div> 
+
                   <NavDropdown.Item   onClick={logOutHandle}>
                   Log Out 
                 </NavDropdown.Item>
+                
+                <NavDropdown.Item href="/settings">
+                  settings</NavDropdown.Item>
+                <NavDropdown.Divider />
+                </div>
+                
               :
               <div>
 
@@ -95,8 +115,7 @@ console.log("🚀 ~ file: header.jsx ~ line 12 ~ Header ~ props", props)
              
              
             }
-            <NavDropdown.Item href="/settings">settings</NavDropdown.Item>
-                <NavDropdown.Divider />
+           
                 
                 
               </NavDropdown>
@@ -117,7 +136,10 @@ console.log("🚀 ~ file: header.jsx ~ line 12 ~ Header ~ props", props)
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state) => (
+// console.log("🚀 ~ file: header.jsx ~ line 137 ~ state", state)
+  
+  {
   cart: state.cart,
   dataLogOut: state.log,
   userSignIn: state.sign ? state.sign : null

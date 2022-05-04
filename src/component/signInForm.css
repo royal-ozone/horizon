@@ -28,7 +28,7 @@ form.form{
 }
 .mb-3 input {
     border :1px solid #333;
-    border: none;
+    /* border: none; */
     border-bottom:  1px solid #333;
     display:block;
     width:100%;
@@ -36,7 +36,7 @@ form.form{
     padding-right: 0;
     margin-bottom: 25px;  
    
-    border-radius: 40px;
+    /* border-radius: 40px; */
 }
 a.btn.btn-sign {
     color:blueviolet;

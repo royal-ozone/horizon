@@ -7,12 +7,15 @@ import {Provider} from 'react-redux';
 import './i18next';
 import reportWebVitals from './reportWebVitals';
 import Loader from './component/loader'
+import {PopupProvider} from "react-custom-popup";
 ReactDOM.render(
   
     <React.StrictMode>
       <Provider store={store}>
       <Suspense fallback={Loader}>
+        <PopupProvider> 
       <App />
+        </PopupProvider>
       </Suspense>
       </Provider>
         
