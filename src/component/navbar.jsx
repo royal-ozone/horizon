@@ -1,44 +1,45 @@
 import React , { useState, useEffect }from "react";
 import { Navbar, Container, Nav, NavDropdown,DropdownButton,ButtonGroup,Dropdown, Form, FormControl,Button } from "react-bootstrap";
 import {connect} from 'react-redux';
-import {parentCategoryHandler} from '../store/product';
+import {parentCategoryHandler} from '../store/parent';
 const MainNavbar = (props) => {
-  const {parentCategoryHandler,parentData} = props;
+  const {parentCategoryHandler,childCategoryHandler,grandChildCategoryHandler,productHandler,parentData} = props;
   const [parent,setParent] =useState([]);
+  const [specificParent,setSpecificParent] =useState();
   const [child,setChild] =useState([]);
   const [grandChild,setGrandChild] =useState([]);
   const [product,setProduct] =useState([]);
   
   
+  useEffect(  () => {
+    parentCategoryHandler();  
+  },[]);
+  
   useEffect(() => {
-    parentCategoryHandler();
-    console.log("🚀 ~ file: navbar.jsx ~ line 7 ~ MainNavbar ~ parentData", parentData)
     setParent(parentData.parentCategory);
     setChild(parentData.childCategory);
     setGrandChild(parentData.grandChildCategory);
+  },[parentData])
+
+  const childHandler= (parent)=>{
+  console.log("🚀 ~ file: navbar.jsx ~ line 25 ~ childHandler ~ parent", parent.target.id)
+     let filter =child&& child.response.filter(el => el.parent_id === parent.target.id);
+     console.log("🚀 ~ file: navbar.jsx ~ line 26 ~ childHandler ~ filter", filter)
+     setSpecificParent(filter);
+}
+  const grandChildHandler =(child)=>{
     
-  },[]);
-  
-  console.log("🚀 ~ file: navbar.jsx ~ line 9 ~ MainNavbar ~ parent", parent)
-  console.log("🚀 ~ file: navbar.jsx ~ line 11 ~ MainNavbar ~ child", child)
-  console.log("🚀 ~ file: navbar.jsx ~ line 13 ~ MainNavbar ~ grandChild", grandChild)
-  
+    let filter = grandChild && grandChild.response.filter(el => el.parent_id ===child.target.id);
+    console.log("🚀 ~ file: navbar.jsx ~ line 33 ~ grandChildHandler ~ filter", filter)
+    setSpecificParent(filter);
+
+  }
   return (
     <div zIndex='2px'>
     <Navbar bg="light" variant="light">
       <Container>
-        {/* <NavDropdown title="Browse Categories" id="collasible-nav-dropdown">
-         <NavDropdown  title="Woman"> 
-          <NavDropdown.Item >Action
-         
-          </NavDropdown.Item>
-         </NavDropdown>
-          <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-          <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-          <NavDropdown.Divider />
-          <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-        </NavDropdown> */}
-        <DropdownButton 
+     
+        {/* <DropdownButton 
         as={ButtonGroup}
         id={`dropdown-button-drop-end`}
         drop='end'
@@ -46,11 +47,9 @@ const MainNavbar = (props) => {
         title='ALL'
         >
             <Dropdown eventKey="1">
-{              console.log("🚀 ~ file: navbar.jsx ~ line 48 ~ MainNavbar ~ parent", parent)
-}              {parent.status===200?parent.response.map((el)=>(
+              {parent.response?parent.response.map((el)=>(
                  <NavDropdown title={el.entitle} id="collasible-nav-dropdown">
-{                 console.log("🚀 ~ file: navbar.jsx ~ line 51 ~ MainNavbar ~ el.entitle", el.entitle)
-}                 <NavDropdown title="clothes" id="collasible-nav-dropdown">
+                 <NavDropdown title="clothes" id="collasible-nav-dropdown">
                      <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
                  </NavDropdown>
                  <NavDropdown title="shoes" id="collasible-nav-dropdown">
@@ -58,30 +57,31 @@ const MainNavbar = (props) => {
                  </NavDropdown>
                </NavDropdown>
               )):null}
-                {/* <NavDropdown title="Man" id="collasible-nav-dropdown">
-                  <NavDropdown title="clothes" id="collasible-nav-dropdown">
-                      <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                  </NavDropdown>
-                  <NavDropdown title="shoes" id="collasible-nav-dropdown">
-                      <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                  </NavDropdown>
-                </NavDropdown>
-                <NavDropdown  title="Woman" id="collasible-nav-dropdown">
-                  <NavDropdown title="clothes" id="collasible-nav-dropdown">
-                      <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                  </NavDropdown>
-                  <NavDropdown title="shoes" id="collasible-nav-dropdown">
-                      <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                  </NavDropdown>
-                </NavDropdown>
-                <NavDropdown title="Kids" id="collasible-nav-dropdown">
-                </NavDropdown> */}
+            
         
             </Dropdown>
          
-        </DropdownButton>
+        </DropdownButton> */}
         <Nav className="me-auto">
-          <Nav.Link href="#home">What's New</Nav.Link>
+          {parent.response?parent.response.map((el)=>(
+           
+            <NavDropdown id={el.id} title={el.entitle}> 
+
+            {child.response.filter(v => v.parent_id === el.id).map((el2)=>(
+
+              <NavDropdown href='' id={el2.id} title={el2.entitle}>
+                { grandChild.response.filter(v2 => v2.parent_id ===el2.id).map((el3)=>(
+                  
+                  <Nav.Link href={`/products/${el3.entitle}`}> {el3.entitle}</Nav.Link>
+                  
+                ))}
+              </NavDropdown>
+
+            ))}
+
+            </NavDropdown>
+          )):null}
+          <Nav.Link href='javascript:void(0)'>What's New</Nav.Link>
           <Nav.Link href="#features">Trending</Nav.Link>
           <Nav.Link href="#pricing">For You</Nav.Link>
           <Nav.Link href="#pricing">Shop Products</Nav.Link>

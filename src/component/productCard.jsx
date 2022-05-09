@@ -95,6 +95,7 @@ const ProfileCard = (props) => {
 
         </div>
         <div className="reviews">
+        
           {props.product.metaTitle ? (
             <p>{props.product.metaTitle}</p>
           ) : null}

@@ -17,6 +17,7 @@ import Cart from './component/cart'
 import Wishlist from './component/wishlist'
 import Product from './component/product'
 import Settings from './component/Settings'
+import Products from './component/products/products';
 import Account from './component/account/account';
 import Address from './component/address/address';
 import Email from './component/email/changeEmail';
@@ -112,6 +113,9 @@ function App() {
           </Route>
           <Route exact path='/wishlist'>
             <Wishlist />
+          </Route>
+          <Route exact path='/products/:childName'>
+              <Products />
           </Route>
           <Route exact path='/product/:id'>
             <Product />
