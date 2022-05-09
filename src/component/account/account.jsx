@@ -27,7 +27,6 @@ const Account = (props) => {
   let {first_name,last_name,country,city,profile_picture} = profileData.user;
   const { showOptionDialog, showToast } = usePopup();
   const [loading, setLoading] = useState(true);
-  console.log("🚀 ~ file: account.jsx ~ line 30 ~ Account ~ loading", loading)
   
   const [loading2, setLoading2] = useState(true);
 

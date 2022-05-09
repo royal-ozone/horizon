@@ -83,7 +83,7 @@ const Header = (props) => {
                 src="https://b.top4top.io/p_2182nn0jy1.png"
                 alt="pin"
               />
-              <NavDropdown  title="" id="collasible-nav-dropdown2"  >
+              <NavDropdown href="" title="" id="collasible-nav-dropdown2"  >
                 <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2"> Another action </NavDropdown.Item>
                 {login?
