@@ -15,6 +15,7 @@ const MainNavbar = (props) => {
     parentCategoryHandler();  
   },[]);
   
+  
   useEffect(() => {
     setParent(parentData.parentCategory);
     setChild(parentData.childCategory);
@@ -34,48 +35,39 @@ const MainNavbar = (props) => {
     setSpecificParent(filter);
 
   }
+  const productCategory =(params)=>{
+    let {G,C,P}=params;
+    console.log("🚀 ~ file: navbar.jsx ~ line 40 ~ productCategory ~ params", params)
+    parentCategoryHandler(G,C,P);  
+    setProduct(parentData.productCategory)
+    
+    console.log("🚀 ~ file: navbar.jsx ~ line 44 ~ productCategory ~ product", product)
+  }
   return (
     <div zIndex='2px'>
     <Navbar bg="light" variant="light">
       <Container>
-     
-        {/* <DropdownButton 
-        as={ButtonGroup}
-        id={`dropdown-button-drop-end`}
-        drop='end'
-        variant="secondary"
-        title='ALL'
-        >
-            <Dropdown eventKey="1">
-              {parent.response?parent.response.map((el)=>(
-                 <NavDropdown title={el.entitle} id="collasible-nav-dropdown">
-                 <NavDropdown title="clothes" id="collasible-nav-dropdown">
-                     <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                 </NavDropdown>
-                 <NavDropdown title="shoes" id="collasible-nav-dropdown">
-                     <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                 </NavDropdown>
-               </NavDropdown>
-              )):null}
-            
-        
-            </Dropdown>
-         
-        </DropdownButton> */}
         <Nav className="me-auto">
           {parent.response?parent.response.map((el)=>(
            
             <NavDropdown id={el.id} title={el.entitle}> 
 
             {child.response.filter(v => v.parent_id === el.id).map((el2)=>(
-
-              <NavDropdown href='' id={el2.id} title={el2.entitle}>
-                { grandChild.response.filter(v2 => v2.parent_id ===el2.id).map((el3)=>(
+              
+              <>
+              
+              { grandChild.response.filter(v2 => v2.parent_id ===el2.id).length >0?grandChild.response.filter(v2 => v2.parent_id ===el2.id).map((el3)=>(
+                <NavDropdown href='' id={el2.id} title={el2.entitle}>
                   
-                  <Nav.Link href={`/products/${el3.entitle}`}> {el3.entitle}</Nav.Link>
+                  <Nav.Link href={`/products?parent_id=${el.id}&child_id=${el2.id}&grandChild_id=${el3.id}`}> {el3.entitle}
+                  </Nav.Link>
                   
-                ))}
               </NavDropdown>
+                )): 
+                <Nav.Link href={`/products?parent_id=${el.id}&child_id=${el2.id}`} > {el2.entitle}
+                  </Nav.Link>
+                }
+                </>
 
             ))}
 

@@ -16,9 +16,13 @@ export const parentCategoryHandler =(payload) =>async (dispatch,state) =>{
     let data2 = await ProductService.getChildCategory();
     let data3 = await ProductService.getGrandChildCategory();
     let data4 = await ProductService.getProduct();
-
+    let data5;
+    if(payload){
+         data5 = await ProductService.getProductByCategory(payload);
+    }
+    
     if(data.status ===200){
-        dispatch(productAction({parentCategory:{...data},childCategory:{...data2},grandChildCategory:{...data3},product:{...data4}}))
+        dispatch(productAction({parentCategory:{...data},childCategory:{...data2},grandChildCategory:{...data3},product:{...data4},productCategory:{...data5}}))
     }else{
         dispatch(productAction({message:data.message}))
     }
@@ -41,7 +45,7 @@ export const parentCategoryHandler =(payload) =>async (dispatch,state) =>{
 //     }
 // }
 // export const productHandler =(payload) => async (dispatch,state)=>{
-// let data = await ProductService.getProduct();
+// let data = await ProductService.getProductByCategory(payload);
 // if(data.status === 200){
 //     dispatch(productAction({grandChildCategory:{...data}},...state()))
 // }else{

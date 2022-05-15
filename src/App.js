@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import Form from './component/Form';
 import React, { Suspense, useEffect } from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route ,useLocation ,useParams,useHistory,generatePath} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import SignupForm from './component/SignupForm';
@@ -33,6 +33,9 @@ import Seller from './component/seller'
 
 function App() {
   const { t, i18n } = useTranslation();
+  
+
+
   useEffect(() => {
     let lang = localStorage.getItem('i18nextLng')
     if (lang === 'en') {
@@ -114,8 +117,8 @@ function App() {
           <Route exact path='/wishlist'>
             <Wishlist />
           </Route>
-          <Route exact path='/products/:childName'>
-              <Products />
+          <Route exact path={`/products`}>
+              <Products   />
           </Route>
           <Route exact path='/product/:id'>
             <Product />
