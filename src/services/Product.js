@@ -38,6 +38,18 @@ class Product extends ApiService {
             return error.message;
         }
     }
+    async getProductByCategory(G,C,P){
+        console.log("🚀 ~ file: Product.js ~ line 42 ~ Product ~ getProductByCategory ~ G,C,P", G,C,P)
+        try {
+            let params ={G:G,C:C,P:P}
+            let response =await this.get(`${this.path}/productsByCategories`,params,null);
+            console.log("🚀 ~ file: Product.js ~ line 45 ~ Product ~ getProductByCategory ~ params", params)
+            console.log("🚀 ~ file: Product.js ~ line 45 ~ Product ~ getProductByCategory ~ response", response)
+            return response;
+        } catch (error) {
+            return error.message;
+        }
+    }
 }
 let ProductService = new Product();
 export default ProductService;

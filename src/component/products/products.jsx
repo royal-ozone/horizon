@@ -7,38 +7,77 @@ import "./products.css";
 
 const Products = (props) => {
   const [products, setProducts] = useState();
-  console.log("🚀 ~ file: products.jsx ~ line 10 ~ Products ~ products", products)
+  const [store,setStore] = useState([]);
+  let query = window.location.search.split(/[?,&,=]/);
+  
   const { productsData, productHandler } = props;
   
   useEffect(() => {
-      productHandler();
-    }, []);
-    useEffect(() => {
-        setProducts(productsData.product.result);
-    }, [productsData]);
+    productHandler(query);
+    console.log("1")
+  }, []);
 
+  useEffect(() => {
+    
+      products&&products.map((product)=>(
+        store.push(product.store_name)
+        ))
+        let storeArray =  [...new Set(store)] ;
+
+setStore(storeArray)
+    },[products]);
+
+    useEffect(() => {
+      
+
+        setProducts(productsData.productCategory&&productsData.productCategory.result);
+        console.log("3")
+
+    }, [productsData.productCategory]);
+
+  
+
+  const priceFilterHandler =(e)=>{
+    
+  }
+
+  const sellerFilterHandler =(e)=>{
+
+    if(e.target.checked ===true){
+      
+      let filter = products.filter(p => p.store_name === e.target.value);
+      setProducts(filter);
+    }else {
+
+      setProducts(productsData.productCategory&&productsData.productCategory.result);
+    }
+
+  }
   return (
     <div>
       <Row>
         <Col xs={2}>
         <div className="filter">
             
-          <Form>
+          <Form  onChange={sellerFilterHandler}>
             {
               <div key={`Store`} className="mb-3">
                 {" "}
-                Store
-                {["one", "two", "three"].map((type2) => (
+              
+                Seller
+                {store&&store.map((type2) => (
                     <Form.Check
-                    type={type2}
+                    type={'checkbox'}
                     id={`default-${type2}`}
-                    label={`Store - ${type2}`}
+                     name={type2}
+                    value={type2}
+                    label={`${type2}`}
                     />
                     ))}
               </div>
             }
             {
-              <div key={`Price`} className="mb-3">
+              <div key={`Price`} className="mb-3" onChange={priceFilterHandler}>
                 {" "}
                 Price
                 {[
@@ -49,8 +88,8 @@ const Products = (props) => {
                   "60JO & Above",
                 ].map((type2) => (
                   <Form.Check
-                    type={type2}
-                    id={`default-${type2}`}
+                  type={'checkbox'}
+                  id={`default-${type2}`}
                     label={`Price - ${type2}`}
                     />
                     ))}
@@ -63,7 +102,7 @@ const Products = (props) => {
                 {["BeastOffice", "VICTONE", "Comfty", "YSSOA", "OFM"].map(
                     (type2) => (
                         <Form.Check
-                        type={type2}
+                        type={'checkbox'}
                         id={`default-${type2}`}
                         label={` ${type2}`}
                         />
@@ -77,14 +116,14 @@ const Products = (props) => {
                 Color
                 {["red", "black", "pink", "blue", "purple"].map((type2) => (
                     <Form.Check
-                    type={type2}
+                    type={'checkbox'}
                     id={`default-${type2}`}
                     label={` ${type2}`}
                     />
                     ))}
               </div>
             }
-          </Form>
+          </Form >
             </div>
         </Col>
         
@@ -93,9 +132,9 @@ const Products = (props) => {
         <CardGroup>
             {products&&products.map((product)=>(
                 <div>
-
+                   
                 <Card>
-                <Card.Img variant="top" src={product.pictures[0].product_picture} />
+                <Card.Img variant="top" src={product.pictures[0]&&product.pictures[0].product_picture} />
                 <Card.Header >{`-${product.discount_rate *100}%`}</Card.Header>
                 <Card.Body>
                   <Card.Title>{product.entitle}</Card.Title>
@@ -109,7 +148,7 @@ const Products = (props) => {
                   <Button as="inline">Details</Button>{' '}
                 </Card.Body>
                 <Card.Footer>
-                  <small className="text-muted">Last updated 3 mins ago</small>
+                  <small className="text-muted">Last updated {product.created_at} ago</small>
                 </Card.Footer>
               </Card> 
                 </div>
