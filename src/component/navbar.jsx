@@ -23,25 +23,20 @@ const MainNavbar = (props) => {
   },[parentData])
 
   const childHandler= (parent)=>{
-  console.log("🚀 ~ file: navbar.jsx ~ line 25 ~ childHandler ~ parent", parent.target.id)
      let filter =child&& child.response.filter(el => el.parent_id === parent.target.id);
-     console.log("🚀 ~ file: navbar.jsx ~ line 26 ~ childHandler ~ filter", filter)
      setSpecificParent(filter);
 }
   const grandChildHandler =(child)=>{
     
     let filter = grandChild && grandChild.response.filter(el => el.parent_id ===child.target.id);
-    console.log("🚀 ~ file: navbar.jsx ~ line 33 ~ grandChildHandler ~ filter", filter)
     setSpecificParent(filter);
 
   }
   const productCategory =(params)=>{
     let {G,C,P}=params;
-    console.log("🚀 ~ file: navbar.jsx ~ line 40 ~ productCategory ~ params", params)
     parentCategoryHandler(G,C,P);  
     setProduct(parentData.productCategory)
     
-    console.log("🚀 ~ file: navbar.jsx ~ line 44 ~ productCategory ~ product", product)
   }
   return (
     <div zIndex='2px'>
@@ -73,7 +68,7 @@ const MainNavbar = (props) => {
 
             </NavDropdown>
           )):null}
-          <Nav.Link href='javascript:void(0)'>What's New</Nav.Link>
+          <Nav.Link href='/whats '>What's New</Nav.Link>
           <Nav.Link href="#features">Trending</Nav.Link>
           <Nav.Link href="#pricing">For You</Nav.Link>
           <Nav.Link href="#pricing">Shop Products</Nav.Link>
