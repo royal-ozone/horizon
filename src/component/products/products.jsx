@@ -1,166 +1,265 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
-import { productHandler } from "../../store/products";
+import { connect, useSelector } from "react-redux";
+import { productHandler, searchProductsHandler } from "../../store/products";
 import { useTranslation } from "react-i18next";
-import { Button, Col, Row, Form ,Card ,CardGroup} from "react-bootstrap";
+import { Button, Col, Row, Form, Card, CardGroup, FormControl, Container, Offcanvas } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 import "./products.css";
+import { CSpinner, CFormSelect, CRow, CCol, CButton } from '@coreui/react'
+import ProductCard from "../ProductCardV2";
 
-const Products = (props) => {
+
+const Products = ({ productsData, productHandler, searchProductsHandler }) => {
+  const { message, searchedProducts } = useSelector(state => state.products)
+  const { parentCategory, childCategory, grandChildCategory } = useSelector(state => state.parent)
+  const initialSearchQuery = {
+    key: '',
+    store_id: '',
+    parent_category_id: '',
+    child_category_id: '',
+    grandchild_id: '',
+    brand: '',
+    price: ''
+  }
   const [products, setProducts] = useState();
-  const [store,setStore] = useState([]);
+  const [store, setStore] = useState([]);
+  const [brand, setBrand] = useState([]);
+  const [loading, setLoading] = useState(true)
+  const [firstLand, setFirstLand] = useState(true)
+  const [show, setShow] = useState(true)
+  const [searchQuery, setSearchQuery] = useState({
+    key: '',
+    store_id: '',
+    parent_category_id: '',
+    child_category_id: '',
+    grandchild_id: '',
+    brand: '',
+    price: ''
+  });
+  const [Checked, setChecked] = useState([
+    { category: "seller", id: [] },
+    { category: "price", id: [] },
+    { category: "brand", id: [] },
+    { category: "color", id: [] },
+  ]);
+
+
   let query = window.location.search.split(/[?,&,=]/);
-  
-  const { productsData, productHandler } = props;
-  
   useEffect(() => {
-    productHandler(query);
-    console.log("1")
+
+  }, [searchQuery.key])
+  const onChange = (e, v = {}) => {
+
+    v[e.target.id] = e.target.value
+    setSearchQuery(x => { return { ...x, ...v } })
+  }
+
+  useEffect(() => {
+    let search = {}
+
+    query.filter((val) => val).map((val, i, a) => i % 2 === 0 && (search[a[i]] = a[i + 1]))
+    Promise.all([searchProductsHandler(search)]).then(() => { setLoading(false); setFirstLand(false) })
+    setSearchQuery(x => { return { ...x, ...search } })
   }, []);
 
   useEffect(() => {
-    
-      products&&products.map((product)=>(
-        store.push(product.store_name)
-        ))
-        let storeArray =  [...new Set(store)] ;
+    let _store = []
+    let _brand = searchedProducts.filter(((product, i, a) => i === a.findIndex(z => z.brand_name === product.brand_name) && product.brand_name)).map((product) => product.brand_name)
+    brand.length === 0 && setBrand(() => _brand)
 
-setStore(storeArray)
-    },[products]);
+    searchedProducts && store.length === 0 && searchedProducts.map((product) => _store.push({ storeName: product.store_name, id: product.store_id }))
 
-    useEffect(() => {
-      
+    _store.length && setStore(() => _store.filter((s, i, a) => i === a.findIndex(z => z.storeName === s.storeName)));
+  }, [searchedProducts]);
 
-        setProducts(productsData.productCategory&&productsData.productCategory.result);
-        console.log("3")
 
-    }, [productsData.productCategory]);
 
-  
 
-  const priceFilterHandler =(e)=>{
-    
+  const submitHandler = e => {
+    e.preventDefault();
+    setLoading(true)
+    setShow(false)
+    searchQuery.key !== query.filter(value => value)[1] && setStore([]) && setBrand([])
+    Promise.all([searchProductsHandler(searchQuery)]).then(() => setLoading(false))
   }
 
-  const sellerFilterHandler =(e)=>{
 
-    if(e.target.checked ===true){
-      
-      let filter = products.filter(p => p.store_name === e.target.value);
-      setProducts(filter);
-    }else {
+  const storeChangeHandler = e => {
+    e.target.checked ? setSearchQuery(x => { return { ...x, store_id: [...x.store_id.split(','), e.target.id].filter(value => value).join(',') } }) :
+      setSearchQuery(x => { return { ...x, store_id: [...x.store_id.split(',')].filter(value => value !== e.target.id).join(',') } })
 
-      setProducts(productsData.productCategory&&productsData.productCategory.result);
-    }
+  }
+  const brandChangeHandler = e => {
+    e.target.checked ? setSearchQuery(x => { return { ...x, brand: [...x.brand?.split(','), e.target.id].filter(value => value).join(',') } }) :
+      setSearchQuery(x => { return { ...x, brand: [...x.brand.split(',')].filter(value => value !== e.target.id).join(',') } })
 
   }
   return (
     <div>
       <Row>
-        <Col xs={2}>
-        <div className="filter">
-            
-          <Form  onChange={sellerFilterHandler}>
-            {
-              <div key={`Store`} className="mb-3">
-                {" "}
-              
-                Seller
-                {store&&store.map((type2) => (
+
+
+        <Col xs={5} sm={4} md={4} lg={3} xl={2} key='col1'>
+          <div className="filter m-2rem" >
+            {loading && firstLand ? <CSpinner /> : <Form onSubmit={submitHandler}>
+              <label htmlFor="key">Search</label>
+              <FormControl
+                type="search"
+                placeholder="Search for products"
+                className="me-2"
+                aria-label="Search"
+                id='key'
+                onChange={onChange}
+                value={searchQuery.key}
+                name='key'
+              />
+              {/* <input value={searchQuery.key} id='key' name='key' onChange={onChange} required /> */}
+              {
+                store.length !== 0 && <div className="mb-3 m-2rem">
+                  {" "}
+                  Seller
+                  {
+                    store.map(({ storeName, id }, index) => (
+                      <Form.Check
+                        key={`store${index}`}
+                        type={"checkbox"}
+                        id={id}
+                        name={`seller`}
+                        value={storeName}
+                        label={storeName}
+                        onChange={storeChangeHandler}
+                      />
+                    ))}
+                </div>
+              }
+
+              {
+                <div key={`Price`} className="mb-3 m-2rem">
+                  {" "}
+                  Price
+                  {[
+                    { name: "All", value: '' },
+                    { name: "Under 15JO", value: '0-15' },
+                    { name: "15JO to 30JO", value: '15-30' },
+                    { name: "30JO to 45JO", value: '30-45' },
+                    { name: "45JO to 60JO", value: '45-60' },
+                    { name: "60JO & Above", value: '60-10000000' },
+
+                  ].map(({ name, value }, index) => (
                     <Form.Check
-                    type={'checkbox'}
-                    id={`default-${type2}`}
-                     name={type2}
-                    value={type2}
-                    label={`${type2}`}
+                      key={`price${index}`}
+                      type={"radio"}
+                      id='price'
+                      name={`price`}
+                      value={value}
+                      label={name}
+
+                      onChange={onChange}
+                      checked={searchQuery.price === value}
                     />
-                    ))}
-              </div>
-            }
-            {
-              <div key={`Price`} className="mb-3" onChange={priceFilterHandler}>
-                {" "}
-                Price
-                {[
-                    "Under 15JO",
-                  "15JO to 30JO",
-                  "30JO to 45JO",
-                  "45JO to 60JO",
-                  "60JO & Above",
-                ].map((type2) => (
-                  <Form.Check
-                  type={'checkbox'}
-                  id={`default-${type2}`}
-                    label={`Price - ${type2}`}
-                    />
-                    ))}
-              </div>
-            }
-            {
-                <div key={`Brand`} className="mb-3">
+                  ))}
+                </div>
+              }
+
+              {brand.length !== 0 && <div key={`Brand`} className="mb-3 m-2rem">
                 {" "}
                 Brand
-                {["BeastOffice", "VICTONE", "Comfty", "YSSOA", "OFM"].map(
-                    (type2) => (
-                        <Form.Check
-                        type={'checkbox'}
-                        id={`default-${type2}`}
-                        label={` ${type2}`}
-                        />
-                        )
-                        )}
-              </div>
-            }
-            {
-                <div key={`Color`} className="mb-3">
-                {" "}
-                Color
-                {["red", "black", "pink", "blue", "purple"].map((type2) => (
+                {brand.map(
+                  (brand, index) => (
                     <Form.Check
-                    type={'checkbox'}
-                    id={`default-${type2}`}
-                    label={` ${type2}`}
+                      key={`brand${index}`}
+                      type="checkbox"
+                      id={brand}
+                      name='brand'
+                      value={brand}
+                      label={brand}
+                      onChange={brandChangeHandler}
                     />
-                    ))}
-              </div>
-            }
-          </Form >
-            </div>
-        </Col>
-        
-        <Col>
-        Result
-        <CardGroup>
-            {products&&products.map((product)=>(
-                <div>
-                   
-                <Card>
-                <Card.Img variant="top" src={product.pictures[0]&&product.pictures[0].product_picture} />
-                <Card.Header >{`-${product.discount_rate *100}%`}</Card.Header>
-                <Card.Body>
-                  <Card.Title>{product.entitle}</Card.Title>
-                  <Card.Text>
-                        {product.endescription}
-                  </Card.Text>
-                  <Card.Title className="line-thro" > {`${product.price}JO`}</Card.Title>
-                  <Card.Title> {`${(product.price -(product.discount_rate)*(product.price))}JO`}</Card.Title>
+                  )
+                )}
+              </div>}
+              {(!!searchQuery.parent_category_id || searchQuery.parent_category_id === '') && <div className="m-2rem"> <label>first category</label> <CFormSelect aria-label="Default select example" value={searchQuery.parent_category_id} id="parent_category_id" onChange={e => onChange(e, { child_category_id: '', grandchild_category_id: '' })}>
+                <option value={''}>All</option>
+                {parentCategory.length > 0 && parentCategory.map((val, i) => <option value={val.id} key={`parent${i}`}>{val.entitle}</option>)}
 
-                  <Button as="inline">Add to cart</Button> {' '}
-                  <Button as="inline">Details</Button>{' '}
-                </Card.Body>
-                <Card.Footer>
-                  <small className="text-muted">Last updated {product.created_at} ago</small>
-                </Card.Footer>
-              </Card> 
+              </CFormSelect></div>}
+              {searchQuery.parent_category_id && <div className="m-2rem"> <label>second category</label><CFormSelect aria-label="Default select example" value={searchQuery.child_category_id} id='child_category_id' onChange={e => onChange(e, { grandchild_category_id: '' })}>
+                <option value={''}>All</option>
+                {childCategory.length > 0 && childCategory.filter(x => x.parent_id === searchQuery.parent_category_id).map((val, i) => <option value={val.id} key={`child${i}`}>{val.entitle}</option>)}
+
+              </CFormSelect></div>}
+              {searchQuery.child_category_id && searchQuery.parent_category_id && <div className="m-2rem"> <label>third category</label><CFormSelect aria-label="Default select example" value={searchQuery.grandchild_category_id} id='grandchild_category_id' onChange={onChange}>
+                <option value={''}>All</option>
+                {grandChildCategory.length > 0 && grandChildCategory.filter(x => x.parent_id === searchQuery.child_category_id).map((val, i) => <option value={val.id} key={`grand${i}`}>{val.entitle}</option>)}
+
+              </CFormSelect></div>}
+
+              <Button variant='secondary' type='button' onClick={() => { setSearchQuery(initialSearchQuery); setBrand([]); setStore([]) }} style={{ width: '100%', margin: '1rem 0' }}>reset filter</Button>
+              <Button variant="primary" type="submit" style={{ width: '100%', marginBottom: '1rem 0' }}>Search</Button>
+              {/* <Button variant="success" >reset filter</Button> */}
+            </Form>}
+            {/* <Form onChange={(e) => handelToggle(e, "brand")}>
+              {
+                <div key={`Brand`} className="mb-3">
+                  {" "}
+                  Brand
+                  {["BeastOffice", "VICTONE", "Comfty", "YSSOA", "OFM"].map(
+                    (brand, index) => (
+                      <Form.Check
+                        key={index}
+                        type={"checkbox"}
+                        id={`${brand}`}
+                        name={`brand`}
+                        value={brand}
+                        label={` ${brand}`}
+                      />
+                    )
+                  )}
                 </div>
-            ))}
-
-  
- 
-  
-</CardGroup>
-        
+              }
+            </Form>
+            <Form onChange={(e) => handelToggle(e, "color")}>
+              {
+                <div key={`Color`} className="mb-3">
+                  {" "}
+                  Color
+                  {["red", "black", "pink", "blue", "purple"].map(
+                    (color, index) => (
+                      <Form.Check
+                        key={index}
+                        type={"checkbox"}
+                        id={`${color}`}
+                        name={`color`}
+                        value={color}
+                        label={` ${color}`}
+                      />
+                    )
+                  )}
+                </div>
+              }
+            </Form> */}
+          </div>
         </Col>
-            
+
+        {loading ? <CSpinner color="primary" /> : <Col key='col2'>
+          <h3>
+
+            Results
+          </h3>
+
+
+          <Row>
+            {searchedProducts &&
+              searchedProducts.map((product, index) => (
+                <Col lg={6} md={6} sm={12} xs={12} xl={4} xxl={3} style={{ margin: '2rem 0' }} key={`product${index}`} >
+                  <ProductCard itemType='product' product={product} />
+
+                </Col>
+              ))}
+          </Row>
+
+
+        </Col>}
       </Row>
     </div>
   );
@@ -169,5 +268,5 @@ setStore(storeArray)
 const mapStateToProps = (state) => ({
   productsData: state.products ? state.products : null,
 });
-const mapDispatchToProps = { productHandler };
+const mapDispatchToProps = { productHandler, searchProductsHandler };
 export default connect(mapStateToProps, mapDispatchToProps)(Products);

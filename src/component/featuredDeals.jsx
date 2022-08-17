@@ -9,12 +9,12 @@ const ProductView = (props) => {
             <h2 className="FH">{props.title}</h2>
 
                 </a>
-            <button className="FDB">View More ></button>
+            <button className="FDB">{`View More >`}</button>
 
             </div>
             <div className="deals">
-               { props.product.map(product => 
-                    <ProfileCard product={product} xclass={props.xclass} itemType='product'/>
+               { props.product.map((product, index) => 
+                    <ProfileCard key={product.title+index} product={product} xclass={props.xclass} itemType='product'/>
                 )}
             </div>
         </div>

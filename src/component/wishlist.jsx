@@ -1,10 +1,11 @@
 import React, { useState, useEffect }from "react";
 import { connect } from "react-redux";
-import {deleteProduct} from '../store/wishlist'
+import {deleteProduct, deleteItemHandler} from '../store/wishlist'
 import {addItem} from '../store/cart'
 import {If, Then, Else} from 'react-if'
-const Wishlist = props =>{
-    const {wishlist,deleteProduct, addItem, cart} = props
+import image from '../assets/no-image.png'
+const Wishlist = ({wishlist,deleteProduct, addItem, cart,deleteItemHandler}) =>{
+   
    
     const x = cart.map(w => w.id)
 
@@ -17,23 +18,23 @@ const Wishlist = props =>{
             <h2 className="wishlistHead">Wishlist</h2>
             {wishlist.length > 0 ? wishlist.map(item =>
             <section className="cardw">
-                <img src={item.image} alt="wishlist"/>
-                <h3>{item.title}</h3>
+                <img src={item.picture??item.pictures?.product_picture??image} alt="wishlist"/>
+                <h3>{item.entitle}</h3>
                 <div className="btnContainer">
                     <div className="money_bag">
-                        <If condition={!x.includes(Number(item.id))}>
+                        <If condition={!cart.find(v=> (v.id ===item.product_id) || (v.product_id ===item.product_id) || (v.product_id ===item.id) || (v.id ===item.id))}>
                  
                             <Then>
                                 <button onClick={() =>addItem({...item, qty: 1})}><i className="fa fa-shopping-bag"/>Move to Card</button>
                             </Then>
                             <Else>
-                                <button disabled onClick={() =>addItem({...item, qty: 1})}><i className="fa fa-shopping-bag"/>In your Card</button>
+                                <button disabled onClick={() =>addItem({...item, qty: 1})}><i className="fa fa-shopping-bag" />In your Card</button>
                             </Else>
                         </If>
                     {/* <button onClick={() =>addItem({...item, qty: 1})}><i className="fa fa-shopping-bag"/>Move to Card</button> */}
                     </div>
                     <div className="removeBtn ">
-                    <button className="removeWishlist" onClick={() =>deleteProduct(item)}>Remove</button>
+                    <button className="removeWishlist" onClick={() =>deleteItemHandler(item)}>Remove</button>
 
                     </div>
                 </div>
@@ -45,9 +46,9 @@ const Wishlist = props =>{
     )
 }
 const mapStateToProps = (state) =>({
-    wishlist: state.wishlist,
+    wishlist: state.wishlist.items,
     cart: state.cart
 })
 
-const mapDispatchToProps = {deleteProduct,addItem}
+const mapDispatchToProps = {deleteProduct,addItem,deleteItemHandler}
 export default connect(mapStateToProps,mapDispatchToProps)(Wishlist)

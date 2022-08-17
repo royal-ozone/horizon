@@ -5,27 +5,33 @@ import { Button, Row, Form, Col, ListGroup } from "react-bootstrap";
 import { usePopup } from "react-custom-popup";
 import "bootstrap/dist/css/bootstrap.min.css";
 import './address.css'
- import {updateAddressHandler,addAddressHandler,myAddressHandler,removeAddressHandler} from "../../store/address"
+
+import { updateAddressHandler, addAddressHandler, myAddressHandler, removeAddressHandler } from "../../store/address"
+import { Link, Route } from "react-router-dom";
+import { CButton } from "@coreui/react";
+import Map from "./Map";
 
 const Address = (props) => {
-  let {updateAddressHandler,addAddressHandler,addressData,myAddressHandler,removeAddressHandler} =props;
-  console.log("🚀 ~ file: address.jsx ~ line 11 ~ Address ~ addressData", addressData)
-  const [myAddress,setMyAddress]= useState();
+  let { updateAddressHandler, addAddressHandler, addressData, myAddressHandler, removeAddressHandler, google } = props;
+  const [myAddress, setMyAddress] = useState();
   const { showInputDialog, showToast } = usePopup();
-  
+ 
   useEffect(() => {
-    myAddressHandler();
+
     setMyAddress(addressData.addresses);
-  },[])
+  }, [])
   useEffect(() => {
     setMyAddress(addressData.addresses);
-  },[addressData.addresses, myAddress])
+  }, [addressData.addresses, myAddress])
   useEffect(() => {
-    if(addressData.message&&(addressData.message.includes('update')||addressData.message.includes('added')||addressData.message.includes('deleted'))){
+    if (addressData.message && (addressData.message.includes('update') || addressData.message.includes('added') || addressData.message.includes('deleted'))) {
       setMyAddress(addressData.addresses);
     }
-  },[addressData, addressData.addresses, addressData.message])
-
+  }, [addressData, addressData.addresses, addressData.message])
+  const mapStyles = {
+    width: '25%',
+    height: '25%'
+  };
 
 
   const showPopup = (data) => {
@@ -67,7 +73,7 @@ const Address = (props) => {
               value: 3,
             },
           },
-          
+
         },
         {
           inputType: "text",
@@ -108,7 +114,7 @@ const Address = (props) => {
         },
       ],
       onConfirm: (event) => {
-      console.log("🚀 ~ file: address.jsx ~ line 107 ~ showPopup ~ event", event)
+        console.log("🚀 ~ file: address.jsx ~ line 107 ~ showPopup ~ event", event)
         updateAddressHandler(event)
       },
     });
@@ -128,16 +134,37 @@ const Address = (props) => {
       apartment_number: e.target.apartment_number.value,
       default_address: e.target.default_address.checked,
     };
-  
+
     addAddressHandler(data);
   };
-  const deleteHandler =(id)=>{
-    removeAddressHandler({id:id});
+  const deleteHandler = (id) => {
+    removeAddressHandler({ id: id });
   }
-  const updateHandler =(data)=>{
-  console.log("🚀 ~ file: address.jsx ~ line 138 ~ updateHandler ~ data", data)
+  const updateHandler = (data) => {
+    console.log("🚀 ~ file: address.jsx ~ line 138 ~ updateHandler ~ data", data)
     showPopup(data);
   }
+
+  // useEffect(() => {
+  //   const success = e => {
+  //     setCoords({ lat: e.coords.latitude, long: e.coords.longitude })
+  //   }
+  //   navigator.geolocation.getCurrentPosition(success)
+
+  // }, [])
+  // useEffect(() => {
+
+  //   console.log("🚀 ~ file: address.jsx ~ line 161 ~ Address ~ coords", coords)
+  // }, [coords])
+  const setStr = e =>{
+    document.getElementById('building').value = e.address_components[0].long_name
+    document.getElementById('street_name').value = e.address_components[1].long_name
+    document.getElementById('region').value = e.address_components[2].long_name
+    document.getElementById('city').value = e.address_components[3]?.long_name
+    document.getElementById('country').value = e.address_components[5]?.long_name?? e.address_components[4]?.long_name
+
+  }
+
   return (
     <div className="container">
       <div className="form-address">
@@ -149,7 +176,8 @@ const Address = (props) => {
                 <Form.Control
                   placeholder="Country"
                   name="country"
-                  //  ={dataAccount.address}
+                  id='country'
+                //  ={dataAccount.address}
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -157,7 +185,8 @@ const Address = (props) => {
                 <Form.Control
                   placeholder="City"
                   name="city"
-                  //  ={dataAccount.address}
+                  id="city"
+                //  ={dataAccount.address}
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -165,15 +194,17 @@ const Address = (props) => {
                 <Form.Control
                   placeholder="first name"
                   name="first_name"
+                  id="first_name"
                   //  ={dataAccount.address}
-                />
+                  />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Last Name</Form.Label>
                 <Form.Control
                   placeholder="last name"
                   name="last_name"
-                  //  ={dataAccount.address}
+                  id="lastName"
+                //  ={dataAccount.address}
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -181,17 +212,27 @@ const Address = (props) => {
                 <Form.Control
                   placeholder="Mobile"
                   name="mobile"
-                  //  ={dataAccount.address}
+                //  ={dataAccount.address}
                 />
               </Form.Group>
             </Col>
 
             <Col>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label>Region</Form.Label>
+                <Form.Control
+                  placeholder="region"
+                  name="region"
+                  id="region"
+                  //  ={dataAccount.address}
+                />
+              </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Street Name</Form.Label>
                 <Form.Control
                   placeholder="street name"
                   name="street_name"
+                  id="street_name"
                   //  ={dataAccount.address}
                 />
               </Form.Group>
@@ -200,6 +241,7 @@ const Address = (props) => {
                 <Form.Control
                   placeholder="building"
                   name="building"
+                  id="building"
                   //  ={dataAccount.address}
                 />
               </Form.Group>
@@ -208,8 +250,9 @@ const Address = (props) => {
                 <Form.Control
                   placeholder="apartment number"
                   name="apartment_number"
+                  id="apartment_number"
                   //  ={dataAccount.address}
-                />
+                  />
               </Form.Group>
 
               {["checkbox"].map((type) => (
@@ -219,7 +262,7 @@ const Address = (props) => {
                     name="default_address"
                     id={`default-${type}`}
                     label={`default address ${type}`}
-                  />
+                    />
                 </div>
               ))}
             </Col>
@@ -230,39 +273,57 @@ const Address = (props) => {
             </Button>
           </Row>
         </Form>
+        <section>
+          {/* {coords && <Map
+            google={google}
+            zoom={14}
+            style={mapStyles}
+            initialCenter={{
+              lat: parseFloat(coords.lat),
+              lng: parseFloat(coords.long)
+            }}
+            >
+            <Marker
+            onClick={e => console.log(e)}
+            name={'This is test name'}
+            />
+          </Map>} */}
+          {/* <CButton onClick={()=> window.location = '/map'}>map</CButton> */}
+          
+          <Map onClick={setStr}/>
+        </section>
       </div>
 
       <div>
         <ListGroup>
           <div>
-            { console.log("🚀 ~ file: address.jsx ~ line 253 ~ Address ~ myAddress", myAddress)}
-            {myAddress&&myAddress.map((el) => (
-                <div key={el.id}> 
-              <ListGroup.Item
-                 action 
-                 variant="info"
-                 key={el.id}
+            {myAddress && myAddress.map((el) => (
+              <div key={el.id}>
+                <ListGroup.Item
+                  action
+                  variant="info"
+                  key={el.id}
                 //  onClick={()=>ahmad(el.id)}
-                 ><div className="list">
+                ><div className="list">
 
-                   <Button className="btn2" onClick={()=>updateHandler(el)}>Update</Button>
-                   <Button className="btn2" onClick={()=>deleteHandler(el.id)}>X</Button>
-                 </div>
-                {`Address: ${el.street_name} Street, Building ${el.building_number} , apartment ${el.apartment_number} `}
-                <br />
-                {`Name : ${el.first_name}  ${el.last_name} `}<br />
-                {`Mobile : ${el.mobile}`}
-                <br />
-              </ListGroup.Item>
-              {/* <lu onClick={()=>ahmad(el.id)}>
+                    <Button className="btn2" onClick={() => updateHandler(el)}>Update</Button>
+                    <Button className="btn2" onClick={() => deleteHandler(el.id)}>X</Button>
+                  </div>
+                  {`Address: ${el.street_name} Street, Building ${el.building_number} , apartment ${el.apartment_number} `}
+                  <br />
+                  {`Name : ${el.first_name}  ${el.last_name} `}<br />
+                  {`Mobile : ${el.mobile}`}
+                  <br />
+                </ListGroup.Item>
+                {/* <lu onClick={()=>ahmad(el.id)}>
                   <li>  {`Address: ${el.street_name} Street,${el.building_number} Building, ${el.apartment_number} apartment`}</li>
                   <li>   {`Name : ${el.name}  `}</li>
                   <li>  {`Mobile : ${el.mobile}`} </li>
               </lu> */}
-                </div> 
-              
+              </div>
+
             ))}
-           
+
           </div>
         </ListGroup>
       </div>
@@ -273,5 +334,10 @@ const Address = (props) => {
 const mapStateToProps = (state) => ({
   addressData: state.address ? state.address : null,
 });
- const mapDispatchToProps = {updateAddressHandler,addAddressHandler,myAddressHandler,removeAddressHandler}
-export default connect(mapStateToProps,mapDispatchToProps)(Address);
+const mapDispatchToProps = { updateAddressHandler, addAddressHandler, myAddressHandler, removeAddressHandler }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Address);
+
+// export default GoogleApiWrapper({
+//   apiKey: 'API_KEY'
+// })(Demo1);

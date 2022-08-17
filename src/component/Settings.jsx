@@ -1,7 +1,7 @@
 import React,{useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import {useTranslation} from 'react-i18next';
-import {useHistory} from 'react-router-dom';
+import {Redirect, useHistory} from 'react-router-dom';
 import {myProfileHandler} from '../store/auth';
 
 import Account from './account/account';
@@ -61,24 +61,24 @@ const routes = [
         sidebar:()=> <div>notification!</div>,
         main: ()=> <Notification/>
     },
-    {
-        path: "/settings/email",
-        exact: true,
-        sidebar:()=> <div>email!</div>,
-        main: ()=> <Email/>
-    },
+    // {
+    //     path: "/settings/email",
+    //     exact: true,
+    //     sidebar:()=> <div>email!</div>,
+    //     main: ()=> <Email/>
+    // },
     {
         path: "/settings/password",
         exact: true,
         sidebar:()=><div>password!</div>,
         main: ()=> <Password/>
     },
-    {
-        path: "/settings/mobile",
-        exact: true,
-        sidebar:()=><div>mobile!</div>,
-        main: ()=> <Mobile/>
-    },
+    // {
+    //     path: "/settings/mobile",
+    //     exact: true,
+    //     sidebar:()=><div>mobile!</div>,
+    //     main: ()=> <Mobile/>
+    // },
 
 ]
 const Settings = props => {
@@ -89,47 +89,47 @@ const Settings = props => {
     const [menuCollapse, setMenuCollapse] = useState(false);
     const {myProfileHandler,profileData} = props;
     console.log("🚀 ~ file: Settings.jsx ~ line 91 ~ profileData", profileData)
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     
     const menuIconClick = () => {
         menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
     };
     
-    useEffect(() => {
+    //     useEffect(() => {
+            
+    //         if(token){
+    //           console.log("🚀 ~ file: Settings.jsx ~ line 101 ~ useEffect ~ token", token)
+    //           myProfileHandler(); 
+    //           setLoading(false);
+    //         }
+    //         else{
+    //             ('/pageInvalidToken')
+    //         }
+    //     },[])
+    //     useEffect(() => {
+    //         if(profileData.message){
+    //             if(profileData.message.includes('500')||profileData.message.includes('403')){
+    //                 history.push('/pageInvalidToken')
+    //             }
+    //         }
+    //     },[history, profileData.message])
+    //     useEffect(() => {
+    //         setLoading(true)
+    //         if(profileData.res){
+    //             if(profileData.message.includes("Invalid")){
+    //                 ('/pageInvalidToken')
+    //                 }
+    //         }
         
-        if(token){
-          console.log("🚀 ~ file: Settings.jsx ~ line 101 ~ useEffect ~ token", token)
-          myProfileHandler(); 
-          setLoading(false);
-        }
-        else{
-            history.push('/pageInvalidToken')
-        }
-    },[])
-    useEffect(() => {
-        if(profileData.message){
-            if(profileData.message.includes('500')||profileData.message.includes('403')){
-                history.push('/pageInvalidToken')
-            }
-        }
-    },[history, profileData.message])
-    useEffect(() => {
-        setLoading(true)
-        if(profileData.res){
-            if(profileData.message.includes("Invalid")){
-                history.push('/pageInvalidToken')
-                }
-        }
-       
-        setLoading(false);
-    },[history, profileData, profileData.message])
+    //         setLoading(false);
+    //     },[history, profileData, profileData.message])
 
- useEffect(()=>{
-if(!token) {
+    //  useEffect(()=>{
+    // if(!token) {
 
-    history.push('/signIn');
-}
- },[history,token])
+    //     ('/signIn');
+    // }
+    //  },[history,token])
 
     
     return (
@@ -159,11 +159,11 @@ if(!token) {
                   
                    <MenuItem icon={<MdCircleNotifications />}><Link to='/settings/notification' className="link">Notification </Link> </MenuItem>
                 
-                   <MenuItem icon={<MdEmail/>}> <Link to ='/settings/email' className="link" >Change Email </Link> </MenuItem>
-                  
+                   {/* <MenuItem icon={<MdEmail/>}> <Link to ='/settings/email' className="link" >Change Email </Link> </MenuItem>
+                   */}
                   
                    <MenuItem icon={<MdPassword />}> <Link to='/settings/password' className="link">Change Password</Link> </MenuItem>
-                   <MenuItem icon={<MdPassword />}> <Link to='/settings/mobile' className="link">Change mobile</Link> </MenuItem>
+                   {/* <MenuItem icon={<MdPassword />}> <Link to='/settings/mobile' className="link">Change mobile</Link> </MenuItem> */}
                   
 
                   
@@ -184,6 +184,7 @@ if(!token) {
                      />
                     ))}
                 </Switch>
+                    <Redirect from='/settings' to='/settings/account'/>
 
                  </Menu>
                </SidebarContent>

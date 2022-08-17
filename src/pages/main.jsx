@@ -86,7 +86,7 @@ const Main = () => {
        
        <section className="mainCardSection">
         {mainProduct.map((product) => (
-          <ProfileCard product={product} xclass='mainCard' itemType='seller' />
+          <ProfileCard product={product} xclass='mainCard' itemType='seller' key ={product.id}/>
           ))}
 
        </section>

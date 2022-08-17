@@ -1,26 +1,28 @@
 import React from "react";
 import {connect} from 'react-redux'
-import { Redirect } from "react-router-dom";
-import {addItem,decrementQuantity,incrementQuantity,deleteItem} from '../store/cart'
-const Cart = (props) => {
-const { addItem,decrementQuantity,incrementQuantity,deleteItem, cart} = props
+import { Redirect, useHistory } from "react-router-dom";
+import {addItem,decrementQuantity,incrementQuantity,deleteItem, updateCartItemHandler,deleteCartItemHandler} from '../store/cart'
+import image from '../assets/no-image.png'
+import cookie from 'react-cookies'
+
+const Cart = ({ cart,updateCartItemHandler,deleteCartItemHandler,login}) => {
+const history = useHistory()
 
 const qtyChangeHandler = (item) => {
-    if(item.qty ===1){
-        deleteItem(item)
+    if(item.quantity ===1){
+      deleteCartItemHandler(item)
     } else{
-        decrementQuantity(item)
+      updateCartItemHandler({...item, quantity:item.quantity -1})
     }
   }
   const submitHandler = e =>{
     e.preventDefault()
-  console.log("🚀 ~ file: cart.jsx ~ line 14 ~ qtyChangeHandler ~ e", e.target)
     let subTotal = Number(document.getElementById('subTotal').innerHTML.split(':')[1])
-    console.log("🚀 ~ file: cart.jsx ~ line 18 ~ Cart ~ subTotal", subTotal)
     // return(
     //   <Redirect to='/'/>
     // )
-    window.location = '/'
+  !login && cookie.save('redirectTo', '/checkout', {path:'/'})
+   history.push('/checkout')
   }
   return (
     <div className="cart">
@@ -39,26 +41,28 @@ const qtyChangeHandler = (item) => {
         </tr>
 
         </thead> */}
-        {cart.map(item =>
         <tbody>
-        <tr>
-          <td><img src={item.image} alt="" className="cartImg" /></td>
-          <td>{item.title}</td>
-          <td>{item.price}</td>
-          <td><div className="btns"><button className="btn" type='button' onClick={() =>{qtyChangeHandler(item)}}>-</button><span className="in">{item.qty}</span><button  type='button' className="btn" onClick={() =>{incrementQuantity(item)}}>+</button></div></td>
-          <td>{Number(item.price.slice(1)) * item.qty}</td>
+        {cart.map(item =>
+       <tr>
+          <td><img src={item.picture?? item.pictures?.product_picture ?? image} alt="" className="cartImg" /></td>
+          <td>{item.entitle}</td>
+          <td>{`${item.price} ${item.currency}`}</td>
+          {item.color && <td>{item.color}</td>}
+          {item.size && <td>{item.size}</td>}
+          <td><div className="btns"><button className="btn" type='button' onClick={() =>{qtyChangeHandler(item)}}>-</button><span className="in">{item.quantity}</span><button  type='button' className="btn" onClick={() =>{updateCartItemHandler({...item, quantity:item.quantity +1})}}>+</button></div></td>
+          <td>{`${item.price * item.quantity} ${item.currency}`}</td>
        
         </tr>
 
-        </tbody>
-        )}
+)}
+</tbody>
         <tfoot>
         <tr>
           <th></th>
           <th></th>
           <th></th>
           <th></th>
-          <th><strong id='subTotal' className="subTotal">Subtotal: {cart.reduce((x,y)=>{return x+= Number(y.price.slice(1)) * y.qty},0)}</strong></th>
+          <th><strong id='subTotal' className="subTotal">Subtotal: {cart.reduce((x,y)=>{return x+= Number(y.price) * y.quantity},0).toFixed(2)}</strong></th>
         </tr>
 
         </tfoot>
@@ -75,11 +79,11 @@ const qtyChangeHandler = (item) => {
 };
 
 const mapStateToProps = (state) => ({
-    cart: state.cart
-  
+    cart: state.cart,
+    login: state.sign.login
   });
 
-const mapDispatchToProps = { addItem,decrementQuantity,incrementQuantity,deleteItem};
+const mapDispatchToProps = { addItem,decrementQuantity,incrementQuantity,deleteItem,updateCartItemHandler,deleteCartItemHandler};
 
 
 export default connect(mapStateToProps,mapDispatchToProps)(Cart);

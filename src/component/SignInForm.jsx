@@ -60,8 +60,7 @@ const SignInForm = (props) => {
   useEffect(()=>{
     if(userSignIn.message){
       if(userSignIn.message){
-        console.log("🚀 ~ file: SignInForm.jsx ~ line 62 ~ useEffect ~ userSignIn.message", userSignIn.message)
-        console.log("🚀 ~ file:asssssssssssssssssssss")
+       
         setShow(true);
         // dispatch(deleteMessage());
       }
@@ -72,8 +71,7 @@ const SignInForm = (props) => {
   useEffect(()=>{
     if(userSignIn.message){
       if(userSignIn.message.includes('activate',30)){
-        console.log("🚀 ~ file: SignInForm.jsx ~ line 62 ~ useEffect ~ userSignIn.message", userSignIn.message)
-        console.log("🚀 ~ file:asssssssssssssssssssss")
+        
         setShowDeactivate(true);
         // dispatch(deleteMessage());
       }

@@ -5,7 +5,7 @@ import cookie from 'react-cookies';
        super();
        this.path='auth';
        this.path2='api/v1';
-       this.token=cookie.load('access_token');
+    //    this.token=cookie.load('access_token');
     }
     async register(data){
         try {
@@ -17,7 +17,7 @@ import cookie from 'react-cookies';
     }
     async getProfile(){
         try {
-            let response = await this.get(`${this.path}/profile`,null,this.bearer(this.token));
+            let response = await this.get(`${this.path}/profile`,null);
             return response;
         } catch (error) {
             return error;
@@ -25,7 +25,7 @@ import cookie from 'react-cookies';
     }
     async updateProfileInfo(data){
         try {
-            let response =await this.update(`${this.path}/update/profile`,data,this.bearer(this.token));
+            let response =await this.update(`${this.path}/update/profile`,data);
             return response;
         } catch (error) {
             return error;
@@ -33,7 +33,7 @@ import cookie from 'react-cookies';
     }
     async updateEmail(data){
         try {
-            let response =await this.update(`${this.path}/user/email`,data,this.bearer(this.token));
+            let response =await this.update(`${this.path}/user/email`,data);
             return response;
         } catch (error) {
             return error;
@@ -41,7 +41,7 @@ import cookie from 'react-cookies';
     }
     async updateMobile(data){
         try {
-            let response =await this.update(`${this.path}/user/mobile`,data,this.bearer(this.token));
+            let response =await this.update(`${this.path}/user/mobile`,data);
             return response;
         } catch (error) {
             return error;
@@ -49,7 +49,7 @@ import cookie from 'react-cookies';
     }
     async insertAddress(data){
         try {
-            let response =await this.post(`${this.path2}/add/address`,data,this.bearer(this.token));
+            let response =await this.post(`${this.path2}/add/address`,data);
             return response;
         } catch (error) {
             return error;
@@ -57,7 +57,7 @@ import cookie from 'react-cookies';
     }
     async getAddress(){
         try {
-            let response =await this.get(`${this.path2}/get/address`,null,this.bearer(this.token));
+            let response =await this.get(`${this.path2}/get/address`,null);
             return response;
         } catch (error) {
             return error;
@@ -65,7 +65,7 @@ import cookie from 'react-cookies';
     }
     async updateAddress(data){
         try {
-            let response =await this.update(`${this.path2}/update/address`,data,this.bearer(this.token));
+            let response =await this.update(`${this.path2}/update/address`,data);
             console.log("🚀 ~ file: Auth.js ~ line 69 ~ Auth ~ updateAddress ~ response", response)
             return response;
         } catch (error) {
@@ -74,7 +74,7 @@ import cookie from 'react-cookies';
     }
     async removeAddress(data){
         try {
-            let response =await this.update(`${this.path2}/remove/address`,data,this.bearer(this.token));
+            let response =await this.update(`${this.path2}/remove/address`,data);
             return response;
         } catch (error) {
             return error;
@@ -82,7 +82,7 @@ import cookie from 'react-cookies';
     }
     async updatePicture(data){
         try {
-            let response =await this.update(`${this.path2}/profile/picture`,data,this.bearer(this.token));
+            let response =await this.update(`${this.path2}/profile/picture`,data);
             return response;
         } catch (error) {
             return error;
@@ -90,7 +90,7 @@ import cookie from 'react-cookies';
     }
     async removePicture(data){
         try {
-            let response =await this.delete(`${this.path2}/profile/picture`,data,this.bearer(this.token));
+            let response =await this.delete(`${this.path2}/profile/picture`,data);
             return response;
         } catch (error) {
             return error;
@@ -98,7 +98,7 @@ import cookie from 'react-cookies';
     }
     async deactivate(){
         try {
-            let response =await this.update(`${this.path}/deactivate`,null,this.bearer(this.token));
+            let response =await this.update(`${this.path}/deactivate`,null);
             return response;
         } catch (error) {
             return error;
@@ -106,7 +106,7 @@ import cookie from 'react-cookies';
     }
     async verification(){
         try {
-            let response = await this.post(`${this.path}/user/verification`,null,this.bearer(this.token));
+            let response = await this.post(`${this.path}/user/verification`,null);
             return response;
         } catch (error) {
             return error;
@@ -114,7 +114,7 @@ import cookie from 'react-cookies';
     }
     async verify(data){
         try {
-            let response = await this.post(`${this.path}/user/verify`,data,this.bearer(this.token));
+            let response = await this.post(`${this.path}/user/verify`,data);
             return response;
         } catch (error) {
             return error;
@@ -130,10 +130,18 @@ import cookie from 'react-cookies';
     }
     async logout(){
         try {
-            let response = await this.post(`${this.path}/signout`,null,this.bearer(this.token));
+            let response = await this.post(`${this.path}/signout`,null);
             return response;
         } catch (error) {
             return error;
+        }
+    }
+    async changePassword(data){
+        try {
+            let response = await this.update(`${this.path}/user/password`, data)
+            return response
+        } catch (error) {
+            return error
         }
     }
 }

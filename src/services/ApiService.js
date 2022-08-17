@@ -5,107 +5,88 @@ import { endSession } from '../store/auth';
 let api = process.env.REACT_APP_API;
 
 export default class ApiService {
- 
-    async get(endpoint, params,headers){
-     let res = await axios({
-            method: 'get',
-            url: `${api}/${endpoint}`,
-            params:params,
-            headers:headers
-          })
-        
-          return res.data
-    }
+  bearer(token) {
+    return token ? { session_id: cookie.load('session_id'), Authorization: `Bearer ${token}`, locale: localStorage.getItem('i18nextLng') } : { locale: localStorage.getItem('i18nextLng') }
+  }
+  basic(data) {
+    return { Authorization: ` Basic ${btoa(`${data.email}:${data.password}`)}` }
+  }
 
-    // async second_get(endpoint, params,token){
-    //   let res = await axios({
-    //          method: 'get',
-    //          url: `${api}/${endpoint}`,
-    //          params:params,
-    //          headers: {
-    //            Authorization: 'Bearer ' + token
-    //          }
-             
-    //        })
-         
-    //        return res.data
-    //  }
-    async post(endpoint,data,headers,params=null){
-     let res = await axios({
-            method: 'post',
-            url: `${api}/${endpoint}`,
-            data: data,
-            params:params,
-            headers: headers,
-            
-          });
-          return res.data
-    }
-    // async basicPost(endpoint,params,data){
-    //   let res = await axios({
-    //          method: 'post',
-    //          url: `${api}/${endpoint}`,
-    //          data: data,
-    //          params:params,
-    //          headers:{Authorization:` Basic ${btoa(`${data?data.email:null}:${data?data.password:null}`)}`}
-            
-             
-    //        });
-          
-    //        return res.data
-    //  }
-    async update(endpoint,data,headers,params=null){
-        let res = await axios({
-            method: 'put',
-            url: `${api}/${endpoint}`,
-            params:params,
-            data: data,
-            headers: headers, 
-          });
-          return res.data
-    }
+  async token() {
+    let token = cookie.load('access_token', { path: '/' })
 
-    async delete(endpoint,params,headers){
-        let res = await axios({
-            method: 'delete',
-            url: `${api}/${endpoint}`,
-            params:params,
-            headers: headers,
-           
-          });
-          return res.data
+    if (!token) return
+    else if (!isJwtExpired(token)) {
+      return token
     }
-    session(){
-      let session_id = cookie.load('session_id');
+    else {
 
-      return session_id
+      let { refresh_token, access_token, status, session_id } = await this.post('auth/refresh', null, this.bearer(cookie.load('refresh_token'), { path: '/' }))
+      if (status === 200) {
+        cookie.remove('access_token', { path: '/' })
+        cookie.remove('refresh_token', { path: '/' })
+        cookie.save('access_token', access_token, { path: '/' })
+        cookie.save('refresh_token', refresh_token, { path: '/' })
+
+        return access_token
+      } else console.log('expired session')
     }
+  }
+  async get(endpoint, params) {
+    let res = await axios({
+      method: 'get',
+      url: `${api}/${endpoint}`,
+      params: params,
+      headers: this.bearer(await this.token())
+    })
 
-    bearer(token){
-      return {session_id:cookie.load('session_id') ,Authorization: `Bearer ${token}`}
-    }
-    basic(data){
-      return { Authorization: ` Basic ${btoa(`${data.email}:${data.password}`)}` }
-    }
+    return res.data
+  }
+  
+  
+  async post(endpoint, data, headers, params = null) {
+    let res = await axios({
+      method: 'post',
+      url: `${api}/${endpoint}`,
+      data: data,
+      params: params,
+      headers: headers ?? this.bearer(await this.token())
 
-    async token(){
-      let accessToken = cookie.load('access_token');
-      let refreshToken = cookie.load('refresh_token');
-      let session_id = cookie.load('session_id');
-      if(!isJwtExpired) return accessToken
-      else if(isJwtExpired(refreshToken)){
-        endSession()
-      }
-      else{
-        let result = await this.post('auth/refresh',null,this.bearer(refreshToken,session_id));
-        cookie.save('access_token',result.access_token);
-        cookie.save('refresh_token', result.refresh_token)  
+    });
+    return res.data
+  }
 
-        return result.access_token;
-      }
-    }
+  async update(endpoint, data, params = null) {
+    let res = await axios({
+      method: 'put',
+      url: `${api}/${endpoint}`,
+      params: params,
+      data: data,
+      headers: this.bearer(await this.token()),
+    });
+    return res.data
+  }
 
-    
+  async delete(endpoint, data, params) {
+    let res = await axios({
+      method: 'delete',
+      url: `${api}/${endpoint}`,
+      params: params,
+      data: data,
+      headers: this.bearer(await this.token()),
+
+    });
+    return res.data
+  }
+  session() {
+    let session_id = cookie.load('session_id');
+
+    return session_id
+  }
+
+
+
+
 
 }
 
