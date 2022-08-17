@@ -19,8 +19,6 @@
     "countries-states-cities": "^1.0.6",
     "country-city": "^1.0.0",
     "country-state-city": "^3.0.1",
-    "google-map-react": "^2.2.0",
-    "google-maps-react": "^2.0.6",
     "i18next": "^21.6.6",
     "i18next-browser-languagedetector": "^6.1.2",
     "i18next-http-backend": "^1.3.1",
