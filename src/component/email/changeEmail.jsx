@@ -12,7 +12,7 @@ const Email = (props) => {
   const { updateEmailHandler, profileData } = props;
   const [loading, setLoading] = useState(true);
   const { showOptionDialog, showToast } = usePopup();
-  const { email } = profileData.user;
+  const { email, mobile } = profileData.user;
   useEffect(() => {
     setLoading(false);
   }, [profileData]);
@@ -21,6 +21,7 @@ const Email = (props) => {
     e.preventDefault();
     let data = {
       email: e.target.email.value,
+      mobile: e.target.mobile.value
     };
     showPopup(data);
   };
@@ -32,13 +33,13 @@ const Email = (props) => {
       title: "Update Email?",
       options: [
         {
-          name: "Cancel",
-          type: "cancel",
-        },
-        {
           name: "Update",
           type: "confirm",
           style: { background: "lightcoral" },
+        },
+        {
+          name: "Cancel",
+          type: "cancel",
         },
       ],
       onConfirm: () => {
@@ -50,25 +51,45 @@ const Email = (props) => {
 
   return (
     <div>
-      <Form onSubmit={updateHandler}>
+      <Form onSubmit={updateHandler} className='back'>
+        <fieldset >
+      <legend>Account info</legend>
+       
         <Row>
-          <Col>
-            <Form.Group className="mb-3" controlId="formBasicEmail1">
+          <Col xs={12} md={12}>
+            <Form.Group className="mb-3"  controlid="formBasicEmail">
               <Form.Label>Email Address </Form.Label>
+             
               <Form.Control
-                placeholder="first name"
+                placeholder="email"
                 name="email"
-                defaultValue={profileData ? email : "Email Address"}
+                defaultValue={ email }
+                style={{maxWidth: '100%'}}
+              />
+              
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12} md={12}>
+          <Form.Group className="mb-3" controlid="formBasicMobile">
+              <Form.Label>Mobile </Form.Label>
+              <Form.Control
+                placeholder="mobile"
+                name="mobile"
+                defaultValue={mobile }
+                style={{maxWidth: '100%'}}
               />
             </Form.Group>
           </Col>
         </Row>
         <Row>
-          <Button variant="primary" type="submit" controlId="button-email">
+          <Button variant="primary" type="submit" controlid="button-email">
             Update
           </Button>
           {loading ? <Spinner animation="border" /> : null}
         </Row>
+        </fieldset>
       </Form>
     </div>
   );

@@ -9,7 +9,7 @@ import AuthService from '../services/Auth';
 let sign = createSlice({
     name: 'sign',
     initialState: {
-        login:false,user:{},message:'',token:{},verify:{}
+        login:false,user:{},message:'',verify:{}
     },
     reducers:{
         // addUser(state,action){
@@ -17,28 +17,28 @@ let sign = createSlice({
         //     return  action.payload 
         // },
         loginAction(state,action){
-            let data =action.payload;
-            let access_token;
-            let refresh_token;
-            let session_id;
-            if (data.login ===true){
+            return {...state,...action.payload} ;
+            // let data =action.payload;
+            // let access_token;
+            // let refresh_token;
+            // let session_id;
+            // if (data.login ===true){
                 
-                access_token = data.user.access_token ?data.user.access_token:null ;
-                refresh_token = data.user.refresh_token? data.user.refresh_token : null;
-                session_id = data.user.session_id ? data.user.session_id :null;
-                if(access_token && refresh_token){
-                    cookie.save('refresh_token',refresh_token);
-                    cookie.save('access_token',access_token);
-                    cookie.save('session_id',session_id);
-                }
+            //     access_token = data.user.access_token ?data.user.access_token:null ;
+            //     refresh_token = data.user.refresh_token? data.user.refresh_token : null;
+            //     session_id = data.user.session_id ? data.user.session_id :null;
+            //     if(access_token && refresh_token){
+            //         cookie.save('refresh_token',refresh_token);
+            //         cookie.save('access_token',access_token);
+            //         cookie.save('session_id',session_id);
+            //     }
                 
-                return {...state,...data}
+            //     return {...state,...data}
 
-            }
-            else{
-                console.log("🚀 ~ file: auth.js ~ line 37 ~ loginAction ~ action.payload", action.payload)
-                return {...state,...action.payload} ;
-            }
+            // }
+            // else{
+            //     console.log("🚀 ~ file: auth.js ~ line 37 ~ loginAction ~ action.payload", action.payload)
+            // }
            
             
         },
@@ -111,11 +111,15 @@ export const signInHandler = (payload) => async(dispatch,state) => {
 //    }
 
 try {
-    let data = await AuthService.login(payload);
-    if(data.status ===200){
-    dispatch(loginAction({ login:true,user:{...data}}))
+    let {access_token, refresh_token, status, session_id, message} = await AuthService.login(payload);
+    if(status ===200){
+        cookie.save('access_token', access_token,{path: '/'})
+        cookie.save('refresh_token', refresh_token,{path: '/'})
+        cookie.save('session_id', session_id,{path: '/'})
+        let {user} = await AuthService.getProfile()
+    dispatch(loginAction({ login:true, user:user}))
     }else{
-        dispatch(loginAction({ message:data.message}))  
+        dispatch(loginAction({ message:message}))  
     }
 } catch (error) {
     dispatch(loginAction({ message:error.message}))
@@ -143,7 +147,6 @@ export const logOutHandler = (payload) =>  async(dispatch,state) => {
     // })()
     try {
         let data =await AuthService.logout();
-        console.log("🚀 ~ file: auth.js ~ line 141 ~ logOutHandler ~ data", data)
         if(data.status ===200){
             cookie.remove('access_token',{path: '/'})
             cookie.remove('refresh_token',{path: '/'})
@@ -208,12 +211,11 @@ export const verifyHandler = (payload) => async(dispatch,state) => {
 }
 export const myProfileHandler = () => async (dispatch,state) => {
     try {
-        let data =await AuthService.getProfile();
-        console.log("🚀 ~ file: auth.js ~ line 212 ~ myProfileHandler ~ data", data)
-        if(data.status ===200){
-            dispatch(loginAction({login:true,user:{...data}}))
+        let {user, status, message} =await AuthService.getProfile();
+        if(status ===200){
+            dispatch(loginAction({login:true,user:user}))
         }else{
-            dispatch(loginAction({message:data.message}))
+            dispatch(loginAction({message:message}))
         }
     } catch (error) {
         dispatch(loginAction({message:error.message}))
@@ -237,12 +239,11 @@ export const myProfileHandler = () => async (dispatch,state) => {
 }
 export const updateProfileHandler = (payload) =>async (dispatch,state)=> {
     try {
-        let data = await AuthService.updateProfileInfo(payload);
-        console.log("🚀 ~ file: auth.js ~ line 241 ~ updateProfileHandler ~ data", data)
-        if(data.status ===200){
-            dispatch(loginAction({user:{...state().sign.user,...data}}))
+        let {status, user, message} = await AuthService.updateProfileInfo(payload);
+        if(status === 200){
+            dispatch(loginAction({user:{...state().sign.user,...user}}))
         }else{
-            dispatch(loginAction({message:data.message}))
+            dispatch(loginAction({message:message}))
         }
     } catch (error) {
         dispatch(loginAction({message:error.message}))
@@ -274,12 +275,11 @@ export const updateEmailHandler = (payload) => async (dispatch,state)=> {
         
     // })()
     try {
-        let data = await AuthService.updateEmail(payload);
-        console.log("🚀 ~ file: auth.js ~ line 278 ~ updateEmailHandler ~ data", data)
-        if(data.status ===200){
-            dispatch(loginAction({user:{...state().sign.user,email:data.profile.email}}))
+        let {user:{email,mobile}, status, message} = await AuthService.updateEmail(payload);
+        if(status ===200){
+            dispatch(loginAction({user:{...state().sign.user,email:email, mobile: mobile}}))
         }else{
-            dispatch(loginAction({message:data}))
+            dispatch(loginAction({message:message}))
         }
     } catch (error) {
         dispatch(loginAction({message:error.message}));
@@ -314,11 +314,11 @@ export const updatePictureHandler = (payload) =>async (dispatch,state)=>{
 
     // }
     try {
-        let data = await AuthService.updatePicture(payload);
-        if(data.status ===200){
-            dispatch(loginAction({user:{...state().sign.user,profile_picture:data.profile_picture}}))
+        let {user,status ,message} = await AuthService.updatePicture(payload);
+        if(status ===200){
+            dispatch(loginAction({user:user}))
         }else{
-            dispatch(loginAction({message:data.message}))
+            dispatch(loginAction({message:message}))
         }
     } catch (error) {
         dispatch(loginAction({ message:error.message}))
@@ -347,6 +347,22 @@ export const deactivateProfileHandler = () =>async (dispatch,state)=>{
         dispatch(loginAction({message:error.message}))
     }
 } 
+
+export const changePasswordHandler = payload => async (dispatch,state) => {
+    try {
+        let {status, message} = await AuthService.changePassword(payload)
+        console.log("🚀 ~ file: auth.js ~ line 354 ~ changePasswordHandler ~ message", message)
+        if(status === 200) {
+            dispatch(loginAction({message:message, status: status}))
+            return {message:message, status: status}
+        } else {
+            dispatch(loginAction({message:message, status:status}))
+            return {message:message, status: status}
+        }
+    } catch (error) {
+        
+    }
+}
 
 
 export default sign.reducer 

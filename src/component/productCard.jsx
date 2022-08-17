@@ -167,7 +167,7 @@ const ProfileCard = (props) => {
 
 const mapStateToProps = (state) => ({
   cart: state.cart,
-  wishlist: state.wishlist
+  wishlist: state.wishlist.items
 
 });
 

@@ -1,33 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector, useDispatch } from "react-redux";
 import {
   updateProfileHandler,
   updatePictureHandler,
   deactivateProfileHandler,
-  logOutHandler
+  logOutHandler, 
+  changePasswordHandler,
+  deleteMessage
 } from "../../store/auth";
-import { useHistory , Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import cookie from "react-cookies";
 import profilePicture from "../../assets/profilePictureDefult.jpg";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./account.css";
-import { Button, Row, Form, Col, Figure, Spinner } from "react-bootstrap";
-import { usePopup } from "react-custom-popup";
+import { Button, Row, Form, Col, Figure, Spinner, Container } from "react-bootstrap";
+import { usePopup, OutAnimationType,AnimationType,
+  DialogType, ToastPosition} from "react-custom-popup";
 import { FcEditImage } from "react-icons/fc";
+import ChangeEmail from "../email/changeEmail";
 
-const Account = (props) => {
+const Account = ({
+  updateProfileHandler,
+  updatePictureHandler,
+  profileData,
+  deactivateProfileHandler,
+  logOutHandler,
+  changePasswordHandler
+}) => {
+  const { message,status,user: { first_name, last_name, country, city, profile_picture } } = useSelector(state => state.sign)
   const history = useHistory();
-  const {
-    updateProfileHandler,
-    updatePictureHandler,
-    profileData,
-    deactivateProfileHandler,
-    logOutHandler,
-  } = props;
-  let {first_name,last_name,country,city,profile_picture} = profileData.user;
-  const { showOptionDialog, showToast } = usePopup();
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
   
+  // let {first_name,last_name,country,city,profile_picture} = profileData.user;
+  const { showOptionDialog, showToast,showAlert } = usePopup();
+  const [loading, setLoading] = useState(true);
+
   const [loading2, setLoading2] = useState(true);
 
   useEffect(() => {
@@ -35,11 +42,11 @@ const Account = (props) => {
       history.push("/pageInvalidToken");
     }
   }, []);
-useEffect(() => {
-    if(profileData.message?profileData.message.includes('deactivated'):null){
-    history.push("/signIn");
-  }
-},[history, profileData])
+  useEffect(() => {
+    if (message && !message.title ? message.includes('deactivated') : null) {
+      history.push("/signIn");
+    }
+  }, [history, profileData])
   useEffect(() => {
     setLoading(false);
     setLoading2(false);
@@ -116,8 +123,66 @@ useEffect(() => {
     updatePictureHandler(formData);
   };
 
+  const updatePasswordHandler = (e) =>{
+    e.preventDefault()
+    const obj = {current: e.target.password.value, new: e.target.newPassword.value, repeatedPassword: e.target.repeatedPassword.value}
+    if (obj.new !== obj.repeatedPassword){
+      return showAlert({
+        type: DialogType.DANGER,
+        text: 'Passwords don`t match',
+        title: 'Please make sure to repeat new password correctly',
+        animationType: AnimationType.FADE_IN,
+        outAnimationType: OutAnimationType.FADE_OUT,
+      })
+     
+    }
+    Promise.all([changePasswordHandler(obj)]).then(([{status, message : msg}]) => {
+      const {title, details} = msg
+      if(title){
+        showAlert({
+        type: DialogType.DANGER,
+        text: <Error data={details}/>,
+        title: title,
+        animationType: AnimationType.FADE_IN,
+        outAnimationType: OutAnimationType.FADE_OUT,
+      })  
+      } else if (status === 403){
+        showAlert({
+          type: DialogType.DANGER,
+          text: msg,
+          title: 'Error',
+          animationType: AnimationType.FADE_IN,
+          outAnimationType: OutAnimationType.FADE_OUT,
+        })  
+      } else if (status === 200){
+        showToast({
+          text: msg,
+          type: DialogType.INFO,
+          position: ToastPosition.BOTTOM_RIGHT,
+          timeoutDuration: 3000
+        })
+        e.target.reset()
+      }
+      
+  
+  }
+    
+    )
+  }
+
+  const Error = ({data}) => {
+    return (
+      <React.Fragment>
+          
+          <ol>
+          {data.map((d, i) => <li key={`detail${i}`}>{d}</li> )}
+
+          </ol>
+      </React.Fragment>
+    )
+  }
   return (
-    <div>
+    <div style={{ maxHeight: 'auto' }}>
       <div className="image">
         {loading ? (
           <Spinner animation="border" />
@@ -128,16 +193,17 @@ useEffect(() => {
                 roundedCircle
                 width={100}
                 height={100}
-                maxWidth={200}
-                maxHeight={200}
+                maxwidth={200}
+                maxheight={200}
                 alt={"not found"}
-                src={profileData?profile_picture:profilePicture}
+                src={profileData ? profile_picture : profilePicture}
               />{" "}
             </div>
             <div>
               <Form>
+
                 <Form.Group className="position-relative mb-3">
-                  <Form.Label for="file-input">
+                  <Form.Label htmlFor="file-input">
                     <span>
                       <FcEditImage />{" "}
                     </span>
@@ -154,78 +220,113 @@ useEffect(() => {
           </Figure>
         )}
       </div>
-
-      <Form onSubmit={updateHandler}>
+      <Container>
         <Row>
-          <Col>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>First Name </Form.Label>
-              <Form.Control
-                type="first_name"
-                placeholder="first name"
-                name="first_name"
-                defaultValue={
-                  profileData ? first_name  : "First Name" 
-                }
-              />
-            </Form.Group>
+          <Col xs={12} md={6} sm={12} lg={4}>
+            <Form onSubmit={updateHandler} className="back">
+              <fieldset className="fieldset" >
+                <legend >Personal Information</legend>
+                <Row>
+                  <Col  >
+                    <Form.Group className="mb-3" controlid="formBasicFirstName">
+                      <Form.Label>First Name </Form.Label>
+                      <Form.Control
+                        type="first_name"
+                        placeholder="first name"
+                        name="first_name"
+                        defaultValue={
+                          profileData ? first_name : "First Name"
+                        }
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group
+                      className="mb-3"
+                      id="last_name"
+                      controlid="formBasicLastName"
+                    >
+                      <Form.Label>Last Name </Form.Label>
+                      <Form.Control
+                        type="last_name"
+                        placeholder="last name"
+                        name="last_name"
+                        defaultValue={profileData ? last_name : "Last Name"}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col >
+                    <Form.Group
+                      className="mb-3"
+                      id="country"
+                      controlid="formBasicCountry"
+                    >
+                      <Form.Label> Country </Form.Label>
+                      <Form.Control
+                        type="country"
+                        placeholder="country"
+                        name="country"
+                        defaultValue={profileData ? country : "Country"}
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group
+                      className="mb-3"
+                      id="city"
+                      controlid="formBasicCity"
+                    >
+                      <Form.Label> City </Form.Label>
+                      <Form.Control
+                        type="city"
+                        placeholder="city"
+                        name="city"
+                        defaultValue={profileData ? city : "City"}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+
+                <Button variant="primary" type="submit">
+                  Update
+                </Button>
+                {loading2 ? <Spinner animation="border" /> : null}
+              </fieldset>
+            </Form>
           </Col>
-          <Col>
-            <Form.Group
-              className="mb-3"
-              id="last_name"
-              controlId="formBasicPassword"
-            >
-              <Form.Label>Last Name </Form.Label>
-              <Form.Control
-                type="last_name"
-                placeholder="last name"
-                name="last_name"
-                defaultValue={profileData ? last_name : "Last Name"}
-              />
-            </Form.Group>
+          <Col xs={12} md={6} sm={12} lg={4}>
+
+            <ChangeEmail />
+          </Col>
+          <Col xs={12} md={6} sm={12} lg={4} >
+            <Form className="back" onSubmit={updatePasswordHandler}>
+              <fieldset>
+                <legend>Change Password</legend>
+                <Row>
+                  <Form.Group className="mb-3">
+                    <Form.Control placeholder='current password' type="password"  id='password'  required/>
+                  </Form.Group>
+                </Row>
+                <Row>
+                  <Form.Group className="mb-3">
+                    <Form.Control placeholder='new password' type="password" id='newPassword'  required/> 
+                  </Form.Group>
+                </Row>
+                <Row>
+                  <Form.Group className="mb-3">
+                    <Form.Control placeholder='repeat new password' type="password" id="repeatedPassword"  required/>
+                    <Button variant="primary" type="submit">Update</Button>
+                  </Form.Group>
+                </Row>
+              </fieldset>
+            </Form>
           </Col>
         </Row>
-        <Row>
-          <Col>
-            <Form.Group
-              className="mb-3"
-              id="country"
-              controlId="formBasicPassword"
-            >
-              <Form.Label> Country </Form.Label>
-              <Form.Control
-                type="country"
-                placeholder="country"
-                name="country"
-                defaultValue={profileData ? country : "Country"}
-              />
-            </Form.Group>
-          </Col>
-          <Col>
-            <Form.Group
-              className="mb-3"
-              id="city"
-              controlId="formBasicPassword"
-            >
-              <Form.Label> City </Form.Label>
-              <Form.Control
-                type="city"
-                placeholder="city"
-                name="city"
-                defaultValue={profileData ? city : "City"}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
 
-        <Button variant="primary" type="submit">
-          Update
-        </Button>
-        {loading2 ? <Spinner animation="border" /> : null}
-      </Form>
-
-      <Button 
+      </Container>
+      <Button
         variant="danger"
         className=""
         type="submit"
@@ -233,8 +334,8 @@ useEffect(() => {
       >
         Deactivate
       </Button >
-    
-      
+
+
     </div>
   );
 };
@@ -247,5 +348,6 @@ const mapDispatchToProps = {
   updatePictureHandler,
   deactivateProfileHandler,
   logOutHandler,
+  changePasswordHandler,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Account);
