@@ -51,22 +51,27 @@ function App({ parentCategoryHandler, myProfileHandler, getCartItemsHandler, get
   let path = cookie.load('redirectTo', { path: '/' })
   useEffect(() => {
     Promise.all([parentCategoryHandler(), token && myProfileHandler()]).then(([q, p]) => { }).finally(() => setLoading(false))
-    let lang = localStorage.getItem('i18nextLng')
-    if (lang === 'en') {
-      i18n.changeLanguage(lang);
-      document.documentElement.setAttribute("lang", 'en');
-      document.documentElement.setAttribute("dir", 'ltl');
-    } else {
-      i18n.changeLanguage(lang);
-      document.documentElement.setAttribute("lang", 'ar');
-      document.documentElement.setAttribute("dir", 'rtl');
-    }
+    // let lang = localStorage.getItem('i18nextLng')
+    // if (lang === 'en') {
+    //   i18n.changeLanguage(lang);
+    // } else if (lang === 'ar'){
+    //   i18n.changeLanguage(lang);
+    // }
   }, [])
   useEffect(() => {
     login && Promise.all([getCartItemsHandler(), getItemsHandler(), myAddressHandler(), getFollowingStores()])
     !login && dispatch(resetCartItems((cookie.load('cart', { path: '/' }) && JSON.parse(cookie.load('cart', { path: '/' }))) ?? [])) && dispatch(resetWishlist((cookie.load('wishlist', { path: '/' }) && JSON.parse(cookie.load('wishlist', { path: '/' }))) ?? []))
 
   }, [login])
+  useEffect(()=>{
+    if (i18n.language === 'en'){
+      document.documentElement.setAttribute("lang", 'en');
+      document.documentElement.setAttribute("dir", 'ltl');
+    } else if (i18n.language === 'ar') {
+      document.documentElement.setAttribute("lang", 'ar');
+      document.documentElement.setAttribute("dir", 'rtl');
+    }
+  },[i18n.language])
   return (
 
 
