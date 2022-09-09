@@ -7,7 +7,7 @@ import {myProfileHandler} from '../store/auth';
 import Account from './account/account';
 import Address from './address/address';
 import Email from './email/changeEmail';
-import Password from './password/changPassword';
+import Orders from './Orders/Orders';
 import Notification from './notification/notification';
 import Mobile from './mobile/mobile';
 
@@ -68,10 +68,10 @@ const routes = [
     //     main: ()=> <Email/>
     // },
     {
-        path: "/settings/password",
+        path: "/settings/orders",
         exact: true,
-        sidebar:()=><div>password!</div>,
-        main: ()=> <Password/>
+        sidebar:()=><div>Orders</div>,
+        main: ()=> <Orders/>
     },
     // {
     //     path: "/settings/mobile",
@@ -88,7 +88,6 @@ const Settings = props => {
 
     const [menuCollapse, setMenuCollapse] = useState(false);
     const {myProfileHandler,profileData} = props;
-    console.log("🚀 ~ file: Settings.jsx ~ line 91 ~ profileData", profileData)
     const [loading, setLoading] = useState(false);
     
     const menuIconClick = () => {
@@ -162,7 +161,7 @@ const Settings = props => {
                    {/* <MenuItem icon={<MdEmail/>}> <Link to ='/settings/email' className="link" >Change Email </Link> </MenuItem>
                    */}
                   
-                   <MenuItem icon={<MdPassword />}> <Link to='/settings/password' className="link">Change Password</Link> </MenuItem>
+                   <MenuItem icon={<MdPassword />}> <Link to='/settings/orders' className="link">Change Password</Link> </MenuItem>
                    {/* <MenuItem icon={<MdPassword />}> <Link to='/settings/mobile' className="link">Change mobile</Link> </MenuItem> */}
                   
 

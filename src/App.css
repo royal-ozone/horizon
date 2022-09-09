@@ -1083,3 +1083,10 @@ fieldset {
   padding: .5rem;
   background-color: #fff
 }
+.card-title{
+  text-align: center
+}
+
+.table * {
+  text-align: center
+}
