@@ -51,12 +51,12 @@ function App({ parentCategoryHandler, myProfileHandler, getCartItemsHandler, get
   let path = cookie.load('redirectTo', { path: '/' })
   useEffect(() => {
     Promise.all([parentCategoryHandler(), token && myProfileHandler()]).then(([q, p]) => { }).finally(() => setLoading(false))
-    // let lang = localStorage.getItem('i18nextLng')
-    // if (lang === 'en') {
-    //   i18n.changeLanguage(lang);
-    // } else if (lang === 'ar'){
-    //   i18n.changeLanguage(lang);
-    // }
+    let lang = localStorage.getItem('i18nextLng')
+    if (lang ) {
+      i18n.changeLanguage(lang);
+    } else {
+      i18n.changeLanguage('en');
+    }
   }, [])
   useEffect(() => {
     login && Promise.all([getCartItemsHandler(), getItemsHandler(), myAddressHandler(), getFollowingStores()])
