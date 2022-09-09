@@ -6,7 +6,7 @@ import {createSlice} from "@reduxjs/toolkit";
 
 const order = createSlice({
     name: 'order',
-    initialState: {message:'', placedOrder: {}},
+    initialState: {message:'', placedOrder: {} , orders: {count: 0, data:[]}, logs:[]},
     reducers:{
         addPlacedOrder(state, action){
             return {...state, ...action.payload}
@@ -17,6 +17,12 @@ const order = createSlice({
         }, 
         clearPlacedOrder (state, action){
             return {...state, placedOrder:action.payload}
+        },
+        addOrders(state, action) {
+            return {...state, orders:action.payload}
+        },
+        addOrderLogs(state, action) {
+            return {...state, logs: action.payload}
         }
     
     }
@@ -35,6 +41,25 @@ export const placedOrderHandler = payload => async (dispatch, state) => {
     }
 }
 
+export const getOrderHandler = (payload) => async (dispatch,state) =>{
+    try {
+        let result = await Order.getOrders(payload) 
+        dispatch(addOrders(result))
+    } catch (error) {
+        dispatch(addMessage(error))
+    }
+}
+
+export const getOrderLogs = payload => async (dispatch, state) => {
+    console.log("🚀 ~ file: order.js ~ line 54 ~ getOrderLogs ~ payload", payload)
+    try {
+        let {result, status} = await Order.orderLogs(payload)
+        status === 200 && dispatch(addOrderLogs(result))
+    } catch (error) {
+        dispatch(addMessage(error))
+    }
+}
+
 export default order.reducer
 
-export const {addPlacedOrder, addMessage,clearPlacedOrder} = order.actions
+export const {addPlacedOrder, addMessage,clearPlacedOrder,addOrders,addOrderLogs} = order.actions

@@ -21,7 +21,6 @@ import Products from './component/products/products';
 import Account from './component/account/account';
 import Address from './component/address/address';
 import Email from './component/email/changeEmail';
-import Password from './component/password/changPassword';
 import Notification from './component/notification/notification';
 import { useTranslation } from 'react-i18next';
 import { Rings } from 'react-loader-spinner'
