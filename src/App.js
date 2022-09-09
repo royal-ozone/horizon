@@ -52,7 +52,7 @@ function App({ parentCategoryHandler, myProfileHandler, getCartItemsHandler, get
   useEffect(() => {
     Promise.all([parentCategoryHandler(), token && myProfileHandler()]).then(([q, p]) => { }).finally(() => setLoading(false))
     let lang = localStorage.getItem('i18nextLng')
-    if (lang ) {
+    if (lang === 'en' || lang === 'ar') {
       i18n.changeLanguage(lang);
     } else {
       i18n.changeLanguage('en');
