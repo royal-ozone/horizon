@@ -1,9 +1,9 @@
 import ProductService from "../services/Product";
 import { createSlice } from "@reduxjs/toolkit";
-
+import { updateOrders } from './order'
 let Product = createSlice({
     name: "product",
-    initialState: { product: [], message: '', searchedProducts: [], storeProducts: []},
+    initialState: { product: {}, message: '', searchedProducts: [], storeProducts: [], reviews: [] },
     reducers: {
         productAction(state, action) {
             return { ...state, ...action.payload }
@@ -12,15 +12,14 @@ let Product = createSlice({
 })
 
 export const productHandler = (payload) => async (dispatch, state) => {
-    console.log("🚀 ~ file: products.js ~ line 15 ~ productHandler ~ payload", payload)
 
-    let data4 = await ProductService.getProduct();
-    let data5 = await ProductService.getProductByCategory(payload[6], payload[4], payload[2]);
+    let { data, status, message } = await ProductService.getProduct(payload);
 
-    if (data4.status === 200) {
-        dispatch(productAction({ product: { ...data4 }, productCategory: { ...data5 } }))
+
+    if (status === 200) {
+        dispatch(productAction({ product: data }))
     } else {
-        dispatch(productAction({ message: data4.message }))
+        dispatch(productAction({ message: message }))
     }
 }
 
@@ -38,14 +37,56 @@ export const searchProductsHandler = payload => async (dispatch, state) => {
     }
 }
 
-export const getStoreProductsHandler = ({id,query}) => async (dispatch, state) => {
+export const getStoreProductsHandler = ({ id, query }) => async (dispatch, state) => {
     try {
-        let {status, result} = await ProductService.getProductsByStore(id, query)
-        if(status === 200){
-            dispatch(productAction({storeProducts : result}))
+        let { status, result } = await ProductService.getProductsByStore(id, query)
+        if (status === 200) {
+            dispatch(productAction({ storeProducts: result }))
         }
     } catch (error) {
-        dispatch(productAction({ message: error.message}))
+        dispatch(productAction({ message: error.message }))
+    }
+}
+
+export const addReviewHandler = (payload) => async (dispatch, state) => {
+    try {
+        let { order: { orders: { data: orders } } } = state()
+        let { data, status, message } = await ProductService.addProductReview(payload)
+        if (status === 200) {
+            let newOrders = orders.map((order) => {
+                if (order.id === data.order_id) {
+                    let newItems = order.items.map((item) => {
+                        if (item.id === data.id) return { ...item, ...data }
+                        else return item
+                    })
+
+                    let newOrder = { ...order }
+                    newOrder['items'] = newItems
+                    return newOrder
+
+                } else return order
+            })
+            dispatch(productAction({ message: 'Review submitted successfully' }))
+            dispatch(updateOrders(newOrders))
+        } else {
+            dispatch(productAction({ message: message }))
+        }
+    } catch (error) {
+        dispatch(productAction({ message: error }))
+    }
+}
+
+export const getProductReviews = ({ id, query }) => async (dispatch) => {
+    try {
+        let { status, data, message } = await ProductService.getProductReviews(id, query)
+        if (status === 200) {
+            dispatch(productAction({ reviews: data }))
+
+        } else {
+            dispatch(productAction({ message: message }))
+        }
+    } catch (error) {
+        dispatch(productAction({ message: error }))
     }
 }
 

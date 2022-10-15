@@ -26,7 +26,6 @@ class Order extends ApiService {
     async orderLogs (id) {
         try {
             let result = await this.get(`${this.path}/order/logs/${id}`)
-            console.log("🚀 ~ file: Order.js ~ line 29 ~ Order ~ orderLogs ~ result", result)
             return result
         } catch (error) {
             return error.message

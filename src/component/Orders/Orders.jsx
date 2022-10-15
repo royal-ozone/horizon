@@ -2,18 +2,20 @@ import React, { useEffect, useState } from 'react'
 import { connect, useSelector } from 'react-redux'
 import { getOrderHandler, getOrderLogs } from '../../store/order'
 import { CCard, CCardHeader, CCardTitle, CCardText, CButton, CCardBody, CRow, CCol, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell, CSpinner } from '@coreui/react'
+import { Link } from 'react-router-dom'
+import Paginator from '../Paginator'
 export const Orders = ({ getOrderHandler, getOrderLogs }) => {
   const { orders: { data, count }, logs } = useSelector(state => state.order)
   const [visible, setVisible] = useState(false)
   const [modalLoading, setModalLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
+  const [params,setParams] = useState({offset: 0, limit: 10})
   useEffect(() => {
-    getOrderHandler()
+   Promise.all([ getOrderHandler()]).then(() => setLoading(false))
   }, [])
-  useEffect(() => {
-    console.log("🚀 ~ file: Orders.jsx ~ line 12 ~ Orders ~ data", logs)
-
-  }, [logs])
+ 
   const logsModal = (id) => {
+    setModalLoading(true)
     Promise.all([getOrderLogs(id)]).then(() => setModalLoading(false));
     setVisible(!visible)
   }
@@ -21,14 +23,14 @@ export const Orders = ({ getOrderHandler, getOrderLogs }) => {
     maxWidth: '90%',
     margin: '1rem auto',
   }
-  const onCloseModal = () =>{
+  const onCloseModal = () => {
     setVisible(false)
-    setModalLoading(true)
+
   }
- 
+
   return (
     <div>
-      <CModal alignment="center" visible={visible} onClose={onCloseModal }>
+      <CModal backdrop={false} alignment="center" visible={visible} onClose={onCloseModal}>
         <CModalHeader>
           <CModalTitle>order tracking</CModalTitle>
         </CModalHeader>
@@ -58,11 +60,11 @@ export const Orders = ({ getOrderHandler, getOrderLogs }) => {
           <CButton color="secondary" onClick={onCloseModal}>
             Close
           </CButton>
-          
+
         </CModalFooter>
       </CModal>
       <CRow xs={{ gutterY: 5 }}>
-         {React.Children.toArray(data.map(({ id, customer_order_id, grand_total, payment_method, status, address: { first_name, last_name }, created_at }) =>
+        {loading? <CSpinner color="primary"/>: React.Children.toArray(data.map(({ id, customer_order_id, grand_total, payment_method, status, address: { first_name, last_name }, created_at }) =>
           <CCol xl={12} >
             <CCard>
               <CCardHeader component="h5">order# {customer_order_id}</CCardHeader>
@@ -90,14 +92,24 @@ export const Orders = ({ getOrderHandler, getOrderLogs }) => {
 
                   <hr style={styles} />
                 </CRow>
-                <CButton href="#">order details</CButton>
-                <CButton color="secondary" onClick={() => logsModal(id)}>order tracking</CButton>
+                <CRow>
+                  <CCol sm='auto'>
+                    <Link to={`/settings/orderItems/${id}`} >
+                    <CButton >order details</CButton>
+                    </Link>
+                  </CCol>
+                  <CCol sm='auto'>
+                    <CButton color="secondary" onClick={() => logsModal(id)}>order tracking</CButton>
+
+                  </CCol>
+                </CRow>
               </CCardBody>
             </CCard>
           </CCol>
         )
         )}
       </CRow>
+      <Paginator count={count} params={params} changeData={getOrderHandler} cookieName='orders'/>
     </div>
   )
 }

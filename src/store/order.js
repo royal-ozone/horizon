@@ -23,6 +23,10 @@ const order = createSlice({
         },
         addOrderLogs(state, action) {
             return {...state, logs: action.payload}
+        },
+
+        updateOrders (state, action) {
+            return {...state, orders: {...state.orders, data: action.payload}}
         }
     
     }
@@ -51,7 +55,6 @@ export const getOrderHandler = (payload) => async (dispatch,state) =>{
 }
 
 export const getOrderLogs = payload => async (dispatch, state) => {
-    console.log("🚀 ~ file: order.js ~ line 54 ~ getOrderLogs ~ payload", payload)
     try {
         let {result, status} = await Order.orderLogs(payload)
         status === 200 && dispatch(addOrderLogs(result))
@@ -62,4 +65,4 @@ export const getOrderLogs = payload => async (dispatch, state) => {
 
 export default order.reducer
 
-export const {addPlacedOrder, addMessage,clearPlacedOrder,addOrders,addOrderLogs} = order.actions
+export const {addPlacedOrder, addMessage,clearPlacedOrder,addOrders,addOrderLogs,updateOrders} = order.actions

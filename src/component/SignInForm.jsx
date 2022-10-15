@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { connect ,useDispatch} from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { deleteMessage, signInHandler } from "../store/auth";
 import { signInHandlerWithGoogle } from "../store/google";
 import { googleProvider, facebookProvider } from "../store/authProvider";
 import { signInHandlerWithFacebook } from "../store/facebook";
 import { useTranslation } from "react-i18next";
-import { useHistory ,Link} from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { Form, Button, Spinner } from "react-bootstrap";
 import "./signInForm.css";
 import background from "../assets/8.jpg";
 import cookie from 'react-cookies'
+import { CCol, CRow } from "@coreui/react";
 const SignInForm = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { t } = useTranslation();
-  const {userSignIn,signInHandler} = props;
+  const { userSignIn, signInHandler } = props;
   console.log("🚀 ~ file: SignInForm.jsx ~ line 19 ~ SignInForm ~ userSignIn", userSignIn)
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
-  const [showDeactivate,setShowDeactivate] = useState(false);
-  const [show,setShow] = useState(false);
+  const [showDeactivate, setShowDeactivate] = useState(false);
+  const [show, setShow] = useState(false);
 
   const submitHandler = (e) => {
     setErrorMessage('');
@@ -31,7 +32,7 @@ const SignInForm = (props) => {
       password: e.target.password.value,
     });
   };
-  let currentPath =cookie.load('currentPath');
+  let currentPath = cookie.load('currentPath');
 
   // useEffect(()=>{
   //   if(userSignIn.user){
@@ -39,13 +40,13 @@ const SignInForm = (props) => {
   //   }
   //   // setLoading(false);
   // },[dispatch, userSignIn.user])
-  
-  useEffect(()=>{
-    if(userSignIn.login){
+
+  useEffect(() => {
+    if (userSignIn.login) {
       history.push(currentPath || '/');
     }
     setLoading(false);
-  },[currentPath, history, userSignIn.login])
+  }, [currentPath, history, userSignIn.login])
 
   // useEffect(()=>{
   //   if(userSignIn.message){
@@ -57,27 +58,27 @@ const SignInForm = (props) => {
   //   setLoading(false);
   // },[dispatch, userSignIn])
 
-  useEffect(()=>{
-    if(userSignIn.message){
-      if(userSignIn.message){
-       
+  useEffect(() => {
+    if (userSignIn.message) {
+      if (userSignIn.message) {
+
         setShow(true);
         // dispatch(deleteMessage());
       }
     }
     setLoading(false);
-  },[dispatch, userSignIn])
+  }, [dispatch, userSignIn])
 
-  useEffect(()=>{
-    if(userSignIn.message){
-      if(userSignIn.message.includes('activate',30)){
-        
+  useEffect(() => {
+    if (userSignIn.message) {
+      if (userSignIn.message.includes('activate', 30)) {
+
         setShowDeactivate(true);
         // dispatch(deleteMessage());
       }
     }
     setLoading(false);
-  },[dispatch, userSignIn])
+  }, [dispatch, userSignIn])
 
   // const handleGoogle = ()=>{
   //    localStorage.setItem('provider', 'google');
@@ -129,27 +130,32 @@ const SignInForm = (props) => {
               {errorMessage}{" "}
             </div>
           )}
-           {show ? <div style={{color:"red"}}> 
+          {show ? <div style={{ color: "red" }}>
             {" "}
             {userSignIn.message}
-          </div>:
-          null}
-           {showDeactivate ? <div style={{color:"blue"}}> 
+          </div> :
+            null}
+          {showDeactivate ? <div style={{ color: "blue" }}>
             {" "}
             {"your account is deactivate , you can sign in again to activate your account and We are glad to have you back in your second family ❤️"}
-          </div>:
-          null}
+          </div> :
+            null}
           <div>
             <Link to="/signUp" className="btn btn-sign">
               {t("sign")}{" "}
             </Link>
           </div>
-          <Button variant="primary" type="submit" className="btn">
-            {t("sub")}
-          </Button>
-         
+          <CRow className='justify-content-md-center'>
+            <CCol xs='auto'>
+              <Button variant="primary" type="submit" className="btn">
+                {t("sub")}
+              </Button>
+
+            </CCol>
+          </CRow>
+
           {loading ? <Spinner animation="border" /> : null}
-         
+
         </Form>
       </div>
     </div>

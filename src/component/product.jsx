@@ -1,143 +1,142 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Children } from "react";
 import { Carousel } from 'react-carousel-minimal';
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import featuredDeals from '../static-data/FeaturedAucklandDeals'
 import StarRatings from 'react-star-ratings';
 import { addItem } from '../store/cart';
 import { addProduct } from '../store/wishlist'
 import { If, Then, Else } from 'react-if'
-const Product = props => {
-  const { cart, wishlist, addItem, addProduct } = props
-  let id = Number(useParams().id)
+import { productHandler, getProductReviews } from "../store/products";
+import { CAvatar, CButton, CCol, CRow, CSpinner } from "@coreui/react";
+import { BagPlus, HeartFill, Heart } from 'react-bootstrap-icons';
+import {addCartItemHandler,updateCartItemHandler} from '../store/cart'
+import { addItemHandler, deleteItemHandler } from '../store/wishlist'
+import { ToastContainer, toast } from 'react-toastify';
 
-  const [product, setProduct] = useState({})
+const Product = ({ productHandler, getProductReviews,addCartItemHandler,updateCartItemHandler ,addItemHandler, deleteItemHandler}) => {
+  let { id } = useParams()
+  const cart = useSelector(state => state.cart)
+  const {items} = useSelector(state => state.wishlist)
+  const { product, reviews } = useSelector(state => state.products)
+  const [loading, setLoading] = useState(true)
   const [qty, setQty] = useState(1)
-  const [c, setC] = useState(null)
-  const [w,setW] = useState(null)
-  
+  const [color, setColor] = useState(null)
+  const [size, setSize] = useState(null)
   useEffect(() => {
-    
-    setProduct(pro => featuredDeals.filter(item => item.id === id)[0])
-    
+    Promise.all([productHandler(id), getProductReviews({ id: id })]).then(() => setLoading(false))
+
   }, [])
-  useEffect(() =>{
-    const i = cart.filter(x => x.id === product.id)[0]
-    setC(i)
-  },[cart])
-  useEffect(() =>{
-    const x = wishlist.filter(w => w.id === product.id)[0]
-    setW(x)
-  },[wishlist])
-
-  useEffect(() => {
-    const i = cart.filter(x => x.id === product.id)[0]
-   
-    const x = wishlist.filter(w => w.id === product.id)[0]
-    
-    setC(i)
-    setW(x)
-  }, [product])
-  const incrementQuantity = () => {
-    let x = qty;
-    x++
-    setQty(x)
-
-  }
-  const decrementQuantity = () => {
-    let x = qty;
-    x--
-
-    setQty(() => x < 0 ? 0 : x)
-  }
-  const captionStyle = {
-    fontSize: '2em',
-    fontWeight: 'bold',
-  }
-  const slideNumberStyle = {
-    fontSize: '20px',
-    fontWeight: 'bold',
-  }
+  const AddBag = () => {
+    let item = cart.find(item => (item.product_id === product.id || item.id === product.id) && item.color === color && item.size === size);
+    if (item) {
+      updateCartItemHandler({ ...item, quantity: item.quantity + qty > product.quantity ? product.quantity: item.quantity + qty })
+    } else {
+      addCartItemHandler({ ...product, quantity: item.quantity + qty > product.quantity ? product.quantity: item.quantity + qty, color: color, size: size })
+    }
+    toast("added to your cart")
+  };
   return (
-    <div className="product">
-      <Carousel data={featuredDeals}
-        width="35rem"
-        height="20rem"
-        captionStyle={captionStyle}
-        radius="10px"
+    <CRow className="product justify-content-center" xs={{ gutterY: 3 }} >
+      <CCol xs={4}>
+        {loading ? <CSpinner /> :
+          product?.pictures?.length > 0 && <Carousel data={product?.pictures?.map(p => { return { image: p.product_picture } }) ?? []}
+            width="35rem"
+            height="20rem"
+            radius="10px"
 
-        captionPosition="bottom"
-        pauseIconColor="white"
-        pauseIconSize="40px"
 
-        slideImageFit="cover"
-        thumbnails={true}
-        thumbnailWidth="100px"
-        style={{
-          textAlign: "left",
-          maxWidth: "850px",
-          maxHeight: "500px",
-          margin: "40px 0",
-        }} />
-      <section className="productContent">
-        <h3 className="productHead">
-          {product.title}
-        </h3>
-        <StarRatings
-          rating={product.rate || 2.403}
-          starDimension="1.5rem"
-          starSpacing=".05rem"
-          starRatedColor="yellow"
-        />
-        <h5 className="productPrice">Price: {product.price}</h5>
-        <p className="productDescription">Description: {product.description}</p>
-      </section>
-      <section className="productAction">
-        <If condition={!c}>
-          <Then>
-            <div className="icCart"><button className="btn" onClick={() => { decrementQuantity() }}>-</button><span className="in">{qty}</span><button className="btn" onClick={() => { incrementQuantity() }}>+</button></div>
-            <div className="money_bag">
+            pauseIconColor="white"
+            pauseIconSize="40px"
 
-              <button  onClick={() => addItem({ ...product, qty: qty })}><i className="fa fa-shopping-bag"></i>Add to cart</button>
+            slideImageFit="cover"
+            thumbnails={true}
+            thumbnailWidth="100px"
+            style={{
+              textAlign: "left",
+              maxWidth: "850px",
+              maxHeight: "500px",
+              margin: "40px 0",
+            }} />}
 
-            </div>
+      </CCol>
+      <CCol xs={4}>
+        <section className="productContent">
+          <h3 className="productHead">
+            {product.entitle}
+          </h3>
+          <StarRatings
+            rating={Number(product.rate) || 0}
+            starDimension="1.5rem"
+            starSpacing=".05rem"
+            starRatedColor="yellow"
+          />  <span>({product.votes}) </span>
+          <h5 className="productPrice">Price: {product.price}</h5>
+          <p className="productDescription">Description: {product.endescription}</p>
+        </section>
 
-          </Then>
-          <Else>
-            <div className="money_bag">
+      </CCol>
+      <CCol xs={2} className="card-btns">
 
-              <button disabled onClick={() => addItem({ ...product, qty: qty })}><i className="fa fa-shopping-bag"></i>Added to cart</button>
+        <CRow className="align-items-center justify-content-center shadow-box pd-1rem" xs={{ gutterY: 2 }} >
 
-            </div>
-          </Else>
-        </If>
-        <div >
-          
-          <div className="wishlistBtn">
-            <If condition={!w}>
-              <Then>
-                <button className="WLB" onClick={() => addProduct(product)}>
-                  <img src="https://img.icons8.com/ios/20/000000/like--v2.png" />{' '}
-                  Add to wishlist
+          <CCol xs={10} >
 
-                </button>
+            <div className="icCart"><button className="btn" onClick={() => setQty(x=> x-1)} disabled={qty === 1}>-</button><span className="in">{qty}</span><button className="btn" onClick={() => setQty(x=> x+1)} disabled={qty=== product.quantity}>+</button></div>
+          </CCol>
 
-              </Then>
-              <Else>
-                <button disabled className="WLB" onClick={() => addProduct(product)}>
-                  <img src="https://img.icons8.com/ios-filled/20/000000/like--v1.png" />{' '}
-                  Added to wishlist
+          <CCol xs={12} >
 
-                </button>
+            <CButton color="primary" className="center-btn" onClick={AddBag}><BagPlus size={20} />{' '}Add to cart</CButton>
+          </CCol>
+          <CCol xs={12} >
 
-              </Else>
-            </If>
+          {items.find(i => i.product_id === product.id)?  <CButton color='success' className="center-btn" disabled>
+             
+              <HeartFill color='red' />
+              {' '}
+              in wishlist
 
-          </div>
+            </CButton>: <CButton color='success' className="center-btn" onClick={() =>addItemHandler(product)}>
+              <Heart color='red'/>
+            
+              {' '}
+              Add to wishlist
 
-        </div>
-      </section>
-    </div>
+            </CButton>}
+
+          </CCol>
+        </CRow>
+
+     
+
+      </CCol>
+      <CCol xs={8} className='shadow-box'>
+        <CRow xs={{ cols: 1, gutterY: 5 }}>
+          <hr />
+          {Children.toArray(reviews.map(review =>
+            <CCol>
+
+              <CAvatar src={review.profile_picture} className="mg-1"></CAvatar>
+
+              <strong>{`${review.first_name} ${review.last_name}`}</strong>
+              <br/>
+              <StarRatings
+                rating={review.rate}
+                starDimension="1.5rem"
+                starSpacing=".05rem"
+                starRatedColor="yellow"
+              />
+              <h6>{review.review}</h6>
+              <span>{new Date(review.created_at).toLocaleDateString()}</span>
+              <hr />
+            </CCol>
+
+          ))
+
+          }
+        </CRow>
+      </CCol>
+    </CRow>
   )
 }
 
@@ -145,7 +144,7 @@ const mapStateToProps = (state) => ({
   cart: state.cart,
   wishlist: state.wishlist
 })
-const mapDispatchToProps = { addItem, addProduct }
+const mapDispatchToProps = { addItem, addProduct, productHandler, getProductReviews,addCartItemHandler,updateCartItemHandler,addItemHandler, deleteItemHandler }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Product);
 
