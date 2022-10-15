@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./productCard.css";
 import { connect } from 'react-redux'
-import { addItem, decrementQuantity, incrementQuantity, deleteItem, addCartItemHandler } from '../store/cart'
+import { addItem, decrementQuantity, incrementQuantity, deleteItem, addCartItemHandler ,updateCartItemHandler} from '../store/cart'
 import { addProduct, deleteProduct } from '../store/wishlist'
 import { If, Then, Else } from 'react-if'
 // import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'
@@ -12,10 +12,10 @@ import { useDispatch } from 'react-redux'
 import Form from 'react-bootstrap/Form';
 import image from '../assets/no-image.png'
 import { Col, Container, Row } from "react-bootstrap";
-import { addItemHandler, deleteItemHandler } from '../store/wishlist'
+import { addItemHandler, deleteItemHandler,  } from '../store/wishlist'
 
 
-const ProfileCard = ({ cart, wishlist, itemType, addCartItemHandler, product, key, xclass, addItemHandler, deleteItemHandler, pic }) => {
+const ProfileCard = ({ cart, wishlist, itemType, addCartItemHandler, product, key, xclass, addItemHandler, deleteItemHandler, pic,updateCartItemHandler }) => {
 
   const dispatch = useDispatch();
   const [addbag, setaddbag] = useState(1);
@@ -27,7 +27,7 @@ const ProfileCard = ({ cart, wishlist, itemType, addCartItemHandler, product, ke
   const AddBag = (product) => {
     let item = cart.find(item => (item.product_id === product.id || item.id === product.id) && item.color === color && item.size === size);
     if (item) {
-      dispatch(incrementQuantity({ ...item, quantity: item.quantity + 1 }))
+      updateCartItemHandler({ ...item, quantity: item.quantity + 1 })
     } else {
       addCartItemHandler({ ...product, quantity: 1, color: color, size: size })
     }
@@ -149,20 +149,7 @@ const ProfileCard = ({ cart, wishlist, itemType, addCartItemHandler, product, ke
             <p>{product.metatitle}</p>
           ) : null}
         </div>
-        {/* <div className="size">
-                        <p>with Hyaluronic acid and Vitamin E</p>
-                        <h5>Size : 1 FL Oz</h5>
-                      </div> */}
-        {/* <div className="buttons">
-                        <button>1 FL Oz<p>1 option from $23</p></button>
-                        <button>2 FL Oz<p>$43($21/FL Oz)</p></button>
-                      </div> */}
-        {/* <h4>Select Gender</h4>
-                    <div className="gender">
-                    <span>Man</span>
-                    <span>Woman</span>
-                    <span>Both</span>
-                  </div> */}
+    
 
         <Row style={{ padding: '0 2px' }}>
           <Col xs={4} sm={4} md={5} lg={4} xl={4}>
@@ -198,7 +185,7 @@ const ProfileCard = ({ cart, wishlist, itemType, addCartItemHandler, product, ke
         <div className="last">
           {/* <span className="boughtSpan">{product.bought} Bought</span> */}
           <StarRatings
-            rating={product?.rate || 2.403}
+            rating={product?.rate || 0}
             starDimension="1.5rem"
             starSpacing=".05rem"
             starRatedColor="yellow"
@@ -252,6 +239,6 @@ const mapStateToProps = (state) => ({
 
 });
 
-const mapDispatchToProps = { addCartItemHandler, addItemHandler, deleteItemHandler };
+const mapDispatchToProps = { addCartItemHandler, addItemHandler, deleteItemHandler,updateCartItemHandler };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileCard);

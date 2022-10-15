@@ -39,6 +39,7 @@ import {
 import { MdAccountCircle,MdCircleNotifications,MdFavoriteBorder,MdAddLocationAlt,MdEmail,MdPassword ,MdOutlineMenu,MdFavorite} from "react-icons/md";
 import "react-pro-sidebar/dist/css/styles.css";
 import './settings.css';
+import OrdersDetails from './Orders/OrdersDetails';
 
 
 
@@ -72,6 +73,12 @@ const routes = [
         exact: true,
         sidebar:()=><div>Orders</div>,
         main: ()=> <Orders/>
+    },
+    {
+        path: "/settings/orderItems/:id",
+        exact: true,
+        sidebar:()=><div>Orders details</div>,
+        main: ()=> <OrdersDetails/>
     },
     // {
     //     path: "/settings/mobile",
@@ -154,6 +161,7 @@ const Settings = props => {
 
                    {/* <MenuItem icon={<MdFavorite />}>Favourite</MenuItem> */}
                    <MenuItem icon={<MdAccountCircle />} ><Link to="/settings/account" className="link">Account</Link> </MenuItem>
+                   <MenuItem icon={<MdPassword />}> <Link to='/settings/orders' className="link">Orders</Link> </MenuItem>
                    <MenuItem icon={<MdAddLocationAlt />}><Link to='/settings/address'>Address</Link> </MenuItem>
                   
                    <MenuItem icon={<MdCircleNotifications />}><Link to='/settings/notification' className="link">Notification </Link> </MenuItem>
@@ -161,7 +169,6 @@ const Settings = props => {
                    {/* <MenuItem icon={<MdEmail/>}> <Link to ='/settings/email' className="link" >Change Email </Link> </MenuItem>
                    */}
                   
-                   <MenuItem icon={<MdPassword />}> <Link to='/settings/orders' className="link">Change Password</Link> </MenuItem>
                    {/* <MenuItem icon={<MdPassword />}> <Link to='/settings/mobile' className="link">Change mobile</Link> </MenuItem> */}
                   
 

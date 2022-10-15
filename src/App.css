@@ -2,7 +2,9 @@ html {
   overflow-y: scroll
 }
 
-
+.mg-1{
+  margin:  1rem 0;
+}
 body {
   min-height: 100vh;
   margin: auto;
@@ -14,7 +16,7 @@ body {
   min-height: 100vh;
 }
 
-a {
+a, .pointer {
   cursor: pointer;
 }
 
@@ -578,7 +580,7 @@ a {
   width: 100%;
   position: absolute;
   /* bottom: -10px; */
-  z-index: 3000;
+  z-index: 10;
   margin-top: 0rem;
   justify-content: center;
   clear: both;
@@ -747,15 +749,18 @@ table img {
 }
 
 table th,
-table td {
+table tr {
   /* border:1px solid black; */
   font-family: 'Roboto', sans-serif;
   color: rgb(77, 72, 72);
 }
 
-table td {
+.checkoutForm table tbody tr {
   text-align: center;
-  background-color: rgb(194, 187, 187);
+  /* background-color: rgb(244, 244, 244); */
+  border-top: 1px solid white;
+  box-shadow: 0 5px 10px #888888;
+  border-radius: 1rem ;
 }
 
 /* th{
@@ -899,10 +904,10 @@ table td {
 }
 
 .productAction {
-  display: flex;
+  /* display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  flex-direction: column; */
 }
 
 .WLB {
@@ -916,8 +921,8 @@ table td {
 
 .icCart button:nth-child(1) {
   padding: .5rem;
-  border-radius: 1rem 0 0 1rem;
-
+  border-radius: 1rem 0 0 1rem ;
+border: 0;
   border-right: 0;
   background-color: skyblue
 }
@@ -925,17 +930,19 @@ table td {
 .icCart button:nth-child(3) {
   padding: .5rem;
   border-radius: 0 1rem 1rem 0;
-
+  border: 0;
   border-left: 0;
   background-color: skyblue
 }
-
+.icCart button:hover{
+ background-color:rgba(135, 207, 235, 0.842)
+}
 .icCart {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
   width: 100%;
 }
 
@@ -1089,4 +1096,19 @@ fieldset {
 
 .table * {
   text-align: center
+}
+
+.card-btns{
+  /* box-shadow: 0 5px 10px #888888;
+  border-radius: 5px; */
+  padding: 10% 1%;
+}
+
+.shadow-box{
+  box-shadow: 0 5px 10px #888888;
+  border-radius: 5px;
+}
+
+.pd-1rem{
+  padding: 1rem;
 }

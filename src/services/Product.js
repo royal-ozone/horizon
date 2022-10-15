@@ -5,6 +5,7 @@ class Product extends ApiService {
     constructor() {
         super();
         this.path = 'api/v1';
+        this.pathProduct = 'api/v1/product';
     }
     async getParentCategory() {
         try {
@@ -30,9 +31,9 @@ class Product extends ApiService {
             return error.message
         }
     }
-    async getProduct() {
+    async getProduct(id) {
         try {
-            let response = await this.get(`${this.path}/products`, null, null);
+            let response = await this.get(`${this.path}/product/${id}`);
             return response;
         } catch (error) {
             return error.message;
@@ -65,6 +66,23 @@ class Product extends ApiService {
             return error.message;            
         }
     }
+    async addProductReview (data) {
+        try {
+            let results = await this.post(`${this.pathProduct}/review`, data) 
+            return results
+        } catch (error) {
+            return error
+        }
+    }
+    async getProductReviews (id,query) {
+        try {
+            let results = await this.get(`${this.pathProduct}/reviews/${id}`, query) 
+            return results
+
+        } catch (error) {
+            return error
+        }
+    }
 }
-let ProductService = new Product();
-export default ProductService;
+
+export default new Product();

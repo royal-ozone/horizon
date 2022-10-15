@@ -28,6 +28,7 @@
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-bootstrap": "^2.1.1",
+    "react-bootstrap-icons": "^1.9.1",
     "react-carousel-minimal": "^1.4.1",
     "react-cookies": "^0.1.1",
     "react-custom-popup": "^1.1.3",

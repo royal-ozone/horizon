@@ -47,13 +47,13 @@ const cart = createSlice({
                 }
                 return value
             })
-            action.payload.cookie &&  cookie.save('cart', [...newState])
+            action.payload.cookie && cookie.save('cart', [...newState])
             return [...newState];
-        }, 
-        addCartItems (state, action){
+        },
+        addCartItems(state, action) {
             return action.payload
         },
-        resetCartItems (state, action){
+        resetCartItems(state, action) {
             return action.payload
         }
     }
@@ -64,13 +64,14 @@ export const addCartItemHandler = payload => async (dispatch, state) => {
     try {
         if (login) {
             let { data, status, message } = await Cart.addCartItem(payload)
+
             if (status === 200) {
                 dispatch(addItem({ ...data, entitle: payload.entitle, currency: payload.currency, artitle: payload.artitle, picture: payload.pictures?.product_picture, storeName: payload.store_name }))
             } else {
                 console.error(message)
             }
         } else {
-            dispatch(addItem({...payload, cookie: true}))
+            dispatch(addItem({ ...payload, cookie: true }))
         }
     } catch (error) {
         console.log("🚀 ~ file: cart.js ~ line 55 ~ addCartItemHandler ~ error", error)
@@ -89,7 +90,7 @@ export const updateCartItemHandler = (payload) => async (dispatch, state) => {
                 console.error(message)
             }
         } else {
-            dispatch(updateCartItem({...payload, cookie: true}))
+            dispatch(updateCartItem({ ...payload, cookie: true }))
         }
     } catch (error) {
         console.log("🚀 ~ file: cart.js ~ line 69 ~ updateCartItemHandler ~ error", error)
@@ -109,7 +110,7 @@ export const deleteCartItemHandler = (payload) => async (dispatch, state) => {
             }
 
         } else {
-            dispatch(deleteItem({...payload, cookie: true}))
+            dispatch(deleteItem({ ...payload, cookie: true }))
         }
     } catch (error) {
         console.log("🚀 ~ file: cart.js ~ line 98 ~ deleteCartItemHandler ~ error", error)
@@ -118,28 +119,28 @@ export const deleteCartItemHandler = (payload) => async (dispatch, state) => {
 }
 
 export const getCartItemsHandler = () => async (dispatch, state) => {
-    try { 
-        let {data, status, message} = await Cart.getCartItems()
-        if(status === 200){
+    try {
+        let { data, status, message } = await Cart.getCartItems()
+        if (status === 200) {
             dispatch(addCartItems(data))
-            
+
         } else {
             console.error(message)
         }
-        const cart = cookie.load('cart',{path: '/'}) && JSON.parse(cookie.load('cart',{path: '/'}))
-        if(cart && cart?.length !== 0) {
-            await cart.map((item) => !state().cart.find(i=> i.product_id === item.id) && dispatch(addCartItemHandler(item)))
-            cookie.remove('cart',{path: '/'})
-        } 
+        const cart = cookie.load('cart', { path: '/' }) && JSON.parse(cookie.load('cart', { path: '/' }))
+        if (cart && cart?.length !== 0) {
+            await cart.map((item) => !state().cart.find(i => i.product_id === item.id) && dispatch(addCartItemHandler(item)))
+            cookie.remove('cart', { path: '/' })
+        }
     } catch (error) {
-    console.log("🚀 ~ file: cart.js ~ line 118 ~ getCartItemsHandler ~ error", error)
-        
+        console.log("🚀 ~ file: cart.js ~ line 118 ~ getCartItemsHandler ~ error", error)
+
     }
 }
 
 export const updateCartHandler = (payload) => async (dispatch, state) => {
     try {
-        let {status} =await Cart.updateCart(payload)
+        let { status } = await Cart.updateCart(payload)
         return status
     } catch (error) {
         return error.message
@@ -148,4 +149,4 @@ export const updateCartHandler = (payload) => async (dispatch, state) => {
 
 export default cart.reducer
 
-export const { addItem, decrementQuantity, incrementQuantity, deleteItem, updateCartItem,addCartItems,resetCartItems } = cart.actions
+export const { addItem, decrementQuantity, incrementQuantity, deleteItem, updateCartItem, addCartItems, resetCartItems } = cart.actions

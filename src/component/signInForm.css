@@ -7,9 +7,9 @@
 
 }
 
-button.btn.btn.btn-primary {
-    margin: auto;
-    display: block;
+.center-btn {
+    margin: auto !important;
+    display: block !important;
 }
 
 .image-holder{
