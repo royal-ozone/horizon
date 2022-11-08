@@ -103,7 +103,7 @@ const Address = (props) => {
           name: "apartment_number",
           label: "Apartment Number",
           default: data.apartment_number,
-          validation: { min: { value: 5 } },
+        
         },
         {
           inputType: "number",
@@ -114,7 +114,6 @@ const Address = (props) => {
         },
       ],
       onConfirm: (event) => {
-        console.log("🚀 ~ file: address.jsx ~ line 107 ~ showPopup ~ event", event)
         updateAddressHandler(event)
       },
     });
@@ -133,8 +132,10 @@ const Address = (props) => {
       building_number: e.target.building.value,
       apartment_number: e.target.apartment_number.value,
       default_address: e.target.default_address.checked,
+      lat: e.target.lat.value,
+      lng: e.target.lng.value
     };
-
+    e.target.reset()
     addAddressHandler(data);
   };
   const deleteHandler = (id) => {
@@ -157,14 +158,14 @@ const Address = (props) => {
   //   console.log("🚀 ~ file: address.jsx ~ line 161 ~ Address ~ coords", coords)
   // }, [coords])
   const setStr = e => {
-    console.log("🚀 ~ file: address.jsx ~ line 160 ~ setStr ~ e", e)
    
     document.getElementById('building').value = e.address_components.find(x=> x.types.includes('street_number'))?.long_name ?? ''
     document.getElementById('street_name').value = e.address_components.find(x=> x.types.includes('route'))?.long_name ?? ''
     document.getElementById('region').value = e.address_components.find(x=> x.types.includes('sublocality'))?.long_name
     document.getElementById('city').value = e.address_components.find(x=> x.types.includes('locality'))?.long_name
     document.getElementById('country').value = e.address_components.find(x=> x.types.includes('country'))?.long_name
-
+    document.getElementById('lat').value = e.geometry.location.lat
+    document.getElementById('lng').value = e.geometry.location.lng
   }
 
   return (
@@ -268,6 +269,8 @@ const Address = (props) => {
                 </div>
               ))}
             </Col>
+            <input type="hidden" id="lat" />
+            <input type="hidden" id="lng" />
           </Row>
           <Row>
             <Button variant="primary" type="submit">
