@@ -156,12 +156,14 @@ const Address = (props) => {
 
   //   console.log("🚀 ~ file: address.jsx ~ line 161 ~ Address ~ coords", coords)
   // }, [coords])
-  const setStr = e =>{
-    document.getElementById('building').value = e.address_components[0].long_name
-    document.getElementById('street_name').value = e.address_components[1].long_name
-    document.getElementById('region').value = e.address_components[2].long_name
-    document.getElementById('city').value = e.address_components[3]?.long_name
-    document.getElementById('country').value = e.address_components[5]?.long_name?? e.address_components[4]?.long_name
+  const setStr = e => {
+    console.log("🚀 ~ file: address.jsx ~ line 160 ~ setStr ~ e", e)
+   
+    document.getElementById('building').value = e.address_components.find(x=> x.types.includes('street_number'))?.long_name ?? ''
+    document.getElementById('street_name').value = e.address_components.find(x=> x.types.includes('route'))?.long_name ?? ''
+    document.getElementById('region').value = e.address_components.find(x=> x.types.includes('sublocality'))?.long_name
+    document.getElementById('city').value = e.address_components.find(x=> x.types.includes('locality'))?.long_name
+    document.getElementById('country').value = e.address_components.find(x=> x.types.includes('country'))?.long_name
 
   }
 
