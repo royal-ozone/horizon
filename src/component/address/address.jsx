@@ -125,6 +125,7 @@ const Address = (props) => {
     let data = {
       country: e.target.country.value,
       city: e.target.city.value,
+      region: e.target.region.value,
       first_name: e.target.first_name.value,
       last_name: e.target.last_name.value,
       mobile: e.target.mobile.value,
