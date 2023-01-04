@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 const featuredDeals = [
     {
         id: 1,
-        image: 'https://main-cdn.grabone.co.nz/goimage/325x225/01915fca4b34589ed7eb907427601fbe5136da09.jpg',
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqNlfBJOg8ltfEF-iAzvjxZVHjV1cAMFwdPw&usqp=CAU',
         title: 'Day Pass Combo incl. Rental Equipment',
         activity: 'Snowplanet',
         place: 'Silverdale',
@@ -14,7 +14,7 @@ const featuredDeals = [
     },
     {
         id: 2,
-        image: 'https://main-cdn.grabone.co.nz/goimage/325x225/985d76296598c852a5f1b16142cfa7d020d9d135.jpg',
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqNlfBJOg8ltfEF-iAzvjxZVHjV1cAMFwdPw&usqp=CAU',
         title: 'Day Tandem Skydive Package Combo incl. Rental Equipment',
         activity: 'Taupo Tandem Skydiving',
         place: 'Taupo',
@@ -25,7 +25,7 @@ const featuredDeals = [
     },
     {
         id: 3,
-        image: 'https://main-cdn.grabone.co.nz/goimage/325x225/f02832bceeb5c708ea36ca003065305d1c1ddbcd.jpg',
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqNlfBJOg8ltfEF-iAzvjxZVHjV1cAMFwdPw&usqp=CAU',
         title: 'Six-Course Signature Menu Dining Experience',
         activity: 'Sails Restaurant, Westhaven Marina',
         place: 'Auckland',

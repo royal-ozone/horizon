@@ -12,7 +12,7 @@ const CarouselItem = () => {
       description: "shop from diffetent categoreis in one cart",
     },
     {
-      img: "https://takebacklink.com/wp-content/uploads/2021/10/eCommerce.jpg",
+      img: "https://media.istockphoto.com/id/1217702156/photo/asian-postman-deliveryman-wearing-mask-carry-small-box-deliver-to-customer-in-front-of-door.jpg?s=612x612&w=0&k=20&c=rqniTEtz1C0EwOipHl6YxwkX9mZe1YTrFiGjYoyIy5U=",
       description: "get your order in 72 Hours",
     },
     {

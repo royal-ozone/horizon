@@ -15,7 +15,7 @@ const mainProduct = [
     {
         id: 2,
         title: 'Two-Night Chateau Tongariro Getaway Package',
-        image: 'https://main-cdn.grabone.co.nz/goimage/495x343/a74e98b37e16b38f47087c1de695d804696c399f.jpg',
+        image: 'https://the-park.co.nz/wp-content/uploads/2018/04/Tongariro-National-Park1.jpg',
         description: 'Two-Night Chateau Tongariro Getaway for Two People incl. Daily Two-Course Dinner, Breakfast, Welcome Drink, Chocolates & Hand Cream, Early Check-In, Late Check-Out, Complimentary Parking & WiFi - O...',
         metaTitle: 'Chateau Tongariro Hotel - National Park',
         oldPrice: '$1000',

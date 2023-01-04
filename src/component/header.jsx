@@ -7,6 +7,8 @@ import { connect,useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router-dom';
 import Fav from '../assets/fav.PNG'
+import Cart from '../assets/cart.PNG'
+
 const Header = (props) => {
   const login = useSelector(state => state.sign.login)
   const history = useHistory();
@@ -73,7 +75,7 @@ const Header = (props) => {
                   <strong className="notificaitonCount">1</strong>
                 </div>
                 <Link to='/cart' className="nav-link" key="cart">
-                  <span className="cartNumber"><strong>{cart.reduce((x, y) => { return x + y.quantity }, 0)}</strong><img className="fav" src="https://d.top4top.io/p_22088h0ek1.png" alt='cart' /></span>
+                  <span className="cartNumber"><strong>{cart.reduce((x, y) => { return x + y.quantity }, 0)}</strong><img className="fav" src={Cart} alt='cart' /></span>
                 </Link>
 
                 <img

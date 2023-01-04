@@ -15,7 +15,7 @@ const escapes = [
     },
     {
         id: uuidv4(),
-        image: 'https://main-cdn.grabone.co.nz/goimage/325x225/837a005e256befcb4caa3074c588a1ee88a55b76.jpg',
+        image: 'https://main-cdn.grabone.co.nz/goimage/325x225/326577d6bf9ecafb75a55c981e195f9d27bc5deb.jpg',
         title: 'Central Queenstown Stay for Two People',
         activity: 'Rydges Lakeland Resort Queenstown',
         place: 'Queenstown',
@@ -27,7 +27,7 @@ const escapes = [
 
     {
         id: uuidv4(),
-        image: 'https://main-cdn.grabone.co.nz/goimage/325x225/fe975862fe35279146c9661da5ff61470e68c9cc.jpg',
+        image: 'https://main-cdn.grabone.co.nz/goimage/325x225/326577d6bf9ecafb75a55c981e195f9d27bc5deb.jpg',
         title: '4.5-Star Luxury Queenstown Lakeside Getaway',
         activity: 'OAKS Queenstown Shores Resort',
         place: 'Frankton',
@@ -38,7 +38,7 @@ const escapes = [
     },
     {
         id: uuidv4(),
-        image: 'https://main-cdn.grabone.co.nz/goimage/325x225/1719b96c9ee175f185dc95a848bc4085fc4b0cba.jpg',
+        image: 'https://main-cdn.grabone.co.nz/goimage/325x225/326577d6bf9ecafb75a55c981e195f9d27bc5deb.jpg',
         title: 'Luxury 4.5-Star Stay at Heritage Queenstown',
         activity: 'The Heritage Queenstown',
         place: 'Queenstown - Wanaka',
