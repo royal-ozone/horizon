@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { updateOrders } from './order'
 let Product = createSlice({
     name: "product",
-    initialState: { product: {}, message: '', searchedProducts: [], storeProducts: [], reviews: [] },
+    initialState: { product: {}, message: '', searchedProducts: {data:[], count:0}, storeProducts: [], reviews: [] },
     reducers: {
         productAction(state, action) {
             return { ...state, ...action.payload }
@@ -26,9 +26,9 @@ export const productHandler = (payload) => async (dispatch, state) => {
 
 export const searchProductsHandler = payload => async (dispatch, state) => {
     try {
-        let result = await ProductService.productsSearch(payload)
-        if (result) {
-            dispatch(productAction({ message: result.length > 0 ? 'yes' : 'no', searchedProducts: result }))
+        let {message, status, data} = await ProductService.productsSearch(payload)
+        if (status===200) {
+            dispatch(productAction({ message: data.data.length > 0 ? 'yes' : 'no', searchedProducts: data }))
         } else {
             dispatch(productAction({ message: 'something went wrong' }))
         }

@@ -185,7 +185,7 @@ const ProfileCard = ({ cart, wishlist, itemType, addCartItemHandler, product, ke
         <div className="last">
           {/* <span className="boughtSpan">{product.bought} Bought</span> */}
           <StarRatings
-            rating={product?.rate || 0}
+            rating={Number(product?.rate) || 0}
             starDimension="1.5rem"
             starSpacing=".05rem"
             starRatedColor="yellow"
