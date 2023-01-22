@@ -118,7 +118,6 @@ const Products = ({ productsData, productHandler, searchProductsHandler }) => {
         brands && (data[param] = brands);
       }
     });
-    console.log("🚀 ~ file: products.jsx:91 ~ submitHandler ~ data", data);
     setLoading(true);
     setShow(false);
     searchQuery.key !== query.filter((value) => value)[1] &&
