@@ -1,22 +1,32 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import store from './store/';
-import {Provider} from 'react-redux';
-
+import { Provider } from 'react-redux';
+import {BrowserRouter as Router} from 'react-router-dom'
+import './i18next';
 import reportWebVitals from './reportWebVitals';
-
+import Loader from './component/loader'
+import { PopupProvider } from "react-custom-popup";
 ReactDOM.render(
+
   <React.StrictMode>
     <Provider store={store}>
+      <Suspense fallback={<Loader/>}>
+        <PopupProvider>
+          <Router>
 
-    <App />
-    
+          <App />
+          </Router>
+        </PopupProvider>
+      </Suspense>
     </Provider>
-      
+
   </React.StrictMode>,
   document.getElementById('root')
+
+
 );
 
 // If you want to start measuring performance in your app, pass a function
