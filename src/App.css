@@ -874,12 +874,14 @@ table tr {
 
 .notificaitonCount {
   position: relative;
-  ;
   background-color: red;
-  top: -.4rem;
-  right: .3rem;
+  top: -1.3rem;
+  right: .5rem;
   padding: 0 .3rem;
   border-radius: 5px;
+}
+.pointer{
+  cursor: pointer;
 }
 
 .fade {
@@ -1111,4 +1113,26 @@ fieldset {
 
 .pd-1rem{
   padding: 1rem;
+}
+
+/* .notification-list{
+  position: absolute;
+  top: 50px;
+  right: 0;
+  z-index: 999;
+  display: none;
+} */
+
+.notification-list {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  z-index: 999;
+  display: none;
+}
+.notification-list.show {
+  display: block;
+}
+.notification-list.hide {
+  display: none;
 }

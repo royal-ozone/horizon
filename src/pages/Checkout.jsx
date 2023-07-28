@@ -46,7 +46,7 @@ export const Checkout = ({ checkCodeHandler,placedOrderHandler }) => {
     } else  setTotal(x=> {return {...x, discount: 0}})
   }, [discount.id])
   const orderHandler = () => {
-    placedOrderHandler({discount_id: discount?.id, address_id: selectedAddress.id, sub_total: total.subtotal, grand_total: (Number(total.subtotal) + Number(total.shipping)- Number(total.discount)).toFixed(2) })
+    placedOrderHandler({discount_id: discount?.id, address_id: selectedAddress.id, sub_total: total.subtotal, grand_total: (Number(total.subtotal) + Number(total.shipping)- Number(total.discount)).toFixed(2), shipping: total.shipping })
 
   }
   useEffect(() => {
